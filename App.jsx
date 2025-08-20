@@ -1,326 +1,298 @@
 import React, { useEffect, useMemo, useState } from "react";
-import { NavLink, Route, Routes, useLocation, useNavigate } from "react-router-dom";
-import { categories, dishes } from "./menuData";
+import { MENU } from "./menuData";
 
-const translations = {
-  pt: {
-    brpt: "BR PT", gben: "GB EN", jaar: "QA AR",
-    nav: { about:"Sobre", menu:"Menu", gallery:"Galeria", location:"Localização", contact:"Contato", reservations:"Reservas" },
-    heroTitle: "Panela de Barro",
-    heroSubtitle: "Culinária Brasileira de Raiz no Qatar",
-    reserve: "Reservar Mesa",
-    seeMenu: "Ver o Menu",
-    ourStory: "Nossa História",
-    aboutText: "Sabores autênticos, hospitalidade generosa e pratos regionais brasileiros de raiz.",
-    categories: "Categorias",
-    price: "Preço",
-    details: "Detalhes",
-    close: "Fechar",
-    all: "Todos",
-    address: "Endereço",
-    hours: "Horários",
-    phone: "Telefone",
-    bookNow: "Reservar Agora",
-    contactUs: "Fale Conosco",
-  },
+const T = {
   en: {
-    brpt: "BR PT", gben: "GB EN", jaar: "QA AR",
-    nav: { about:"About", menu:"Menu", gallery:"Gallery", location:"Location", contact:"Contact", reservations:"Reservations" },
+    nav: { about: "About", menu: "Menu", gallery: "Gallery", location: "Location", contact: "Contact", reservations: "Reservations" },
     heroTitle: "Panela de Barro",
     heroSubtitle: "Brazilian Heritage Cuisine in Qatar",
-    reserve: "Reserve a Table",
-    seeMenu: "See the Menu",
+    ctas: { reserve: "Reserve a Table", seeMenu: "See the Menu" },
     ourStory: "Our Story",
-    aboutText: "Authentic Brazilian flavors, generous hospitality, and regional classics cooked slow.",
-    categories: "Categories",
+    storyText:
+      "We celebrate slow cooking, countryside flavors and generous hospitality. Led by Chef Cass, we serve iconic regional classics with fresh halal ingredients.",
+    categories: { all: "All", mains: "Mains", sides: "Sides", desserts: "Desserts", drinks: "Drinks" },
+    search: "Search dishes...",
     price: "Price",
-    details: "View Details",
-    close: "Close",
-    all: "All",
+    details: "Details",
+    galleryTitle: "Gallery",
+    locationTitle: "Location & Hours",
+    contactTitle: "Contact",
     address: "Address",
     hours: "Hours",
-    phone: "Phone",
-    bookNow: "Book Now",
-    contactUs: "Contact Us",
+    today: "Daily: 12:00–23:00",
+    bookFly: "Booking by phone or WhatsApp",
+    footer: "© Panela de Barro — Brazilian comfort food crafted with fresh ingredients and lots of love.",
+    modalClose: "Close"
+  },
+  pt: {
+    nav: { about: "Sobre", menu: "Menu", gallery: "Galeria", location: "Localização", contact: "Contato", reservations: "Reservas" },
+    heroTitle: "Panela de Barro",
+    heroSubtitle: "Culinária Brasileira de Raiz no Catar",
+    ctas: { reserve: "Reservar Mesa", seeMenu: "Ver o Menu" },
+    ourStory: "Nossa História",
+    storyText:
+      "Valorizamos o fogo lento, os sabores do interior e a hospitalidade generosa. Liderados pelo Chef Cass, servimos clássicos regionais icônicos com ingredientes frescos halal.",
+    categories: { all: "Todos", mains: "Pratos Principais", sides: "Acompanhamentos", desserts: "Sobremesas", drinks: "Bebidas" },
+    search: "Buscar pratos...",
+    price: "Preço",
+    details: "Detalhes",
+    galleryTitle: "Galeria",
+    locationTitle: "Localização & Horários",
+    contactTitle: "Contato",
+    address: "Endereço",
+    hours: "Horários",
+    today: "Diariamente: 12:00–23:00",
+    bookFly: "Reservas por telefone ou WhatsApp",
+    footer: "© Panela de Barro — Comida brasileira feita com ingredientes frescos e muito amor.",
+    modalClose: "Fechar"
   },
   ar: {
-    brpt: "BR PT", gben: "GB EN", jaar: "QA AR",
-    nav: { about:"نبذة عنا", menu:"القائمة", gallery:"معرض الصور", location:"الموقع", contact:"اتصال", reservations:"الحجوزات" },
+    nav: { about: "نبذة", menu: "القائمة", gallery: "معرض الصور", location: "الموقع", contact: "اتصال", reservations: "الحجوزات" },
     heroTitle: "بانيلّا دي بارّو",
-    heroSubtitle: "المطبخ البرازيلي التقليدي في قطر",
-    reserve: "احجز طاولة",
-    seeMenu: "عرض القائمة",
+    heroSubtitle: "المطبخ البرازيلي الأصيل في قطر",
+    ctas: { reserve: "احجز طاولة", seeMenu: "عرض القائمة" },
     ourStory: "قصتنا",
-    aboutText: "نكهات برازيلية أصيلة وضيافة كريمة وأطباق إقليمية مطهية على مهل.",
-    categories: "الفئات",
+    storyText:
+      "نُجدد طهي النار الهادئة ونكهات الريف والضيافة الكريمة. بإدارة الشيف كاس، نقدم أطباقاً إقليمية أيقونية بمكونات طازجة حلال.",
+    categories: { all: "الكل", mains: "الأطباق الرئيسية", sides: "الأطباق الجانبية", desserts: "الحلويات", drinks: "المشروبات" },
+    search: "ابحث عن الأطباق...",
     price: "السعر",
     details: "التفاصيل",
-    close: "إغلاق",
-    all: "الكل",
+    galleryTitle: "المعرض",
+    locationTitle: "الموقع & المواعيد",
+    contactTitle: "اتصال",
     address: "العنوان",
     hours: "الساعات",
-    phone: "الهاتف",
-    bookNow: "احجز الآن",
-    contactUs: "اتصل بنا",
-  },
+    today: "يومياً: 12:00–23:00",
+    bookFly: "الحجز عبر الهاتف أو واتساب",
+    footer: "© بانيلّا دي بارّو — أكل برازيلي منزلي بمكونات طازجة وكثير من المحبة.",
+    modalClose: "إغلاق"
+  }
 };
 
-function useLang() {
-  const [lang, setLang] = useState(() => localStorage.getItem("lang") || "pt");
-  useEffect(() => localStorage.setItem("lang", lang), [lang]);
-  return [lang, setLang];
-}
+const CATS = ["all", "mains", "sides", "desserts", "drinks"];
+const catKey = { mains: "mains", sides: "sides", desserts: "desserts", drinks: "drinks" };
 
-function Header({ lang, setLang, t }) {
-  const location = useLocation();
-  const isAR = lang === "ar";
-
-  return (
-    <header className={`nav ${isAR ? "rtl" : ""}`}>
-      <div className="nav-inner">
-        <NavLink to="/" className="brand">
-          <img className="brand-logo" src="/logo.png" alt="Panela de Barro" />
-          <span className="brand-text">Panela de Barro</span>
-        </NavLink>
-
-        <nav className="nav-links">
-          <NavLink to="/about">{t.nav.about}</NavLink>
-          <NavLink to="/menu">{t.nav.menu}</NavLink>
-          <NavLink to="/gallery">{t.nav.gallery}</NavLink>
-          <NavLink to="/location">{t.nav.location}</NavLink>
-          <NavLink to="/contact">{t.nav.contact}</NavLink>
-          <NavLink to="/reservations">{t.nav.reservations}</NavLink>
-        </nav>
-
-        <div className="lang-switch">
-          <button className={lang==="pt"?"active":""} onClick={()=>setLang("pt")}>{t.brpt}</button>
-          <button className={lang==="en"?"active":""} onClick={()=>setLang("en")}>{t.gben}</button>
-          <button className={lang==="ar"?"active":""} onClick={()=>setLang("ar")}>{t.jaar}</button>
-        </div>
-      </div>
-    </header>
-  );
-}
-
-function Hero({ t, lang }) {
-  return (
-    <section className={`hero ${lang==="ar"?"rtl":""}`}>
-      <div className="hero-bg" />
-      <div className="hero-content">
-        <h1 className="hero-title">{t.heroTitle}</h1>
-        <p className="hero-sub">{t.heroSubtitle}</p>
-        <div className="hero-actions">
-          <a className="btn primary" href="/reservations">{t.reserve}</a>
-          <a className="btn ghost" href="/menu">{t.seeMenu}</a>
-        </div>
-      </div>
-    </section>
-  );
-}
-
-function DishCard({ item, lang, onClick }) {
-  return (
-    <div className="card" onClick={()=>onClick(item)}>
-      <div className="card-img" style={{backgroundImage:`url(${item.image})`}}/>
-      <div className="card-body">
-        <h4>{item.name[lang]}</h4>
-        <div className="price">{item.price} {item.currency}</div>
-      </div>
-    </div>
-  );
-}
-
-function Modal({ open, onClose, children, lang }) {
-  if(!open) return null;
-  return (
-    <div className="modal" onClick={onClose}>
-      <div className={`modal-content ${lang==="ar"?"rtl":""}`} onClick={e=>e.stopPropagation()}>
-        <button className="modal-close" onClick={onClose}>×</button>
-        {children}
-      </div>
-    </div>
-  );
-}
-
-function Home({ t, lang }) {
-  const [open, setOpen] = useState(null);
-  const mains = dishes.filter(d=>d.category==="mains").slice(0,3);
-
-  return (
-    <>
-      <Hero t={t} lang={lang}/>
-      <section className={`section about ${lang==="ar"?"rtl":""}`}>
-        <div className="container">
-          <h2>{t.ourStory}</h2>
-          <p>{t.aboutText}</p>
-        </div>
-      </section>
-
-      <section className="section">
-        <div className="container">
-          <h3>{t.nav.menu}</h3>
-          <div className="grid">
-            {mains.map(m => (
-              <DishCard key={m.id} item={m} lang={lang} onClick={setOpen}/>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      <Modal open={!!open} onClose={()=>setOpen(null)} lang={lang}>
-        {open && (
-          <>
-            <div className="modal-hero" style={{backgroundImage:`url(${open.image})`}}/>
-            <h3>{open.name[lang]}</h3>
-            <p>{open.description[lang]}</p>
-            <div className="price big">{open.price} {open.currency}</div>
-          </>
-        )}
-      </Modal>
-    </>
-  );
-}
-
-function MenuPage({ t, lang }) {
+export default function App() {
+  const [lang, setLang] = useState("pt"); // padrão PT
+  const t = T[lang];
   const [cat, setCat] = useState("all");
-  const filtered = useMemo(()=>{
-    return cat==="all" ? dishes : dishes.filter(d=>d.category===cat);
-  },[cat]);
+  const [q, setQ] = useState("");
+  const [modal, setModal] = useState(null);
+
+  // DIR RTL para árabe
+  useEffect(() => {
+    const html = document.documentElement;
+    html.lang = lang;
+    html.dir = lang === "ar" ? "rtl" : "ltr";
+  }, [lang]);
+
+  // Revelar ao rolar
+  useEffect(() => {
+    const obs = new IntersectionObserver(
+      (entries) =>
+        entries.forEach((e) => {
+          if (e.isIntersecting) e.target.classList.add("in");
+        }),
+      { threshold: 0.15 }
+    );
+    document.querySelectorAll(".reveal").forEach((el) => obs.observe(el));
+    return () => obs.disconnect();
+  }, []);
+
+  const filtered = useMemo(() => {
+    let items = MENU.slice();
+    if (cat !== "all") items = items.filter((i) => i.category === catKey[cat] || i.category === cat);
+    if (q.trim()) {
+      const needle = q.toLowerCase();
+      items = items.filter((i) => {
+        const name = (i.name[lang] || i.name.en || "").toLowerCase();
+        const desc = (i.desc[lang] || i.desc.en || "").toLowerCase();
+        return name.includes(needle) || desc.includes(needle);
+      });
+    }
+    return items;
+  }, [cat, q, lang]);
 
   return (
-    <section className={`section ${lang==="ar"?"rtl":""}`}>
-      <div className="container">
-        <div className="menu-top">
-          <h2>{t.nav.menu}</h2>
-          <div className="pills">
-            <button className={cat==="all"?"active":""} onClick={()=>setCat("all")}>{t.all}</button>
-            {categories.map(c=>(
-              <button key={c.id} className={cat===c.id?"active":""} onClick={()=>setCat(c.id)}>
-                {c.label[lang]}
-              </button>
-            ))}
+    <div>
+      {/* NAVBAR */}
+      <header className="nav">
+        <div className="nav-inner">
+          <a className="brand" href="#hero">
+            <img src="/logo.png" alt="Panela de Barro logo" />
+            <span>Panela de Barro</span>
+          </a>
+          <nav>
+            <a href="#about">{t.nav.about}</a>
+            <a href="#menu">{t.nav.menu}</a>
+            <a href="#gallery">{t.nav.gallery}</a>
+            <a href="#location">{t.nav.location}</a>
+            <a href="#contact">{t.nav.contact}</a>
+          </nav>
+          <div className="langs">
+            <button onClick={() => setLang("pt")} className={lang === "pt" ? "active" : ""}>
+              BR PT
+            </button>
+            <button onClick={() => setLang("en")} className={lang === "en" ? "active" : ""}>
+              GB EN
+            </button>
+            <button onClick={() => setLang("ar")} className={lang === "ar" ? "active" : ""}>
+              QA AR
+            </button>
           </div>
         </div>
-        <div className="grid">
-          {filtered.map(item=>(
-            <div key={item.id} className="card card--menu">
-              <div className="card-img" style={{backgroundImage:`url(${item.image})`}}/>
-              <div className="card-body">
-                <h4>{item.name[lang]}</h4>
-                <p className="muted">{item.description[lang]}</p>
-                <div className="price">{item.price} {item.currency}</div>
-              </div>
-            </div>
+      </header>
+
+      {/* HERO */}
+      <section id="hero" className="hero">
+        <div className="hero-overlay" />
+        <div className="hero-content reveal">
+          <h1 className="display">{t.heroTitle}</h1>
+          <p className="lead">{t.heroSubtitle}</p>
+          <div className="cta">
+            <a href="#reservations" className="btn primary">{t.ctas.reserve}</a>
+            <a href="#menu" className="btn">{t.ctas.seeMenu}</a>
+          </div>
+        </div>
+      </section>
+
+      {/* ABOUT */}
+      <section id="about" className="container reveal">
+        <h2 className="section-title">{t.ourStory}</h2>
+        <p className="muted">{t.storyText}</p>
+      </section>
+
+      {/* MENU */}
+      <section id="menu" className="container reveal">
+        <div className="section-head">
+          <h2 className="section-title">{t.nav.menu}</h2>
+          <input
+            className="search"
+            placeholder={t.search}
+            value={q}
+            onChange={(e) => setQ(e.target.value)}
+          />
+        </div>
+
+        <div className="pills">
+          {CATS.map((c) => (
+            <button key={c} className={`pill ${cat === c ? "active" : ""}`} onClick={() => setCat(c)}>
+              {t.categories[c]}
+            </button>
           ))}
         </div>
-      </div>
-    </section>
-  );
-}
 
-function Gallery({ t, lang }) {
-  const imgs = [
-    "https://images.unsplash.com/photo-1544025162-d76694265947?q=80&w=1200&auto=format&fit=crop",
-    "https://images.unsplash.com/photo-1504674900247-0877df9cc836?q=80&w=1200&auto=format&fit=crop",
-    "https://images.unsplash.com/photo-1562158070-4b4a2f5a64fb?q=80&w=1200&auto=format&fit=crop",
-  ];
-  const [i,setI]=useState(0);
-  useEffect(()=>{
-    const id=setInterval(()=>setI(v=>(v+1)%imgs.length),3500);
-    return ()=>clearInterval(id);
-  },[]);
-  return (
-    <section className="section">
-      <div className="container">
-        <h2>{t.nav.gallery}</h2>
-        <div className="carousel">
-          <img key={i} src={imgs[i]} alt="" />
+        <div className="grid">
+          {filtered.map((item) => (
+            <article key={item.id} className="card" onClick={() => setModal(item)}>
+              <img src={item.image} alt={item.name[lang] || item.name.en} />
+              <div className="card-body">
+                <h3>{item.name[lang] || item.name.en}</h3>
+                <p className="line-clamp">{item.desc[lang] || item.desc.en}</p>
+                <div className="price">QAR {item.priceQAR}</div>
+              </div>
+            </article>
+          ))}
+          {!filtered.length && <p className="muted">{/* nenhum resultado */}—</p>}
         </div>
-      </div>
-    </section>
-  );
-}
+      </section>
 
-function Location({ t, lang }) {
-  return (
-    <section className={`section ${lang==="ar"?"rtl":""}`}>
-      <div className="container">
-        <h2>{t.nav.location}</h2>
-        <div className="info">
-          <p><strong>{t.address}:</strong> Doha, Qatar – Souq Waqif (exemplo)</p>
-          <p><strong>{t.hours}:</strong> 12:00–23:00 (Diariamente)</p>
-          <p><strong>{t.phone}:</strong> +974 0000 0000</p>
+      {/* MODAL */}
+      {modal && (
+        <div className="modal" onClick={() => setModal(null)}>
+          <div className="modal-card" onClick={(e) => e.stopPropagation()}>
+            <img src={modal.image} alt={modal.name[lang] || modal.name.en} />
+            <div className="modal-body">
+              <h3>{modal.name[lang] || modal.name.en}</h3>
+              <p>{modal.desc[lang] || modal.desc.en}</p>
+              <div className="price">QAR {modal.priceQAR}</div>
+              <button className="btn primary" onClick={() => setModal(null)}>{T[lang].modalClose}</button>
+            </div>
+          </div>
         </div>
-        <div className="map">
+      )}
+
+      {/* GALERIA */}
+      <section id="gallery" className="container reveal">
+        <h2 className="section-title">{t.galleryTitle}</h2>
+        <div className="masonry">
+          {[
+            "https://images.unsplash.com/photo-1520072959219-c595dc870360",
+            "https://images.unsplash.com/photo-1525610553991-2bede1a236e2",
+            "https://images.unsplash.com/photo-1498654896293-37aacf113fd9",
+            "https://images.unsplash.com/photo-1498654896293-3f8b81e0f6f3",
+            "https://images.unsplash.com/photo-1498654896293-2bfe588b4681",
+            "https://images.unsplash.com/photo-1522770179533-24471fcdba45"
+          ].map((src, i) => (
+            <img key={i} src={`${src}?auto=format&fit=crop&w=1200&q=60`} alt={`gallery ${i+1}`} className="zoomable" onClick={(e)=>openLightbox(src)} />
+          ))}
+        </div>
+      </section>
+
+      {/* LIGHTBOX simples */}
+      <div id="lightbox" className="lightbox" onClick={(e)=>{ if(e.target.id==='lightbox') e.currentTarget.classList.remove('show')}}>
+        <img alt="preview" />
+      </div>
+
+      {/* LOCALIZAÇÃO */}
+      <section id="location" className="container reveal">
+        <h2 className="section-title">{t.locationTitle}</h2>
+        <div className="map-card">
           <iframe
             title="map"
             loading="lazy"
-            src="https://maps.google.com/maps?q=Souq%20Waqif%20Doha&t=&z=14&ie=UTF8&iwloc=&output=embed">
-          </iframe>
+            referrerPolicy="no-referrer-when-downgrade"
+            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d6637.964!2d51.531!3d25.286!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zMjXCsDE3JzEwLjYiTiA1McKwMzEnNTkuNiJF!5e0!3m2!1sen!2sqa!4v1680000000000"
+            allowFullScreen
+          ></iframe>
+          <div className="map-meta">
+            <div><strong>{t.address}:</strong> Doha – Qatar</div>
+            <div><strong>{t.hours}:</strong> {t.today}</div>
+            <div className="muted">{t.bookFly}</div>
+          </div>
         </div>
-      </div>
-    </section>
-  );
-}
+      </section>
 
-function Contact({ t, lang }) {
-  return (
-    <section className={`section ${lang==="ar"?"rtl":""}`}>
-      <div className="container">
-        <h2>{t.contactUs}</h2>
-        <form className="form">
-          <input placeholder="Nome / Name" />
-          <input placeholder="Email" type="email" />
-          <textarea placeholder="Mensagem / Message" rows="5"></textarea>
-          <button className="btn primary" type="button">Enviar</button>
+      {/* RESERVAS / CONTATO */}
+      <section id="reservations" className="container reveal">
+        <h2 className="section-title">{t.nav.reservations}</h2>
+        <div className="contact-cta">
+          <a className="btn primary" href="https://wa.me/97400000000" target="_blank" rel="noreferrer">WhatsApp</a>
+          <a className="btn" href="tel:+97400000000">+974 0000 0000</a>
+        </div>
+      </section>
+
+      <section id="contact" className="container reveal">
+        <h2 className="section-title">{t.contactTitle}</h2>
+        <form className="contact-form" onSubmit={(e)=>{e.preventDefault(); window.location.href='mailto:info@paneladebarroqatar.com'}}>
+          <input required type="text" placeholder={lang==='ar'?'الاسم':'Nome / Name'} />
+          <input required type="email" placeholder="Email" />
+          <textarea required rows="4" placeholder={lang==='ar'?'رسالتك':'Sua mensagem / Your message'} />
+          <button className="btn primary" type="submit">Send</button>
         </form>
-      </div>
-    </section>
-  );
-}
+      </section>
 
-function Reservations({ t, lang }) {
-  return (
-    <section className={`section ${lang==="ar"?"rtl":""}`}>
-      <div className="container">
-        <h2>{t.nav.reservations}</h2>
-        <p className="muted">Integração de reservas (SevenRooms / OpenTable / formulário WhatsApp) — placeholder por enquanto.</p>
-        <a className="btn primary" href="https://wa.me/97400000000" target="_blank" rel="noreferrer">{t.bookNow}</a>
-      </div>
-    </section>
-  );
-}
-
-export default function App(){
-  const [lang,setLang] = useLang();
-  const t = translations[lang];
-
-  return (
-    <div className={`app ${lang==="ar"?"rtl":""}`}>
-      <Header lang={lang} setLang={setLang} t={t}/>
-      <main>
-        <Routes>
-          <Route path="/" element={<Home t={t} lang={lang}/>}/>
-          <Route path="/about" element={<Home t={t} lang={lang}/>}/>
-          <Route path="/menu" element={<MenuPage t={t} lang={lang}/>}/>
-          <Route path="/gallery" element={<Gallery t={t} lang={lang}/>}/>
-          <Route path="/location" element={<Location t={t} lang={lang}/>}/>
-          <Route path="/contact" element={<Contact t={t} lang={lang}/>}/>
-          <Route path="/reservations" element={<Reservations t={t} lang={lang}/>}/>
-        </Routes>
-      </main>
+      {/* FOOTER */}
       <footer className="footer">
         <div className="container footer-inner">
-          <div className="footer-brand">
-            <img src="/logo.png" alt="logo"/>
-            <span>Panela de Barro</span>
-          </div>
-          <div className="socials">
+          <span>Panela de Barro</span>
+          <div className="social">
             <a href="#" aria-label="Instagram">Instagram</a>
             <a href="#" aria-label="Facebook">Facebook</a>
           </div>
         </div>
+        <p className="tiny muted">{t.footer}</p>
       </footer>
     </div>
   );
 }
+
+// Lightbox helper
+function openLightbox(src){
+  const lb = document.getElementById('lightbox');
+  const img = lb.querySelector('img');
+  img.src = `${src}?auto=format&fit=crop&w=1600&q=80`;
+  lb.classList.add('show');
+}
+
