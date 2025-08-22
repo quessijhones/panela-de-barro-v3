@@ -1,550 +1,297 @@
 // menuData.js
-// =====================================================
-// Cardápio multilíngue com fotos do diretório /public/images
-// e textos pensados para PT / EN / AR.
-// • "imageCandidates": tentamos vários nomes (com/sem acentos).
-// • "seasonal: true" marca os sazonais (ex.: pamonha).
-// =====================================================
+// Categoria: 'mains' | 'sides' | 'desserts' | 'beverages' | 'seasonal'
 
-const fallbackUnsplash = (query) =>
-  `https://source.unsplash.com/800x600/?${encodeURIComponent(query)},brazilian,food`;
-
-const img = (...names) => names.filter(Boolean); // util p/ montar candidatos
-
-export const i18nUI = {
-  pt: {
-    brand: "Panela de Barro",
-    nav: { about: "Sobre", menu: "Menu", gallery: "Galeria", location: "Localização", contact: "Contato", reservations: "Reservas" },
-    hero: {
-      title: "Panela de Barro",
-      subtitle: "Culinária Brasileira de Raiz no Catar",
-      ctaReserve: "Reservar Mesa",
-      ctaMenu: "Ver o Menu",
-    },
-    filters: { all: "Todos", mains: "Pratos Principais", sides: "Acompanhamentos", desserts: "Sobremesas", drinks: "Bebidas", seasonal: "Sazonais" },
-    details: { view: "Detalhes", close: "Fechar", coming: "Em breve — inauguração em novembro." },
-    contact: {
-      title: "Contato",
-      email: "restaurant@paneladebarroqatar.com",
-      phone: "+974 3047 5279",
-      address: "Barwa Town, Doha, Qatar",
-    },
-    story: {
-      title: "Nossa História",
-      body:
-        "Restaurante familiar brasileiro no Catar. Há 20 anos no ramo de gastronomia, trazemos sabores de fogo e fogão a lenha, música sertaneja e viola. O chef-proprietário Quessi Jhones comanda a cozinha ao lado de sua mãe, Dona Cleuza, mineira, guardiã de técnicas e temperos, e do irmão Head Chef, com mais de 10 anos em casas brasileiras. A proposta é simples: hospitalidade generosa, raízes e pratos regionais preparados com carinho e autenticidade.",
-    },
-    seasonalBadge: "Sazonal",
-    langLabel: "Idioma",
-  },
-  en: {
-    brand: "Panela de Barro",
-    nav: { about: "About", menu: "Menu", gallery: "Gallery", location: "Location", contact: "Contact", reservations: "Reservations" },
-    hero: {
-      title: "Panela de Barro",
-      subtitle: "Brazilian Heritage Cuisine in Qatar",
-      ctaReserve: "Reserve a Table",
-      ctaMenu: "See the Menu",
-    },
-    filters: { all: "All", mains: "Mains", sides: "Side Dishes", desserts: "Desserts", drinks: "Beverages", seasonal: "Seasonal" },
-    details: { view: "View Details", close: "Close", coming: "Coming soon — grand opening in November." },
-    contact: {
-      title: "Contact",
-      email: "restaurant@paneladebarroqatar.com",
-      phone: "+974 3047 5279",
-      address: "Barwa Town, Doha, Qatar",
-    },
-    story: {
-      title: "Our Story",
-      body:
-        "A Brazilian family restaurant in Qatar. With 20 years in hospitality, we bring fire-kissed flavors from a wood-fired stove and the warmth of countryside music. Chef-owner Quessi Jhones leads the kitchen with his mother Dona Cleuza, from Minas Gerais, and his brother, the Head Chef with 10+ years of experience. Expect soulful regional classics, generous hospitality, and real Brazilian roots.",
-    },
-    seasonalBadge: "Seasonal",
-    langLabel: "Language",
-  },
-  ar: {
-    brand: "بانيلّا دي بارّو",
-    nav: { about: "نبذة", menu: "القائمة", gallery: "المعرض", location: "الموقع", contact: "اتصال", reservations: "الحجوزات" },
-    hero: {
-      title: "بانيلّا دي بارّو",
-      subtitle: "المطبخ البرازيلي الأصيل في قطر",
-      ctaReserve: "احجز طاولة",
-      ctaMenu: "عرض القائمة",
-    },
-    filters: { all: "الكل", mains: "الأطباق الرئيسية", sides: "الأطباق الجانبية", desserts: "الحلويات", drinks: "المشروبات", seasonal: "الموسمية" },
-    details: { view: "التفاصيل", close: "إغلاق", coming: "قريبًا — الافتتاح في نوفمبر." },
-    contact: {
-      title: "التواصل",
-      email: "restaurant@paneladebarroqatar.com",
-      phone: "+974 3047 5279",
-      address: "باروا تاون، الدوحة، قطر",
-    },
-    story: {
-      title: "قصتنا",
-      body:
-        "مطعم عائلي برازيلي في قطر. مع خبرة تمتد 20 عامًا، نقدّم نكهات على نار الحطب وموسيقى ريفية دافئة. يقود المطبخ الشيف والمالك كويِسّي جونِس مع والدته السيدة كليوزا من ميناس جيرايس وشقيقه الشيف الرئيسي ذو الخبرة الطويلة. نحتفي بالكلاسيكيات الإقليمية والضيافة السخية والجذور البرازيلية الأصيلة.",
-    },
-    seasonalBadge: "موسمي",
-    langLabel: "اللغة",
-  },
-};
-
-// --------------------------
-// DADOS DO CARDÁPIO
-// --------------------------
-export const MENU = [
-  // ===== PRATOS PRINCIPAIS (MAINS)
+export const dishes = [
+  // ----- Pratos Principais -----
   {
-    id: "vaca-atolada",
-    category: "mains",
-    seasonal: false,
-    names: { pt: "Vaca Atolada (Ossobuco)", en: "Vaca Atolada (Ossobuco)", ar: "فاکا أتولادا (عظم لحم العجل)" },
-    price: null,
-    imageCandidates: img("Vaca-atolada.jpg", "vaca-atolada.jpg", "Ossobuco.jpg"),
-    fallback: fallbackUnsplash("ossobuco,beef,stew"),
-    descriptions: {
-      pt: "Ossobuco cozido lentamente, polenta cremosa de milho verde e salada cítrica de rúcula. Clássico de Minas com equilíbrio entre maciez, cremosidade e frescor.",
-      en: "Slow-cooked ossobuco with creamy green-corn polenta and citrus arugula salad — a Minas Gerais classic balancing tender meat and bright freshness.",
-      ar: "عظم لحم العجل مطهو ببطء مع بولينتا الذرة الخضراء وسلطة الجرجير بالحمضيات — طبق تقليدي من ميناس يجمع الطراوة والنكهة.",
+    id: 'vaca-atolada',
+    category: 'mains',
+    image: 'Mandioca-Real.jpg', // use uma foto que tenha (substitua se quiser)
+    name: {
+      pt: 'Vaca Atolada (Ossobuco)',
+      en: 'Vaca Atolada (Ossobuco)',
+      ar: 'ڤاكا أتولادا (أوسّوبوكو)'
     },
-    story: {
-      pt: "Receita de fogão a lenha, onde o tempo e o calor lento fazem a carne se desfazer em fibras suculentas.",
-      en: "Born from wood-fire cooking: time and ember heat turn the meat meltingly tender.",
-      ar: "وصفة من مطبخ النار الخشبية حيث يمنح الوقت والجمر اللحم نعومة تذوب في الفم.",
+    short: {
+      pt: 'Ossobuco cozido lentamente com polenta cremosa de milho verde e rúcula cítrica.',
+      en: 'Slow-cooked ossobuco with creamy green-corn polenta and citrus arugula.',
+      ar: 'أوسّوبوكو مطهو ببطء مع بولينتا الذرة الخضراء وكركله حمضية.'
     },
+    long: {
+      pt: 'Clássico de Minas Gerais: carne macia que se desfaz, caldo rico e polenta cremosa de milho verde, equilibrados por rúcula cítrica fresquinha.',
+      en: 'A Minas Gerais classic — fall‑apart tender beef in a rich broth over silky green‑corn polenta, brightened with fresh citrus arugula.',
+      ar: 'طبق كلاسيكي من ميناس جيرايس — لحم طري جدًا بمرق غني فوق بولينتا الذرة الخضراء، مع جرجير حمضي طازج.'
+    }
   },
   {
-    id: "feijoada-costela",
-    category: "mains",
-    names: { pt: "Feijoada de Costela", en: "Beef Rib Feijoada", ar: "فيجوادا بالأضلاع" },
-    price: null,
-    imageCandidates: img("Feijoada-de-Costela.jpg", "feijoada-de-costela.jpg"),
-    fallback: fallbackUnsplash("feijoada,brazil"),
-    descriptions: {
-      pt: "Feijoada de costela suculenta servida com farofa de banana, laranja, vinagrete e arroz temperado.",
-      en: "Rich beef-rib feijoada served with banana farofa, orange slices, vinaigrette, and seasoned rice.",
-      ar: "فيجوادا بأضلاع اللحم تُقدّم مع فاروفا الموز وشرائح البرتقال وصوص الخل والأرز المتبل.",
+    id: 'feijoada-costela',
+    category: 'mains',
+    image: 'feijoada.jpg', // se tiver com outro nome, troque
+    name: {
+      pt: 'Feijoada de Costela',
+      en: 'Beef Rib Feijoada',
+      ar: 'فيجوادا ضلع البقر'
     },
-    story: {
-      pt: "Domingo de família em uma panela só: caldo encorpado, defumado e cheio de memória afetiva.",
-      en: "A family-Sunday classic where depth and smokiness meet comfort.",
-      ar: "طبق أحد عائلي بامتياز — مرق غني بنفحات مدخنة ودفء منزلي.",
+    short: {
+      pt: 'Feijoada de costela servida com farofa de banana, laranja, vinagrete e arroz.',
+      en: 'Rib feijoada with banana farofa, orange, vinaigrette, and rice.',
+      ar: 'فيجوادا الأضلاع مع فاروفا الموز والبرتقال وخليط الخل والأرز.'
     },
+    long: {
+      pt: 'Nosso feijão preto de cozimento lento com costela suculenta, servido com farofa de banana da terra, rodelas de laranja, vinagrete e arroz branco soltinho.',
+      en: 'Slow‑cooked black beans with succulent beef ribs, served with plantain farofa, orange slices, vinaigrette, and fluffy white rice.',
+      ar: 'فاصوليا سوداء مطهوة ببطء مع أضلاع بقريّة طرية، تُقدَّم مع فاروفا الموز والبرتقال والفيـناغريت والأرز الأبيض.'
+    }
   },
   {
-    id: "picanha-grelhada",
-    category: "mains",
-    names: { pt: "Picanha Grelhada (Prato do Chef)", en: "Grilled Picanha (Chef’s Signature)", ar: "بيكانيا مشوية (طبق الشيف)" },
-    price: null,
-    imageCandidates: img("Picanha-grelhada.jpg", "picanha-grelhada.jpg", "Fraldinha-inteira.jpg"),
-    fallback: fallbackUnsplash("picanha,steak,grill"),
-    descriptions: {
-      pt: "Picanha grelhada com risoto de cogumelos, polenta cremosa de milho verde e molho de pimenta-do-reino.",
-      en: "Grilled picanha with mushroom risotto, creamy green-corn polenta and peppercorn sauce.",
-      ar: "بيكانيا مشوية مع ريزوتو الفطر وبولينتا الذرة الخضراء وصوص الفلفل الأسود.",
+    id: 'picanha-chef',
+    category: 'mains',
+    image: 'picanha.jpg',
+    name: {
+      pt: 'Picanha Grelhada (Prato do Chef)',
+      en: "Grilled Picanha (Chef's Signature)",
+      ar: 'بيكانيا مشوية (توقيع الشيف)'
     },
-    story: {
-      pt: "Nosso corte-ícone, grelhado alto para manter o suco e a crosta perfeita.",
-      en: "Our iconic cut — seared hot for a charred crust and juicy center.",
-      ar: "قطعتنا الأيقونية تُشوى بحرارة عالية لقشرة متفحمة ومركز كثير العصارة.",
+    short: {
+      pt: 'Servida com risoto de cogumelos, polenta cremosa de milho verde e molho de pimenta do reino.',
+      en: 'With mushroom risotto, green‑corn polenta, and peppercorn sauce.',
+      ar: 'مع ريزوتو الفطر وبولينتا الذرة الخضراء وصلصة الفلفل.'
     },
+    long: {
+      pt: 'Corte nobre na brasa, suculento e defumado, finalizado com risoto cremoso de cogumelos, polenta de milho verde e um toque de pimenta‑do‑reino.',
+      en: 'Prime cut grilled over fire — juicy and lightly smoky — finished with creamy mushroom risotto, green‑corn polenta and peppercorn sauce.',
+      ar: 'قطعة فاخرة على الجمر — عصيرية بلمسة دخانية — مع ريزوتو الفطر الكريمي وبولينتا الذرة الخضراء وصلصة الفلفل.'
+    }
   },
   {
-    id: "fraldinha-inteira",
-    category: "mains",
-    names: { pt: "Fraldinha Inteira para Compartilhar", en: "Whole Flank Steak to Share", ar: "فخذية كاملة للمشاركة" },
-    price: null,
-    imageCandidates: img("fraldinha-inteira.jpg", "Fraldinha-inteira.jpg"),
-    fallback: fallbackUnsplash("flank,steak"),
-    descriptions: {
-      pt: "Fraldinha na brasa, chimichurri, vinagrete e molho de pimenta. Suculenta, defumada e perfeita para dividir.",
-      en: "Char-grilled flank steak with chimichurri, vinaigrette and pepper sauce — smoky, juicy and perfect for sharing.",
-      ar: "لحم فخذ مشوي على الفحم مع تشيميشوري وخليط الخل الحار — مدخن وعصاري ومناسب للمشاركة.",
+    id: 'fraldinha',
+    category: 'mains',
+    image: 'fraldinha-inteira.jpg',
+    name: { pt:'Fraldinha Inteira para Compartilhar', en:'Whole Flank Steak to Share', ar:'فرالدينيا كاملة للمشاركة' },
+    short: {
+      pt:'Servida com chimichurri, vinagrete e molho de pimenta. Perfeita para dividir.',
+      en:'With chimichurri, vinaigrette and pepper sauce — made for sharing.',
+      ar:'مع تشيميشوري وفيناغريت وصلصة الفلفل — مثالية للمشاركة.'
     },
-    story: {
-      pt: "Corte macio e saboroso, favorito de churrasco de quintal.",
-      en: "A backyard-barbecue favorite for its tenderness and bold flavor.",
-      ar: "من نجوم الشواء المنزلي لطراوته ونكهته القوية.",
-    },
+    long: {
+      pt:'Carne suculenta, grelhada na brasa e fatiada, acompanhada de molhos clássicos da casa.',
+      en:'Juicy, fire‑grilled and sliced, with our classic house sauces.',
+      ar:'لحم مشوي على النار ومقطّع مع صلصات البيت الكلاسيكية.'
+    }
   },
   {
-    id: "galinhada",
-    category: "mains",
-    names: { pt: "Galinhada Caipira", en: "Country Chicken & Rice Stew", ar: "غاليِنهادَا (دجاج وأرز ريفي)" },
-    price: null,
-    imageCandidates: img("Galinhada.jpg", "galinhada.jpg"),
-    fallback: fallbackUnsplash("brazilian,chicken,stew"),
-    descriptions: {
-      pt: "Galinhada tradicional com aioli de cúrcuma — conforto, caldo rico e toque de quintal.",
-      en: "Traditional chicken-and-rice stew with turmeric aioli — comforting and aromatic.",
-      ar: "يخنة دجاج مع الأرز بصلصة الأيولي بالكركم — دافئة وعطرة.",
+    id:'galinhada',
+    category:'mains',
+    image:'Galinahda.jpg',
+    name:{ pt:'Galinhada Caipira', en:'Country Chicken & Rice Stew', ar:'جالينهادا ريفية' },
+    short:{
+      pt:'Frango e arroz no caldo, com aioli de cúrcuma. Conforto de casa.',
+      en:'Traditional chicken‑and‑rice stew with turmeric aioli — comforting.',
+      ar:'طبق دجاج مع أرز بمرق، مع آيولي الكركم — مريح.'
     },
-    story: {
-      pt: "Prato de reunião — panela grande, fogo manso, comida de abraço.",
-      en: "A gathering dish: big pot, slow fire, food that hugs.",
-      ar: "طبق اجتماع العائلة — قدر كبير ونار هادئة وطعام يضمّك بحنانه.",
-    },
+    long:{
+      pt:'Arroz de quintal perfumado, frango macio e aioli de cúrcuma: sabor de fogão a lenha.',
+      en:'Backyard rice, tender chicken and turmeric aioli — flavors of a wood‑fired stove.',
+      ar:'أرز وحدات ودجاج طري وآيولي كركم — نكهات موقد الحطب.'
+    }
   },
   {
-    id: "burger-picanha",
-    category: "mains",
-    names: { pt: "Hambúrguer de Picanha", en: "Picanha Burger", ar: "برجر بيكانيا" },
-    price: null,
-    imageCandidates: img("Hamburguer-de-picanha.jpg", "hamburguer-de-picanha.jpg"),
-    fallback: fallbackUnsplash("burger"),
-    descriptions: {
-      pt: "Burger de picanha com cogumelos, pimenta verde, queijo derretido, bacon, batatas rústicas e maionese da casa.",
-      en: "Picanha burger with mushrooms, green peppercorn sauce, melted cheese, bacon, rustic fries and house mayo.",
-      ar: "برجر بيكانيا مع الفطر وصلصة الفلفل الأخضر وجبن مذاب وباكون وبطاطس ريفية ومايونيز البيت.",
+    id:'hamburguer-picanha',
+    category:'mains',
+    image:'hamburguer.jpg',
+    name:{ pt:'Hambúrguer de Picanha', en:'Picanha Burger', ar:'برغر بيكانيا' },
+    short:{
+      pt:'Com cogumelos, pimenta verde, queijo derretido, bacon, batatas rústicas e maionese da casa.',
+      en:'With mushrooms, green peppercorn, melted cheese, bacon, rustic fries and house mayo.',
+      ar:'مع فطر وفلفل أخضر وجبن مذاب وبايكون وبطاطا ريفية ومايونيز البيت.'
     },
-    story: {
-      pt: "American burger encontra churrasco brasileiro — suculência e personalidade.",
-      en: "An American burger meets Brazilian barbecue — juicy and bold.",
-      ar: "برغر أمريكي يلتقي بالشواء البرازيلي — طراوة ونكهة واثقة.",
-    },
+    long:{
+      pt:'Burger generoso de picanha grelhada, suculento e defumado, no melhor estilo brasileiro.',
+      en:'A generous, juicy, lightly‑smoked picanha burger — Brazilian style.',
+      ar:'برغر بيكانيا غني وعصير بلمسة دخانية — على الطريقة البرازيلية.'
+    }
   },
   {
-    id: "lasanha-banana",
-    category: "mains",
-    names: { pt: "Lasanha de Carne com Banana da Terra", en: "Beef Lasagna with Plantain", ar: "لازانيا لحم مع موز الجنة" },
-    price: null,
-    imageCandidates: img("Lasanha-de-banana.jpg", "Lasanha-de-carne-com-banana-da-terra.jpg"),
-    fallback: fallbackUnsplash("lasagna"),
-    descriptions: {
-      pt: "Lasanha com muçarela e parmesão, intercalando a cremosidade da carne ao crocante da banana da terra na manteiga.",
-      en: "Lasagna layered with mozzarella and parmesan, balanced by buttery, crispy plantain.",
-      ar: "لازانيا بطبقات من الموتزاريلا والبارميزان مع توازن رائع بطبقات من الموز المقلي بالزبدة.",
+    id:'lasanha-banana',
+    category:'mains',
+    image:'Lasanha-de-banana.jpg',
+    name:{ pt:'Lasanha de Carne com Banana da Terra', en:'Beef Lasagna with Plantain', ar:'لازانيا لحم مع موز الجنة' },
+    short:{
+      pt:'Camadas de carne, muçarela e parmesão, equilibradas com banana da terra crocante na manteiga.',
+      en:'Beef, mozzarella and parmesan layered, balanced with buttery, crispy plantain.',
+      ar:'طبقات لحم وجبن مع موز الجنة المقلي بالزبدة.'
     },
-    story: {
-      pt: "Clássico com sotaque brasileiro — doce e salgado em harmonia.",
-      en: "An Italian classic with a Brazilian accent — sweet-meets-savory harmony.",
-      ar: "كلاسيكية إيطالية بلمسة برازيلية — تناغم بين الحلو والمالح.",
-    },
+    long:{
+      pt:'Clássico da casa que une o salgado e o doce, textura crocante por fora e cremosa por dentro.',
+      en:'House classic blending savory and sweet — crispy edges, creamy center.',
+      ar:'كلاسيكي يجمع المالح والحلو — حواف مقرمشة وقلب كريمي.'
+    }
   },
   {
-    id: "coxinha-costela",
-    category: "mains",
-    names: { pt: "Coxinha de Costela (4 pcs)", en: "Beef Rib Coxinha (4 pcs)", ar: "كوشينيا بالأضلاع (٤ قطع)" },
-    price: null,
-    imageCandidates: img("coxinha-de-costela.jpg", "Coxinha-de-costela.jpg"),
-    fallback: fallbackUnsplash("coxinha"),
-    descriptions: {
-      pt: "Massa dourada e crocante, recheio de costela desfiada, toque cremoso de queijo e dip barbecue defumado.",
-      en: "Golden, crisp pastries stuffed with pulled beef rib and creamy cheese — served with smoky barbecue dip.",
-      ar: "عجينة ذهبية مقرمشة محشوة بأضلاع لحم مبشور مع جبن كريمي — تُقدّم مع صوص شواء مدخّن.",
+    id:'coxinha-costela',
+    category:'mains',
+    image:'coxinha-de-costela.jpg',
+    name:{ pt:'Coxinha de Costela (4 pcs)', en:'Beef Rib Coxinha (4 pcs)', ar:'كوشينيا ضلع (٤ قطع)' },
+    short:{
+      pt:'Recheio de costela desfiada com toque cremoso de queijo. Acompanha molho BBQ defumado.',
+      en:'Shredded rib filling with a creamy cheese touch. Smoked BBQ dip on the side.',
+      ar:'حشوة ضلع مبشور مع لمسة جبن كريمية. صوص شواء مدخن جانبًا.'
     },
-    story: {
-      pt: "Ícone das festas brasileiras — crocante por fora, suculenta por dentro.",
-      en: "Brazil’s party icon — crunchy shell, juicy filling.",
-      ar: "رمز الحفلات البرازيلية — قشرة مقرمشة وحشوة عصارية.",
+    long:{
+      pt:'Crosta dourada e crocante, interior macio e suculento — nosso salgado mais pedido.',
+      en:'Golden crisp outside, soft and juicy inside — our most‑ordered snack.',
+      ar:'قشرة ذهبية مقرمشة، داخل طري وعصير — الأكثر طلبًا لدينا.'
+    }
+  },
+  {
+    id:'moqueca',
+    category:'mains',
+    image:'Moqueca-baiana.jpg',
+    name:{ pt:'Moqueca Baiana', en:'Bahian Fish Stew', ar:'موقتشة بايانا' },
+    short:{
+      pt:'Peixe com leite de coco, azeite de dendê e pimentões. Servida com arroz e farofa.',
+      en:'Fish with coconut milk, dendê oil and peppers. Served with rice and farofa.',
+      ar:'سمك مع حليب جوز الهند وزيت دنْدي والفلفل. يُقدّم مع الأرز والفاروفا.'
     },
+    long:{
+      pt:'Doce tropical e leve picância — mar, calor e alma baiana em um prato.',
+      en:'Tropical sweetness with a gentle heat — Bahia’s sea and soul in one dish.',
+      ar:'حلاوة استوائية مع حرارة لطيفة — روح باهيا في طبق.'
+    }
+  },
+  {
+    id:'pasteis',
+    category:'mains',
+    image:'PasteI.jpg',
+    name:{ pt:'Pastéis Brasileiros (4 pcs)', en:'Brazilian Pastéis (4 pcs)', ar:'باستييس برازيلي (٤ قطع)' },
+    short:{
+      pt:'Recheios à escolha: carne, queijo, frango ou palmito. Com vinagrete apimentado.',
+      en:'Choice of beef, cheese, chicken or hearts of palm. Spicy vinaigrette.',
+      ar:'اختيار لحم أو جبن أو دجاج أو قلوب نخيل. فيناغريت حار.'
+    },
+    long:{
+      pt:'Casquinhas crocantes por fora, suculentas por dentro — cada mordida estala.',
+      en:'Crispy shells outside, juicy inside — a satisfying crack at every bite.',
+      ar:'قِشرة مقرمشة من الخارج وعصير من الداخل — طقطقة ممتعة مع كل لقمة.'
+    }
   },
 
-  // ===== ACOMPANHAMENTOS (SIDES)
+  // ----- Acompanhamentos -----
   {
-    id: "mandioca-frita",
-    category: "sides",
-    names: { pt: "Mandioca Frita", en: "Crispy Cassava Sticks", ar: "عيدان الكسافا المقرمشة" },
-    price: null,
-    imageCandidates: img("Mandioca-frita.jpg", "Mandioca-Frita.jpg"),
-    fallback: fallbackUnsplash("cassava,fries"),
-    descriptions: {
-      pt: "Palitos dourados por fora e macios por dentro — clássico de boteco.",
-      en: "Golden on the outside, soft inside — a tavern classic.",
-      ar: "مقرمشة من الخارج وطرية من الداخل — كلاسيكيات المقاهي.",
-    },
-    story: { pt: "", en: "", ar: "" },
+    id:'mandioca-frita', category:'sides', image:'Mandioca-frita.jpg',
+    name:{ pt:'Mandioca Frita', en:'Fried Cassava', ar:'كسافا مقلية' },
+    short:{ pt:'Palitos dourados, sequinhos e crocantes.', en:'Golden, crisp cassava sticks.', ar:'أعواد كسافا ذهبية مقرمشة.' },
+    long:{ pt:'Clássico da mesa brasileira: textura perfeita por fora e maciez por dentro.', en:'Brazilian classic: crisp outside, fluffy inside.', ar:'كلاسيكي برازيلي: مقرمش من الخارج وهشّ من الداخل.' }
   },
   {
-    id: "polenta-frita",
-    category: "sides",
-    names: { pt: "Polenta Frita", en: "Fried Cornmeal Sticks", ar: "أصابع دقيق الذرة المقلية" },
-    price: null,
-    imageCandidates: img("Polenta-frita.jpg", "polenta-frita.jpg"),
-    fallback: fallbackUnsplash("polenta,fries"),
-    descriptions: {
-      pt: "Porção crocante, perfeita para mergulhar no molho do chefe.",
-      en: "Crunchy batons perfect for dipping in the chef’s sauce.",
-      ar: "أصابع مقرمشة مثالية للغموس مع صوص الشيف.",
-    },
-    story: { pt: "", en: "", ar: "" },
+    id:'polenta-frita', category:'sides', image:'Polenta-frita.jpg',
+    name:{ pt:'Polenta Frita', en:'Fried Polenta', ar:'بولينتا مقلية' },
+    short:{ pt:'Palitos crocantes de fubá.', en:'Crispy cornmeal sticks.', ar:'أعواد دقيق الذرة المقرمشة.' },
+    long:{ pt:'Levemente salgada, perfeita para petiscar.', en:'Lightly salted — perfect for snacking.', ar:'مالحة قليلاً — مثالية للتسالي.' }
   },
   {
-    id: "pao-de-alho",
-    category: "sides",
-    names: { pt: "Pão de Alho", en: "Garlic Bread", ar: "خبز بالثوم" },
-    price: null,
-    imageCandidates: img("Pao-de-alho.jpg", "pao-de-alho.jpg"),
-    fallback: fallbackUnsplash("garlic,bread"),
-    descriptions: {
-      pt: "Pão crocante recheado com creme de alho e ervas — quentinho e perfumado.",
-      en: "Crisp bread filled with creamy garlic-herb spread — warm and fragrant.",
-      ar: "خبز مقرمش محشو بكريمة الثوم والأعشاب — دافئ وعطِر.",
-    },
-    story: { pt: "", en: "", ar: "" },
+    id:'pao-alho', category:'sides', image:'Pao-de-alho.jpg',
+    name:{ pt:'Pão de Alho', en:'Garlic Bread', ar:'خبز بالثوم' },
+    short:{ pt:'Crocante por fora, cremoso por dentro, com ervas.', en:'Crunchy outside, creamy garlic‑herb center.', ar:'مقرمش من الخارج وحشوة كريم الثوم بالأعشاب.' },
+    long:{ pt:'Vai à grelha e chega perfumado à mesa.', en:'Grilled and aromatic to the table.', ar:'يُشوى ويصل عطِرًا إلى المائدة.' }
   },
   {
-    id: "pao-de-queijo",
-    category: "sides",
-    names: { pt: "Pão de Queijo", en: "Brazilian Cheese Bread", ar: "خبز الجبن البرازيلي" },
-    price: null,
-    imageCandidates: img("pao-de-queijo.jpg", "Pão-de-queijo.jpg", "pao-de-queijo.jpeg"),
-    fallback: fallbackUnsplash("pao de queijo"),
-    descriptions: {
-      pt: "Macio e quentinho, com queijo de verdade — impossível comer um só.",
-      en: "Soft and warm, made with real cheese — impossible to eat just one.",
-      ar: "خبز جبن طري ودافئ — يستحيل الاكتفاء بواحد.",
-    },
-    story: { pt: "", en: "", ar: "" },
+    id:'pao-queijo', category:'sides', image:'Pao-de-queijo.jpg',
+    name:{ pt:'Pão de Queijo', en:'Cheese Bread', ar:'خبز الجبن' },
+    short:{ pt:'Macio e quentinho, tradicional de Minas.', en:'Soft and warm, straight from Minas.', ar:'طري ودافئ — تقليدي من ميناس.' },
+    long:{ pt:'Casamento perfeito com café… e com tudo.', en:'Perfect with coffee… and with everything.', ar:'مثالي مع القهوة… ومع كل شيء.' }
   },
   {
-    id: "farofa-castanha",
-    category: "sides",
-    names: { pt: "Farofa de Castanha/Banana", en: "Toasted Cassava Flour with Nuts or Plantain", ar: "فاروفا الكسافا بالمكسرات أو موز الجنة" },
-    price: null,
-    imageCandidates: img("farofa-de-castanha.jpg", "Farofa-de-castanha.jpg"),
-    fallback: fallbackUnsplash("farofa"),
-    descriptions: {
-      pt: "Farofa personalizada: crocante de castanhas ou lâminas douradas de banana da terra.",
-      en: "Your pick: crunchy cashew-nut farofa or golden plantain slices.",
-      ar: "اختيارك: فاروفا بالمكسرات المقرمشة أو شرائح موز الجنة الذهبية.",
-    },
-    story: { pt: "", en: "", ar: "" },
+    id:'farofa-castanha', category:'sides', image:'farofa-de-castanha.jpg',
+    name:{ pt:'Farofa de Castanha/Banana', en:'Cashew/Banana Farofa', ar:'فاروفا كاجو/موز' },
+    short:{ pt:'Tostada, crocante, opção com banana da terra salteada.', en:'Toasted and crunchy; option with sautéed plantain.', ar:'محمصة ومقرمشة؛ خيار مع موز الجنة السوتيه.' },
+    long:{ pt:'Textura que vicia — dá vontade de comer pura.', en:'Addictive texture — dangerously snackable.', ar:'قوام مُدمن — يجعلك تأكلها وحدها.' }
   },
-  {
-    id: "rubacao",
-    category: "sides",
-    names: { pt: "Rubaçāo", en: "Creamy Rice & Beans with Grilled Queijo Coalho", ar: "أرز وكُرنب مع جبن مشوي" },
-    price: null,
-    imageCandidates: img("Rubaço.jpg", "Rubacao.jpg", "rubaçao.jpg"),
-    fallback: fallbackUnsplash("brazil,rice,beans"),
-    descriptions: {
-      pt: "Arroz cremoso com feijão e queijo coalho na brasa — potência nordestina.",
-      en: "Creamy rice and beans crowned with grilled queijo coalho — Northeastern soul.",
-      ar: "أرز كريمي مع الفاصوليا يُتوّج بجبن كوانهو المشوي — روح الشمال الشرقي.",
-    },
-    story: { pt: "", en: "", ar: "" },
+  { id:'rubacao', category:'sides', image:'Rubacao.jpg',
+    name:{ pt:'Rubacão', en:'Rubacão', ar:'روباكاو' },
+    short:{ pt:'Arroz cremoso com feijão e queijo coalho grelhado.', en:'Creamy rice & beans with grilled queijo coalho.', ar:'أرز كريمي مع فاصوليا وجبن كوالهو مشوي.' },
+    long:{ pt:'Conforto nordestino, cremosidade na medida certa.', en:'Northeastern comfort — just‑right creaminess.', ar:'راحة شمالية شرقية بقوام كريمي متزن.' }
   },
 
-  // ===== SOBREMESAS (DESSERTS)
-  {
-    id: "encanto-de-coco",
-    category: "desserts",
-    names: { pt: "Encanto de Coco", en: "Coconut Flan", ar: "بودينغ جوز الهند" },
-    price: null,
-    imageCandidates: img("Encanto-de-Coco.jpg", "encanto-de-coco.jpg"),
-    fallback: fallbackUnsplash("coconut flan"),
-    descriptions: {
-      pt: "Pudim de coco assado lentamente, textura aveludada e caramelo dourado leve.",
-      en: "Silky coconut flan, slow-baked with a light golden caramel.",
-      ar: "بودينغ جوز الهند بقوام حريري وخليط كراميل ذهبي خفيف.",
-    },
-    story: { pt: "", en: "", ar: "" },
+  // ----- Sobremesas -----
+  { id:'encanto-coco', category:'desserts', image:'Encanto-de-Coco.jpg',
+    name:{ pt:'Encanto de Coco', en:'Coconut Flan', ar:'فلان جوز الهند' },
+    short:{ pt:'Pudim de coco aveludado com caramelo dourado.', en:'Silky coconut flan topped with golden caramel.', ar:'فلان جوز الهند حريري مع كراميل ذهبي.' },
+    long:{ pt:'Clássico brasileiro repaginado com leveza e brilho.', en:'A classic, reimagined with lightness and glow.', ar:'كلاسيكي مُعاد بتجديد خفيف وبريق.' }
   },
-  {
-    id: "doce-da-roca",
-    category: "desserts",
-    names: { pt: "Doce da Roça com Gelo", en: "Pumpkin Compote & Ice Cream", ar: "حلوى القرع مع الآيس كريم" },
-    price: null,
-    imageCandidates: img("Doce-da-Roça-com-Gelo.jpg", "Doce-da-Roca-com-Gelo.jpg"),
-    fallback: fallbackUnsplash("pumpkin dessert,ice cream"),
-    descriptions: {
-      pt: "Compota de abóbora com especiarias da casa, servida quente com sorvete de creme artesanal.",
-      en: "Spiced pumpkin compote served warm with artisan vanilla ice cream.",
-      ar: "مربى اليقطين بالبهارات يُقدّم ساخناً مع آيس كريم فانيلا منزلي.",
-    },
-    story: { pt: "", en: "", ar: "" },
+  { id:'doce-roca', category:'desserts', image:'Doce-da-Roca-com-Gelo.jpg',
+    name:{ pt:'Doce da Roça com Gelo', en:'Pumpkin Compote à la Mode', ar:'قرع بالحلو مع مثلجات' },
+    short:{ pt:'Abóbora cozida com especiarias, sorvete de creme artesanal.', en:'Spiced pumpkin compote, warm, with vanilla ice cream.', ar:'قرع متبّل دافئ مع آيس كريم فانيلا.' },
+    long:{ pt:'Sobremesa de alma caipira — quente, perfumada, aconchegante.', en:'Countryside soul — warm, aromatic, cozy.', ar:'روح ريفية — دافئة وعطرة ودافئة.' }
   },
-  {
-    id: "mandioca-real",
-    category: "desserts",
-    names: { pt: "Mandioca Real", en: "Cassava Cake with Dulce de Leche", ar: "كعكة الكسافا مع دولسي دي ليتشي" },
-    price: null,
-    imageCandidates: img("Mandioca-Real.jpg", "mandioca-real.jpg"),
-    fallback: fallbackUnsplash("cassava cake,dessert"),
-    descriptions: {
-      pt: "Bolo de mandioca com doce de leite artesanal e crocante de farofa de mandioca caramelizada.",
-      en: "Rustic cassava cake with artisan dulce de leche and caramelized cassava crumble.",
-      ar: "كيك الكسافا التقليدي مع دولسي دي ليتشي وحبيبات كسافا مكرملة.",
-    },
-    story: { pt: "", en: "", ar: "" },
+  { id:'mandioca-real', category:'desserts', image:'Mandioca-Real.jpg',
+    name:{ pt:'Mandioca Real', en:'Cassava Cake “Real”', ar:'كعكة الكسافا' },
+    short:{ pt:'Bolo de mandioca com doce de leite e farofa crocante de mandioca caramelizada.', en:'Rustic cassava cake with dulce de leche and crispy cassava crumble.', ar:'كعكة كسافا ريفية مع دولسي دي ليتشي وكرامبل كسافا مقرمش.' },
+    long:{ pt:'Texturas que se encontram — cremoso, crocante e nostálgico.', en:'Textures meeting: creamy, crunchy, nostalgic.', ar:'قوامات تلتقي — كريمي ومقرمش وحالم بالذكريات.' }
   },
-  {
-    id: "beijo-da-roca",
-    category: "desserts",
-    names: { pt: "Beijo da Roça", en: "Coconut-Cashew Kiss", ar: "قبلة المزرعة (جوز الهند والكاجو)" },
-    price: null,
-    imageCandidates: img("Beijo-da-roça.jpg", "Beijo-da-Roca.jpg"),
-    fallback: fallbackUnsplash("coconut dessert"),
-    descriptions: {
-      pt: "Beijinho cremoso de coco e castanha, servido sobre bolo de milho verde levemente úmido.",
-      en: "Creamy coconut-cashew truffle served over a moist green-corn cake.",
-      ar: "حلوى كريمية من جوز الهند والكاجو فوق كعكة الذرة الخضراء.",
-    },
-    story: { pt: "", en: "", ar: "" },
+  { id:'beijo-roca', category:'desserts', image:'Beijo-da-Roca.jpg',
+    name:{ pt:'Beijo da Roça', en:'Coconut‑Cashew Truffle', ar:'ترافل جوز الهند والكاجو' },
+    short:{ pt:'Trufa cremosa sobre mini bolo de milho verde levemente úmido.', en:'Creamy truffle over moist green‑corn cake.', ar:'ترافل كريمي فوق كعكة ذرة خضراء رطبة.' },
+    long:{ pt:'Doçura na medida certa com perfume de campo.', en:'Just‑right sweetness with countryside perfume.', ar:'حلاوة متوازنة بعطر ريفي.' }
   },
 
-  // ===== BEBIDAS (DRINKS)
-  {
-    id: "sol-do-cerrado",
-    category: "drinks",
-    names: { pt: "Sol do Cerrado", en: "Cerrado Sunset", ar: "شمس السِيرادو" },
-    price: null,
-    imageCandidates: img("Sol-do-Cerrado.jpg", "sol-do-cerrado.jpg"),
-    fallback: fallbackUnsplash("mango drink"),
-    descriptions: {
-      pt: "Manga, maracujá, hortelã e toque cítrico — refrescante como um pôr do sol brasileiro.",
-      en: "Mango, passion fruit, mint and a citrus lift — refreshing like a Brazilian sunset.",
-      ar: "مانجو مع فاكهة العاطفة والنعناع ولمسة حمضية منعشة كغروب برازيلي.",
-    },
-    story: { pt: "", en: "", ar: "" },
+  // ----- Bebidas -----
+  { id:'sol-cerrado', category:'beverages', image:'Sol-do-Cerrado.jpg',
+    name:{ pt:'Sol do Cerrado', en:'Sun of the Cerrado', ar:'شمس السيرادو' },
+    short:{ pt:'Manga com maracujá, hortelã e toque cítrico.', en:'Mango with passion fruit, mint and a citrus touch.', ar:'مانجو مع ماراكوجا ونعناع ولمسة حمضية.' },
+    long:{ pt:'Refrescante como pôr do sol brasileiro.', en:'Refreshing like a Brazilian sunset.', ar:'منعش كغروب شمس برازيلي.' }
   },
-  {
-    id: "frescor-da-amazonia",
-    category: "drinks",
-    names: { pt: "Frescor da Amazônia", en: "Amazon Fresh", ar: "نسمات الأمازون" },
-    price: null,
-    imageCandidates: img("Frescor-da-Amazônia.jpg", "Frescor-da-Amazonia.jpg"),
-    fallback: fallbackUnsplash("pineapple drink, mint,lime"),
-    descriptions: {
-      pt: "Abacaxi batido com hortelã e limão — tropical e vibrante.",
-      en: "Fresh pineapple blended with mint and lime — tropical and vibrant.",
-      ar: "أناناس طازج ممزوج بالنعناع والليمون — استوائي ونابض.",
-    },
-    story: { pt: "", en: "", ar: "" },
+  { id:'frescor-amazonia', category:'beverages', image:'Frescor-da-Amazônia.jpg',
+    name:{ pt:'Frescor da Amazônia', en:'Amazon Fresh', ar:'نسيم الأمازون' },
+    short:{ pt:'Abacaxi batido com hortelã e limão.', en:'Pineapple blended with mint and lime.', ar:'أناناس مخفوق مع نعناع وليمون.' },
+    long:{ pt:'Tropical, vibrante e verde.', en:'Tropical, vibrant, green.', ar:'استوائي نابض بالحياة.' }
   },
-  {
-    id: "pe-de-serra",
-    category: "drinks",
-    names: { pt: "Pé de Serra", en: "Iced Yerba Mate with Lemon, Honey & Ginger", ar: "شاي يَربا ماتيه بارد مع ليمون وعسل وزنجبيل" },
-    price: null,
-    imageCandidates: img("Pé-de-Serra.jpg", "Pe-de-Serra.jpg"),
-    fallback: fallbackUnsplash("iced tea"),
-    descriptions: {
-      pt: "Chá-mate gelado com limão, mel e raspas de gengibre — natural e energizante.",
-      en: "Iced yerba-mate tea with lemon, honey and ginger zest — naturally energizing.",
-      ar: "شاي يربا ماتيه بارد مع الليمون والعسل وبشر الزنجبيل — منعش وطبيعي.",
-    },
-    story: { pt: "", en: "", ar: "" },
+  { id:'pe-serra', category:'beverages', image:'Pé-de-Serra.jpg',
+    name:{ pt:'Pé de Serra', en:'Mountain Mate', ar:'متة الجبل' },
+    short:{ pt:'Chá‑mate gelado com limão, mel e gengibre.', en:'Iced yerba mate with lime, honey and ginger.', ar:'متة باردة مع ليمون وعسل وزنجبيل.' },
+    long:{ pt:'Energia natural, elegante e leve.', en:'Natural energy — light and elegant.', ar:'طاقة طبيعية خفيفة أنيقة.' }
   },
-  {
-    id: "caipile-classico",
-    category: "drinks",
-    names: { pt: "Caipilé Clássico (sem álcool)", en: "Caipilé Classic (non-alcoholic)", ar: "كايبيليه كلاسيك (بدون كحول)" },
-    price: null,
-    imageCandidates: img("Caípílé-Clássico.jpg", "Caipile-Classico.jpg"),
-    fallback: fallbackUnsplash("mocktail,lime"),
-    descriptions: {
-      pt: "Limão fresco, gelo e água com gás — o clássico em versão não alcoólica.",
-      en: "Fresh lime, ice and sparkling water — the classic reimagined without alcohol.",
-      ar: "ليمون طازج وجليد وماء فوار — الكلاسيكي بإصدار غير كحولي.",
-    },
-    story: { pt: "", en: "", ar: "" },
+  { id:'caipile', category:'beverages', image:'Caipilé-Clássico.jpg',
+    name:{ pt:'Caipilé Clássico (sem álcool)', en:'Classic Caipilé (NA)', ar:'كايپيلي كلاسيكي' },
+    short:{ pt:'Limão fresco, gelo e água com gás.', en:'Fresh lime, ice and sparkling water.', ar:'ليمون طازج وثـلج ومياه غازية.' },
+    long:{ pt:'A alma da caipirinha, numa versão sem álcool.', en:'The soul of caipirinha, alcohol‑free.', ar:'روح الكايبيرينيا بدون كحول.' }
   },
-  {
-    id: "blueberry-coco-fizz",
-    category: "drinks",
-    names: { pt: "Blueberry & Coco Fizz", en: "Blueberry & Coco Fizz", ar: "بلوبيري وكوكونَت فِز" },
-    price: null,
-    imageCandidates: img("Blueberry-&-Coco-Fizz.jpg", "Blueberry-e-Coco-Fizz.jpg"),
-    fallback: fallbackUnsplash("blueberry,coconut,drink"),
-    descriptions: {
-      pt: "Mirtilo batido com leite de coco e toque de baunilha — leve, cremoso e aromático.",
-      en: "Blueberries blended with coconut milk and a hint of vanilla — light, creamy and fragrant.",
-      ar: "توت أزرق ممزوج بحليب جوز الهند ولمسة فانيلا — خفيف وكريمي وعطِر.",
-    },
-    story: { pt: "", en: "", ar: "" },
+  { id:'blueberry-coco', category:'beverages', image:'Blueberry-&-Coco-Fizz.jpg',
+    name:{ pt:'Blueberry & Coco Fizz', en:'Blueberry & Coco Fizz', ar:'بلوبيري وكوكو فيز' },
+    short:{ pt:'Mirtilo batido com leite de coco e toque de baunilha.', en:'Blueberries blended with coconut milk and a hint of vanilla.', ar:'توت أزرق مع حليب جوز الهند ولمسة فانيلا.' },
+    long:{ pt:'Leve, cremoso e perfumado.', en:'Light, creamy and fragrant.', ar:'خفيف وكريمي وعطر.' }
   },
-  {
-    id: "amazon-breeze",
-    category: "drinks",
-    names: { pt: "Amazon Breeze", en: "Amazon Breeze", ar: "نسيم الأمازون" },
-    price: null,
-    imageCandidates: img("Amazon-Breeze.jpg"),
-    fallback: fallbackUnsplash("cupuaçu milkshake"),
-    descriptions: {
-      pt: "Milkshake cremoso de cupuaçu com leite e leite condensado — sobremesa tropical no copo.",
-      en: "Creamy cupuaçu milkshake with milk and condensed milk — a tropical dessert in a glass.",
-      ar: "ميلك شيك كوبواسو كريمي بالحليب والحليب المكثف — حلوى استوائية في كوب.",
-    },
-    story: { pt: "", en: "", ar: "" },
+  { id:'amazon-breeze', category:'beverages', image:'Amazon-Breeze.jpg',
+    name:{ pt:'Amazon-Breeze', en:'Amazon‑Breeze', ar:'أمازون بريز' },
+    short:{ pt:'Milkshake de cupuaçu com leite e leite condensado.', en:'Creamy cupuaçu shake with milk & condensed milk.', ar:'ميلكشيك كوبواسو كريمي مع حليب وحليب مكثف.' },
+    long:{ pt:'Sobremesa tropical no copo.', en:'A tropical dessert in a glass.', ar:'حلوى استوائية في كوب.' }
   },
-  {
-    id: "vitamina-do-cerrado",
-    category: "drinks",
-    names: { pt: "Vitamina do Cerrado", en: "Cerrado Vitamina", ar: "ڤيتامينَا دو سيرادو" },
-    price: null,
-    imageCandidates: img("Vitamina-do-Cerrado.jpg"),
-    fallback: fallbackUnsplash("banana smoothie,honey"),
-    descriptions: {
-      pt: "Vitamina de banana com leite de coco e mel — cremosa e energizante.",
-      en: "Banana smoothie with coconut milk and honey — creamy and energizing.",
-      ar: "سموثي الموز بحليب جوز الهند والعسل — كريمي ومنشط.",
-    },
-    story: { pt: "", en: "", ar: "" },
+  { id:'vitamina', category:'beverages', image:'Vitamina-do-Cerrado.jpg',
+    name:{ pt:'Vitamina do Cerrado', en:'Cerrado Smoothie', ar:'ڤيتامينا دو سيرادو' },
+    short:{ pt:'Banana com leite de coco e mel.', en:'Banana with coconut milk and honey.', ar:'موز مع حليب جوز الهند وعسل.' },
+    long:{ pt:'Cremoso, energético e acolhedor.', en:'Creamy, energizing, cozy.', ar:'كريمي ومنشّط.'. }
   },
-  {
-    id: "verao-brasil",
-    category: "drinks",
-    names: { pt: "Verão Brasil", en: "Verão Brasil", ar: "صيف البرازيل" },
-    price: null,
-    imageCandidates: img("Verão-Brasil.jpg", "Verao-Brasil.jpg"),
-    fallback: fallbackUnsplash("mango,sparkling,mint"),
-    descriptions: {
-      pt: "Suco de manga, hortelã fresca e água com gás — leve, elegante e refrescante.",
-      en: "Mango juice, fresh mint and sparkling water — light, elegant, refreshing.",
-      ar: "عصير مانجو مع نعناع طازج وماء فوار — خفيف وأنيق ومنعش.",
-    },
-    story: { pt: "", en: "", ar: "" },
+  { id:'verao-brasil', category:'beverages', image:'Verão-Brasil.jpg',
+    name:{ pt:'Verão Brasil', en:'Brazilian Summer', ar:'صيف البرازيل' },
+    short:{ pt:'Suco de manga, hortelã fresca e água com gás.', en:'Mango juice, fresh mint and sparkling water.', ar:'عصير مانجو ونعناع طازج وماء غازي.' },
+    long:{ pt:'Leve, elegante e refrescante.', en:'Light, elegant and refreshing.', ar:'خفيف أنيق منعش.' }
   },
-  {
-    id: "uva-limao-gelo",
-    category: "drinks",
-    names: { pt: "Uva & Limão Gelo", en: "Grape & Lime on Ice", ar: "عصير العنب والليمون على الثلج" },
-    price: null,
-    imageCandidates: img("Uva-&-Limão-Gelo.jpg", "Uva-e-Limao-Gelo.jpg"),
-    fallback: fallbackUnsplash("grape juice,lime"),
-    descriptions: {
-      pt: "Suco de uva integral com limão espremido e hortelã — refrescância que abraça.",
-      en: "Pure grape juice with squeezed lime and mint — cool and embracing.",
-      ar: "عصير عنب نقي مع ليمون معصور ونعناع — برودة منعشة.",
-    },
-    story: { pt: "", en: "", ar: "" },
+  { id:'uva-limao', category:'beverages', image:'Uva-&-Limão-Gelo.jpg',
+    name:{ pt:'Uva & Limão Gelo', en:'Grape & Lime on Ice', ar:'عنب وليمون بالثلج' },
+    short:{ pt:'Suco de uva integral com limão e hortelã.', en:'Pure grape juice with lime and mint.', ar:'عصير عنب نقي مع ليمون ونعناع.' },
+    long:{ pt:'Equilíbrio perfeito entre doce e cítrico.', en:'Perfect balance of sweet and citrus.', ar:'توازن مثالي بين الحلو والحامض.' }
   },
-  {
-    id: "agua-aromatica",
-    category: "drinks",
-    names: { pt: "Água Aromática Panela de Barro", en: "Panela de Barro Infused Water", ar: "ماء منكه بانيلّا دي بارّو" },
-    price: null,
-    imageCandidates: img("Agua-Aromatica.jpg", "Agua-Aromatica-Panela.jpg"),
-    fallback: fallbackUnsplash("infused water"),
-    descriptions: {
-      pt: "Água filtrada com laranja, pepino, limão e hortelã — servida bem gelada.",
-      en: "Filtered water infused with orange, cucumber, lemon and mint — served chilled.",
-      ar: "ماء مفلتر منقوع بالبرتقال والخيار والليمون والنعناع — يُقدّم باردًا.",
-    },
-    story: { pt: "", en: "", ar: "" },
+  { id:'agua-aromatica', category:'beverages', image:'Água-Aromática-Panela-de-Barro.jpg',
+    name:{ pt:'Água Aromática Panela de Barro', en:'Aromatic Water', ar:'ماء عطِر' },
+    short:{ pt:'Laranja, pepino, limão siciliano e hortelã — servida bem gelada.', en:'Orange, cucumber, lemon and mint — served chilled.', ar:'برتقال وخيار وليمون ونعناع — بارد جدًا.' },
+    long:{ pt:'Refresco leve da casa.', en:'House light refresher.', ar:'منعش خفيف خاص بنا.' }
   },
 
-  // ===== SAZONAIS (SEASONAL)
-  {
-    id: "pamonha",
-    category: "mains",
-    seasonal: true,
-    names: { pt: "Pamonha de Milho Verde", en: "Green-Corn Pamonha", ar: "بامونيا (ذرة خضراء)" },
-    price: null,
-    imageCandidates: img("pamonha.jpg", "Pamonha.jpg"),
-    fallback: fallbackUnsplash("pamonha,corn,tamale"),
-    descriptions: {
-      pt: "Clássico caipira de milho verde fresco, cremoso e perfumado, cozido na própria palha.",
-      en: "A countryside classic — fresh green-corn dough, creamy and fragrant, steamed in its husk.",
-      ar: "كلاسيكية ريفية — عجين الذرة الخضراء الطازجة، كريمي وعطِر، مطهوّ في قشرته.",
-    },
-    story: {
-      pt: "Disponível na época de milho — tradição que perfuma a cozinha e a memória.",
-      en: "Available in corn season — a tradition that perfumes both kitchen and memory.",
-      ar: "متاح في موسم الذرة — تقليد تفوح رائحته في المطبخ والذاكرة.",
-    },
-  },
+  // ----- Sazonal -----
+  { id:'pamonha', category:'seasonal', image:'pamonha.jpg',
+    name:{ pt:'Pamonha Mineira (Sazonal)', en:'Pamonha (Seasonal)', ar:'بامونيا موسمية' },
+    short:{ pt:'Clássico de milho verde, doce e cremoso.', en:'Classic green‑corn sweet, silky and creamy.', ar:'حلوى الذرة الخضراء الكلاسيكية كريمية.' },
+    long:{ pt:'Receita de família, embrulhada na palha, que chega quentinha e perfumada à mesa.', en:'Family recipe, wrapped in husk, served warm and fragrant.', ar:'وصفة عائلية تُقدَّم دافئة وعطرة داخل قشر الذرة.' }
+  }
 ];
 
