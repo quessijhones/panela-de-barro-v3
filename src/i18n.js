@@ -1,88 +1,76 @@
-export const locales = {
+export const LOCALES = { PT: "pt", EN: "en", AR: "ar" };
+
+export const STRINGS = {
   pt: {
-    code: "pt",
-    dir: "ltr",
-    nav: { about: "Sobre", menu: "Menu", gallery: "Galeria", location: "Localização", contact: "Contato" },
-    heroTitle: "Panela de Barro",
-    heroSub:
-      "Restaurante brasileiro familiar no Qatar. Com mais de 20 anos na hospitalidade, trazemos sabores de fogão a lenha, calor do interior e raízes brasileiras.",
-    openingNote: "Inauguração em Novembro — reservas online em breve.",
-    menuPreview: "Menu (prévia)",
-    seeFullMenu: "Ver menu completo",
-    category: {
-      mains: "Pratos Principais",
-      sides: "Acompanhamentos",
-      desserts: "Sobremesas",
-      beverages: "Bebidas",
-      seasonal: "Sazonal",
-      chef: "Do Chef",
-      all: "Todos"
-    },
-    galleryTitle: "Galeria",
-    locationTitle: "Localização",
-    locationText: "Baraha Town, Doha, Qatar",
-    contactTitle: "Contato",
-    contactEmail: "Email",
-    contactPhone: "Telefone",
-    footer: "panela-de-barro-v3.vercel.app"
+    brand: "Panela de Barro",
+    nav_about: "Sobre",
+    nav_menu: "Menu",
+    nav_gallery: "Galeria",
+    nav_location: "Localização",
+    nav_contact: "Contato",
+    hero_title: "Panela de Barro",
+    hero_sub: "Restaurante brasileiro familiar no Qatar. Com mais de 20 anos na hospitalidade, trazemos sabores de fogão a lenha, calor do interior e raízes brasileiras.",
+    hero_cta: "Ver Menu",
+    opening_note: "Inauguração em Novembro — reservas online em breve.",
+    filters_all: "Todos",
+    filters_mains: "Pratos Principais",
+    filters_sides: "Acompanhamentos",
+    filters_desserts: "Sobremesas",
+    filters_drinks: "Bebidas",
+    filters_seasonal: "Sazonal",
+    filters_chef: "Do Chef",
+    contact_title: "Contato",
+    location_title: "Localização",
+    address: "Baraha Town, Doha, Qatar",
+    email: "Email",
+    phone: "Telefone"
   },
   en: {
-    code: "en",
-    dir: "ltr",
-    nav: { about: "About", menu: "Menu", gallery: "Gallery", location: "Location", contact: "Contact" },
-    heroTitle: "Panela de Barro",
-    heroSub:
-      "A Brazilian family restaurant in Qatar. With 20+ years in hospitality, we bring wood-fired flavors, countryside warmth and Brazilian roots.",
-    openingNote: "Opening in November — online reservations soon.",
-    menuPreview: "Menu (preview)",
-    seeFullMenu: "See full menu",
-    category: {
-      mains: "Mains",
-      sides: "Side Dishes",
-      desserts: "Desserts",
-      beverages: "Beverages",
-      seasonal: "Seasonal",
-      chef: "Chef's",
-      all: "All"
-    },
-    galleryTitle: "Gallery",
-    locationTitle: "Location",
-    locationText: "Baraha Town, Doha, Qatar",
-    contactTitle: "Contact",
-    contactEmail: "Email",
-    contactPhone: "Phone",
-    footer: "panela-de-barro-v3.vercel.app"
+    brand: "Panela de Barro", // travado, sem tradução
+    nav_about: "About",
+    nav_menu: "Menu",
+    nav_gallery: "Gallery",
+    nav_location: "Location",
+    nav_contact: "Contact",
+    hero_title: "Panela de Barro",
+    hero_sub: "A Brazilian family restaurant in Qatar. With 20+ years in hospitality, we bring wood-fired flavors, countryside warmth and Brazilian roots.",
+    hero_cta: "See Menu",
+    opening_note: "Opening in November — online reservations coming soon.",
+    filters_all: "All",
+    filters_mains: "Mains",
+    filters_sides: "Side Dishes",
+    filters_desserts: "Desserts",
+    filters_drinks: "Beverages",
+    filters_seasonal: "Seasonal",
+    filters_chef: "Chef's",
+    contact_title: "Contact",
+    location_title: "Location",
+    address: "Baraha Town, Doha, Qatar",
+    email: "Email",
+    phone: "Phone"
   },
   ar: {
-    code: "ar",
-    dir: "rtl",
-    nav: { about: "نبذة", menu: "القائمة", gallery: "المعرض", location: "الموقع", contact: "التواصل" },
-    heroTitle: "بانِيلا دي بارّو",
-    heroSub:
-      "مطعم برازيلي عائلي في قطر. بخبرة تتجاوز 20 عامًا في الضيافة، نقدم نكهات فرن الحطب ودفء الريف وجذور البرازيل.",
-    openingNote: "الافتتاح في نوفمبر — الحجز عبر الإنترنت قريبًا.",
-    menuPreview: "القائمة (نظرة سريعة)",
-    seeFullMenu: "عرض القائمة كاملة",
-    category: {
-      mains: "الأطباق الرئيسية",
-      sides: "الأطباق الجانبية",
-      desserts: "الحلويات",
-      beverages: "المشروبات",
-      seasonal: "موسمي",
-      chef: "طبق الشيف",
-      all: "الكل"
-    },
-    galleryTitle: "المعرض",
-    locationTitle: "الموقع",
-    locationText: "باراحة تاون، الدوحة، قطر",
-    contactTitle: "التواصل",
-    contactEmail: "البريد الإلكتروني",
-    contactPhone: "الهاتف",
-    footer: "panela-de-barro-v3.vercel.app"
+    brand: "Panela de Barro", // لا تُترجم العلامة التجارية
+    nav_about: "حول",
+    nav_menu: "القائمة",
+    nav_gallery: "المعرض",
+    nav_location: "الموقع",
+    nav_contact: "اتصال",
+    hero_title: "Panela de Barro",
+    hero_sub: "مطعم برازيلي عائلي في قطر. بخبرة تزيد عن 20 عامًا في الضيافة، نقدم نكهات مطهية على الحطب ودفء الريف وجذورًا برازيلية.",
+    hero_cta: "عرض القائمة",
+    opening_note: "الافتتاح في نوفمبر — سيتم تفعيل الحجوزات عبر الإنترنت قريبًا.",
+    filters_all: "الكل",
+    filters_mains: "الأطباق الرئيسية",
+    filters_sides: "الأطباق الجانبية",
+    filters_desserts: "حلويات",
+    filters_drinks: "مشروبات",
+    filters_seasonal: "موسمي",
+    filters_chef: "طبق الشيف",
+    contact_title: "اتصال",
+    location_title: "الموقع",
+    address: "باراها تاون، الدوحة، قطر",
+    email: "البريد الإلكتروني",
+    phone: "الهاتف"
   }
 };
-
-export function applyDir(dir) {
-  const html = document.documentElement;
-  html.setAttribute("dir", dir);
-}
