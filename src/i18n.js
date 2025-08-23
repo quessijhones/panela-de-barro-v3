@@ -1,76 +1,83 @@
-export const LOCALES = { PT: "pt", EN: "en", AR: "ar" };
+// i18n.js – strings de interface + helpers de locale
 
-export const STRINGS = {
-  pt: {
-    brand: "Panela de Barro",
-    nav_about: "Sobre",
-    nav_menu: "Menu",
-    nav_gallery: "Galeria",
-    nav_location: "Localização",
-    nav_contact: "Contato",
-    hero_title: "Panela de Barro",
-    hero_sub: "Restaurante brasileiro familiar no Qatar. Com mais de 20 anos na hospitalidade, trazemos sabores de fogão a lenha, calor do interior e raízes brasileiras.",
-    hero_cta: "Ver Menu",
-    opening_note: "Inauguração em Novembro — reservas online em breve.",
-    filters_all: "Todos",
-    filters_mains: "Pratos Principais",
-    filters_sides: "Acompanhamentos",
-    filters_desserts: "Sobremesas",
-    filters_drinks: "Bebidas",
-    filters_seasonal: "Sazonal",
-    filters_chef: "Do Chef",
-    contact_title: "Contato",
-    location_title: "Localização",
-    address: "Baraha Town, Doha, Qatar",
-    email: "Email",
-    phone: "Telefone"
+export const SUPPORTED_LOCALES = ["pt", "en", "ar"];
+
+export const UI = {
+  brand: { pt: "Panela de Barro", en: "Panela de Barro", ar: "‏Panela de Barro" },
+  nav: {
+    about: { pt: "Sobre", en: "About", ar: "نبذة" },
+    menu: { pt: "Menu", en: "Menu", ar: "القائمة" },
+    gallery: { pt: "Galeria", en: "Gallery", ar: "المعرض" },
+    location: { pt: "Localização", en: "Location", ar: "الموقع" },
+    contact: { pt: "Contato", en: "Contact", ar: "اتصال" },
   },
-  en: {
-    brand: "Panela de Barro", // travado, sem tradução
-    nav_about: "About",
-    nav_menu: "Menu",
-    nav_gallery: "Gallery",
-    nav_location: "Location",
-    nav_contact: "Contact",
-    hero_title: "Panela de Barro",
-    hero_sub: "A Brazilian family restaurant in Qatar. With 20+ years in hospitality, we bring wood-fired flavors, countryside warmth and Brazilian roots.",
-    hero_cta: "See Menu",
-    opening_note: "Opening in November — online reservations coming soon.",
-    filters_all: "All",
-    filters_mains: "Mains",
-    filters_sides: "Side Dishes",
-    filters_desserts: "Desserts",
-    filters_drinks: "Beverages",
-    filters_seasonal: "Seasonal",
-    filters_chef: "Chef's",
-    contact_title: "Contact",
-    location_title: "Location",
-    address: "Baraha Town, Doha, Qatar",
-    email: "Email",
-    phone: "Phone"
+  home: {
+    headline: {
+      pt: "Cozinha brasileira com raízes e afeto",
+      en: "Brazilian cuisine with roots and heart",
+      ar: "مطبخ برازيلي بأصالة ودفء",
+    },
+    sub: {
+      pt: "Mais de 20 anos de hospitalidade — sabores no fogão a lenha e calor do interior.",
+      en: "20+ years of hospitality — wood-fired flavors and countryside warmth.",
+      ar: "أكثر من 20 عامًا من الضيافة — نكهات من موقد الحطب ودفء الريف.",
+    },
+    ctaMenu: { pt: "Ver Menu", en: "View Menu", ar: "عرض القائمة" },
+    preview: { pt: "Menu (prévia)", en: "Menu (preview)", ar: "لمحة عن القائمة" },
   },
-  ar: {
-    brand: "Panela de Barro", // لا تُترجم العلامة التجارية
-    nav_about: "حول",
-    nav_menu: "القائمة",
-    nav_gallery: "المعرض",
-    nav_location: "الموقع",
-    nav_contact: "اتصال",
-    hero_title: "Panela de Barro",
-    hero_sub: "مطعم برازيلي عائلي في قطر. بخبرة تزيد عن 20 عامًا في الضيافة، نقدم نكهات مطهية على الحطب ودفء الريف وجذورًا برازيلية.",
-    hero_cta: "عرض القائمة",
-    opening_note: "الافتتاح في نوفمبر — سيتم تفعيل الحجوزات عبر الإنترنت قريبًا.",
-    filters_all: "الكل",
-    filters_mains: "الأطباق الرئيسية",
-    filters_sides: "الأطباق الجانبية",
-    filters_desserts: "حلويات",
-    filters_drinks: "مشروبات",
-    filters_seasonal: "موسمي",
-    filters_chef: "طبق الشيف",
-    contact_title: "اتصال",
-    location_title: "الموقع",
-    address: "باراها تاون، الدوحة، قطر",
-    email: "البريد الإلكتروني",
-    phone: "الهاتف"
-  }
+  filters: {
+    all: { pt: "Todos", en: "All", ar: "الكل" },
+    mains: { pt: "Pratos Principais", en: "Mains", ar: "الأطباق الرئيسية" },
+    sides: { pt: "Acompanhamentos", en: "Side Dishes", ar: "الأطباق الجانبية" },
+    desserts: { pt: "Sobremesas", en: "Desserts", ar: "الحلويات" },
+    beverages: { pt: "Bebidas", en: "Beverages", ar: "المشروبات" },
+    seasonal: { pt: "Sazonal", en: "Seasonal", ar: "موسمي" },
+    chef: { pt: "Do Chef", en: "Chef’s", ar: "اختيار الشيف" },
+  },
+  modal: {
+    close: { pt: "Fechar", en: "Close", ar: "إغلاق" },
+    orderSoon: { pt: "Pedir (em breve)", en: "Order (soon)", ar: "طلب (قريبًا)" },
+    nutrition: { pt: "Ficha técnica", en: "Nutrition", ar: "القيم الغذائية" },
+    kcal: { pt: "kcal", en: "kcal", ar: "كيلو كالوري" },
+    carbs: { pt: "Carboidratos", en: "Carbs", ar: "كربوهيدرات" },
+    protein: { pt: "Proteínas", en: "Protein", ar: "بروتين" },
+    fat: { pt: "Gorduras", en: "Fat", ar: "دهون" },
+    allergens: { pt: "Alergênicos", en: "Allergens", ar: "مسببات الحساسية" },
+  },
+  gallery: {
+    title: { pt: "Galeria", en: "Gallery", ar: "المعرض" },
+  },
+  location: {
+    title: { pt: "Localização", en: "Location", ar: "الموقع" },
+    address: {
+      pt: "Baraha Town, Doha, Qatar",
+      en: "Baraha Town, Doha, Qatar",
+      ar: "‏باراحة تاون، الدوحة، قطر",
+    },
+  },
+  contact: {
+    title: { pt: "Contato", en: "Contact", ar: "اتصال" },
+    email: "restaurant@paneladebarroqatar.com",
+    phone: "+974 3047 5279",
+  },
 };
+
+export function getLocale() {
+  const p = new URLSearchParams(window.location.search);
+  const q = (p.get("lang") || "").toLowerCase();
+  if (SUPPORTED_LOCALES.includes(q)) return q;
+  return "pt"; // padrão
+}
+
+export function setLocale(lang) {
+  const url = new URL(window.location.href);
+  url.searchParams.set("lang", lang);
+  window.location.href = url.toString();
+}
+
+export function t(path) {
+  const lang = getLocale();
+  const val = path?.[lang];
+  // fallback para EN se não existir no AR/PT
+  return val ?? path?.en ?? "";
+}
