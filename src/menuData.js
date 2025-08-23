@@ -1,175 +1,200 @@
-// Caminhos SEM "public", sempre começando com /images/...
+// menuData.js – dados do cardápio com PT/EN + nutrição + alergênicos
+
+export const CATEGORIES = ["mains", "sides", "desserts", "beverages", "seasonal", "chef"];
+
 export const MENU = [
-  // PRATOS PRINCIPAIS
   {
     id: "vaca-atolada",
-    title: "Vaca Atolada (Ossobuco)",
-    desc: "Ossobuco com polenta cremosa e rúcula cítrica.",
-    tag: "mains",
-    image: "/images/vaca-atolada.jpg"
+    image: "/images/vaca-atolada.jpg",
+    category: "mains",
+    tag: "🥩",
+    title: {
+      pt: "Vaca Atolada (Ossobuco)",
+      en: "Vaca Atolada (Beef Ossobuco)",
+    },
+    summary: {
+      pt: "Ossobuco lentamente cozido, polenta cremosa e rúcula cítrica.",
+      en: "Slow-braised ossobuco with creamy polenta and citrus arugula.",
+    },
+    description: {
+      pt: "Clássico mineiro de dias de festa. O ossobuco cozinha por horas até desmanchar, puxando alho, cebola e ervas. Servido com polenta cremosa e rúcula cítrica — conforto e raiz no mesmo prato.",
+      en: "A Minas Gerais classic for feast days. Beef ossobuco braises for hours until tender, infused with garlic, onions, and herbs. Served with creamy polenta and citrus arugula — comfort and heritage in one plate.",
+    },
+    nutrition: { kcal: 680, carbs: 18, protein: 42, fat: 48 },
+    allergens: ["gluten-free"],
   },
   {
     id: "feijoada-costela",
-    title: "Feijoada de Costela",
-    desc: "Feijão preto com costela, farofa de banana e vinagrete.",
-    tag: "mains",
-    image: "/images/feijoada-costela.jpg"
+    image: "/images/feijoada-costela.jpg",
+    category: "mains",
+    tag: "🥩",
+    title: { pt: "Feijoada de Costela", en: "Black Bean Stew with Ribs" },
+    summary: {
+      pt: "Feijão preto com costela, farofa de banana e vinagrete.",
+      en: "Black beans with ribs, banana farofa and vinaigrette.",
+    },
+    description: {
+      pt: "Feijoada de quintal: o feijão cozinha devagar, a costela fica macia e a farofa de banana traz o toque doce-salgado típico do Brasil central.",
+      en: "Backyard-style feijoada: slow-cooked black beans, tender ribs, and banana farofa for that sweet-savory note from Brazil’s heartland.",
+    },
+    nutrition: { kcal: 720, carbs: 52, protein: 36, fat: 38 },
+    allergens: ["contains-pork?"],
   },
   {
     id: "picanha-grelhada",
-    title: "Picanha Grelhada",
-    desc: "Com risoto de cogumelos, polenta verde e molho de pimenta do reino.",
-    tag: "chef",
-    image: "/images/picanha-grelhada.jpg"
+    image: "/images/picanha-grelhada.jpg",
+    category: "chef",
+    tag: "🥩⭐",
+    title: { pt: "Picanha Grelhada", en: "Grilled Picanha" },
+    summary: {
+      pt: "Com risoto de cogumelos, polenta verde e molho de pimenta-do-reino.",
+      en: "With mushroom risotto, green-corn polenta and peppercorn sauce.",
+    },
+    description: {
+      pt: "Corte-ícone do churrasco brasileiro, dourado em chapa quente para manter a suculência. Acompanha risoto de cogumelos e polenta verde — toque do chef.",
+      en: "An icon of Brazilian barbecue, seared hot to keep it juicy. Served with mushroom risotto and green-corn polenta — chef’s signature.",
+    },
+    nutrition: { kcal: 640, carbs: 28, protein: 45, fat: 36 },
+    allergens: [],
   },
-  {
-    id: "galinhada-caipira",
-    title: "Galinhada Caipira",
-    desc: "Arroz de galinha caipira, cheiro-verde e pimenta-biquinho.",
-    tag: "mains",
-    image: "/images/galinhada-caipira.jpg"
-  },
-  {
-    id: "fraldinha-inteira",
-    title: "Fraldinha Inteira",
-    desc: "Assada lentamente com alho e ervas, suculenta.",
-    tag: "mains",
-    image: "/images/fraldinha-inteira.jpg"
-  },
-  {
-    id: "hamburguer-picanha",
-    title: "Hambúrguer de Picanha",
-    desc: "Queijo, maionese de casa e pão de brioche.",
-    tag: "mains",
-    image: "/images/hamburguer-de-picanha.jpg"
-  },
-
-  // ACOMPANHAMENTOS
   {
     id: "pao-de-queijo",
-    title: "Pão de Queijo",
-    desc: "Tradicional, macio e quentinho.",
-    tag: "sides",
-    image: "/images/pao-de-queijo.jpg"
+    image: "/images/pao-de-queijo.jpg",
+    category: "sides",
+    tag: "🌾🚫",
+    title: { pt: "Pão de Queijo", en: "Cheese Bread (GF)" },
+    summary: { pt: "Tradicional, macio e quentinho.", en: "Traditional, soft and warm." },
+    description: {
+      pt: "Receita mineira com polvilho e queijo curado. Sem glúten por natureza, é abraço em forma de pão.",
+      en: "Minas-style recipe using cassava starch and aged cheese. Naturally gluten-free — a warm hug in bread form.",
+    },
+    nutrition: { kcal: 210, carbs: 22, protein: 5, fat: 10 },
+    allergens: ["dairy"],
   },
   {
     id: "polenta-frita",
-    title: "Polenta Frita",
-    desc: "Dourada por fora, cremosa por dentro.",
-    tag: "sides",
-    image: "/images/polenta-frita.jpg"
+    image: "/images/polenta-frita.jpg",
+    category: "sides",
+    tag: "🌽",
+    title: { pt: "Polenta Frita", en: "Crispy Polenta Fries" },
+    summary: { pt: "Dourada por fora, cremosa por dentro.", en: "Golden outside, creamy inside." },
+    description: {
+      pt: "Herança italiana no Brasil: milho, fogo baixo e tempo. Depois, cortes firmes que viram crocância perfeita.",
+      en: "Italian heritage in Brazil: cornmeal, low heat and time. Then firm cuts turned into perfect crunch.",
+    },
+    nutrition: { kcal: 310, carbs: 30, protein: 4, fat: 18 },
+    allergens: [],
   },
   {
-    id: "pao-de-alho",
-    title: "Pão de Alho",
-    desc: "Pão artesanal, manteiga de alho e salsa.",
-    tag: "sides",
-    image: "/images/pao-de-alho.jpg"
+    id: "pamonha",
+    image: "/images/pamonha.jpg",
+    category: "seasonal",
+    tag: "🌽",
+    title: { pt: "Pamonha (Sazonal)", en: "Pamonha (Seasonal)" },
+    summary: { pt: "Clássico de milho verde — doce ou salgada.", en: "Green-corn classic — sweet or savory." },
+    description: {
+      pt: "Feita na palha, cozida lentamente. Sabor de festa junina e de roça.",
+      en: "Wrapped in corn husks and gently simmered. Tastes like countryside fairs.",
+    },
+    nutrition: { kcal: 380, carbs: 62, protein: 7, fat: 10 },
+    allergens: [],
   },
   {
-    id: "mandioca-frita",
-    title: "Mandioca Frita",
-    desc: "Crocante por fora, macia por dentro.",
-    tag: "sides",
-    image: "/images/mandioca-frita.jpg"
+    id: "encanto-de-coco",
+    image: "/images/encanto-de-coco.jpg",
+    category: "desserts",
+    tag: "🥥",
+    title: { pt: "Encanto de Coco", en: "Coconut Pudim" },
+    summary: { pt: "Pudim de coco com caramelo claro.", en: "Coconut flan with light caramel." },
+    description: {
+      pt: "Sobremesa de domingo: textura sedosa, perfume de coco e doçura equilibrada.",
+      en: "Sunday dessert: silky texture, coconut aroma and balanced sweetness.",
+    },
+    nutrition: { kcal: 290, carbs: 36, protein: 6, fat: 12 },
+    allergens: ["dairy", "eggs"],
   },
   {
-    id: "mandioca-real",
-    title: "Mandioca Real",
-    desc: "Cozida na manteiga de garrafa com cebola roxa.",
-    tag: "sides",
-    image: "/images/mandioca-real.jpg"
-  },
-
-  // BEBIDAS
-  {
-    id: "sol-do-cerrado",
-    title: "Sol do Cerrado",
-    desc: "Manga com maracujá, hortelã e toque cítrico.",
-    tag: "beverages",
-    image: "/images/sol-do-cerrado.jpg"
-  },
-  {
-    id: "uva-limao-gelo",
-    title: "Uva & Limão Gelo",
-    desc: "Suco de uva integral com limão espremido e hortelã.",
-    tag: "beverages",
-    image: "/images/uva-limao-gelo.jpg"
+    id: "doce-da-roca-com-gelo",
+    image: "/images/doce-da-roca-com-gelo.jpg",
+    category: "desserts",
+    tag: "🎃",
+    title: { pt: "Doce da Roça com Gelo", en: "Country Pumpkin Sweet w/ Ice Cream" },
+    summary: { pt: "Abóbora cremosa, especiarias e sorvete artesanal.", en: "Creamy pumpkin, spices and artisan ice cream." },
+    description: {
+      pt: "Abóbora cozida com cravo e canela, lembrança doce das cozinhas do interior.",
+      en: "Pumpkin cooked with clove and cinnamon — sweet memory from country kitchens.",
+    },
+    nutrition: { kcal: 340, carbs: 54, protein: 5, fat: 10 },
+    allergens: ["dairy"],
   },
   {
     id: "amazon-breeze",
-    title: "Amazon-Breeze",
-    desc: "Abacaxi, cupuaçu e água de coco geladinha.",
-    tag: "beverages",
-    image: "/images/amazon-breeze.jpg"
+    image: "/images/amazon-breeze.jpg",
+    category: "beverages",
+    tag: "🥤",
+    title: { pt: "Amazon Breeze", en: "Amazon Breeze" },
+    summary: { pt: "Abacaxi, hortelã e limão.", en: "Pineapple, mint & lime." },
+    description: {
+      pt: "Refresco brilhante com toque herbal, inspirado no Norte do Brasil.",
+      en: "Bright, herbal refreshment inspired by Brazil’s North.",
+    },
+    nutrition: { kcal: 120, carbs: 28, protein: 1, fat: 0 },
+    allergens: [],
   },
   {
-    id: "blueberry-coco-fizz",
-    title: "Blueberry & Coco Fizz",
-    desc: "Mirtilo com coco e toque de limão siciliano.",
-    tag: "beverages",
-    image: "/images/blueberry-coco-fizz.jpg"
-  },
-
-  // SOBREMESAS
-  {
-    id: "encanto-de-coco",
-    title: "Encanto de Coco",
-    desc: "Pudim de coco com caramelo claro.",
-    tag: "desserts",
-    image: "/images/encanto-de-coco.jpg"
-  },
-  {
-    id: "doce-da-roca",
-    title: "Doce da Roça com Gelo",
-    desc: "Abóbora cremosa com especiarias e sorvete artesanal.",
-    tag: "desserts",
-    image: "/images/doce-da-roca-com-gelo.jpg"
-  },
-
-  // SAZONAL
-  {
-    id: "pamonha",
-    title: "Pamonha (Sazonal)",
-    desc: "Clássico de milho verde — doce ou salgada.",
-    tag: "seasonal",
-    image: "/images/pamonha.jpg"
-  },
-  {
-    id: "verao-brasil",
-    title: "Verão Brasil",
-    desc: "Limonada com maracujá e gelo moído.",
-    tag: "seasonal",
-    image: "/images/verao-brasil.jpg"
-  },
-  {
-    id: "vitamina-do-cerrado",
-    title: "Vitamina do Cerrado",
-    desc: "Cupu-açu, banana e castanha de caju.",
-    tag: "seasonal",
-    image: "/images/vitamina-do-cerrado.jpg"
-  },
-
-  // MAIS BEBIDAS (que você subiu)
-  {
-    id: "caipile-classico",
-    title: "Caipilé Clássico",
-    desc: "Limão, gelo e água com gás.",
-    tag: "beverages",
-    image: "/images/caipile-classico.jpg"
+    id: "uva-limao-gelo",
+    image: "/images/uva-limao-gelo.jpg",
+    category: "beverages",
+    tag: "🥤",
+    title: { pt: "Uva & Limão Gelo", en: "Grape & Lemon Ice" },
+    summary: { pt: "Suco de uva integral com limão e hortelã.", en: "Grape juice with lemon and mint." },
+    description: {
+      pt: "Ácido, frutado e gelado — companhia leve para os pratos.",
+      en: "Tart, fruity and icy — a light companion to food.",
+    },
+    nutrition: { kcal: 110, carbs: 26, protein: 1, fat: 0 },
+    allergens: [],
   },
   {
     id: "pe-de-serra",
-    title: "Pé de Serra",
-    desc: "Chá-mate gelado com limão, mel e gengibre.",
-    tag: "beverages",
-    image: "/images/pe-de-serra.jpg"
+    image: "/images/pe-de-serra.jpg",
+    category: "beverages",
+    tag: "🧉",
+    title: { pt: "Pé de Serra", en: "Pé de Serra (Mate Iced Tea)" },
+    summary: { pt: "Chá-mate gelado com limão e gengibre.", en: "Iced yerba mate with lemon & ginger." },
+    description: {
+      pt: "Bebida refrescante, cara de tarde nordestina e vento de varanda.",
+      en: "Refreshing, an afternoon breeze from Brazil’s Northeast.",
+    },
+    nutrition: { kcal: 35, carbs: 9, protein: 0, fat: 0 },
+    allergens: [],
   },
   {
-    id: "frescor-da-amazonia",
-    title: "Frescor da Amazônia",
-    desc: "Abacaxi batido com hortelã e limão.",
-    tag: "beverages",
-    image: "/images/frescor-da-amazonia.jpg"
+    id: "pasteis-brasileiros",
+    image: "/images/pasteis-brasileiros.jpg",
+    category: "sides",
+    tag: "🥟",
+    title: { pt: "Pastéis Brasileiros", en: "Brazilian Pastéis" },
+    summary: { pt: "Massa crocante com recheios do dia.", en: "Crispy shells, daily fillings." },
+    description: {
+      pt: "Tradição de feira: massa leve e bolhas douradas. Recheios variam conforme a estação.",
+      en: "Street-fair classic: light dough with golden bubbles. Fillings change with the season.",
+    },
+    nutrition: { kcal: 420, carbs: 38, protein: 10, fat: 24 },
+    allergens: ["gluten"],
+  },
+  {
+    id: "galinhada-caipira",
+    image: "/images/galinhada-caipira.jpg",
+    category: "mains",
+    tag: "🍗",
+    title: { pt: "Galinhada Caipira", en: "Country Chicken Rice" },
+    summary: { pt: "Arroz úmido e aromático com frango caipira.", en: "Aromatic rice with free-range chicken." },
+    description: {
+      pt: "Prato de reunião em panelão: caldo rico, cúrcuma e cheiro verde.",
+      en: "Gathering dish in a big pot: rich broth, turmeric and herbs.",
+    },
+    nutrition: { kcal: 560, carbs: 48, protein: 32, fat: 24 },
+    allergens: [],
   },
 ];
