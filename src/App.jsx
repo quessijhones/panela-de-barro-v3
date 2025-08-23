@@ -1,252 +1,205 @@
-import React, { useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
+import "./styles.css";
 import { MENU } from "./menuData";
-import { locales, applyDir } from "./i18n";
+import { LOCALES, STRINGS } from "./i18n";
 
-const ALL = ["all","mains","sides","desserts","beverages","seasonal","chef"];
+const heroImages = [
+  "/images/vaca-atolada.jpg",
+  "/images/picanha-grelhada.jpg",
+  "/images/feijoada-costela.jpg"
+];
 
-function useLang() {
-  const [lang, setLang] = useState(() => localStorage.getItem("lang") || "pt");
-  const t = locales[lang] || locales.pt;
+function useLocale() {
+  const [locale, setLocale] = useState(() => {
+    const url = new URL(window.location.href);
+    return url.searchParams.get("lang") || localStorage.getItem("lang") || LOCALES.PT;
+  });
+  const t = useMemo(() => STRINGS[locale] ?? STRINGS.pt, [locale]);
+
   useEffect(() => {
-    localStorage.setItem("lang", lang);
-    applyDir(t.dir);
-    document.documentElement.lang = t.code;
-  }, [lang, t.dir, t.code]);
-  return { lang, setLang, t };
+    localStorage.setItem("lang", locale);
+    const url = new URL(window.location.href);
+    url.searchParams.set("lang", locale);
+    window.history.replaceState({}, "", url);
+    document.documentElement.lang = locale;
+    document.documentElement.dir = locale === LOCALES.AR ? "rtl" : "ltr";
+  }, [locale]);
+
+  return { locale, setLocale, t };
 }
 
-function useHashRoute() {
-  const [hash, setHash] = useState(() => window.location.hash || "#home");
-  useEffect(() => {
-    const onHash = () => setHash(window.location.hash || "#home");
-    window.addEventListener("hashchange", onHash);
-    return () => window.removeEventListener("hashchange", onHash);
-  }, []);
-  return hash.replace("#","") || "home";
-}
+function Header({ locale, setLocale, t }) {
+  const scrollTo = (id) => {
+    document.getElementById(id)?.scrollIntoView({ behavior: "smooth", block: "start" });
+  };
 
-function Navbar({ t, onNav }) {
-  const Item = ({href, children}) => (
-    <a href={href} onClick={onNav} className="nav-link">{children}</a>
-  );
   return (
-    <header className="nav">
-      <a href="#home" className="brand">
-        <img src="/logo.png" alt="logo" />
-        <span>Panela<br/>de Barro</span>
-      </a>
-      <nav>
-        <Item href="#home">{t.nav.about}</Item>
-        <Item href="#menu">{t.nav.menu}</Item>
-        <Item href="#gallery">{t.nav.gallery}</Item>
-        <Item href="#location">{t.nav.location}</Item>
-        <Item href="#contact">{t.nav.contact}</Item>
+    <header className="header" translate="no">
+      <nav className="nav container">
+        <div className="brand">
+          <img src="/logo.png" width="28" height="28" alt="" />
+          <span translate="no">Panela de Barro</span>
+        </div>
+
+        <a href="#about" onClick={(e)=>{e.preventDefault();scrollTo("about")}}>{t.nav_about}</a>
+        <a href="#menu" onClick={(e)=>{e.preventDefault();scrollTo("menu")}}>{t.nav_menu}</a>
+        <a href="#gallery" onClick={(e)=>{e.preventDefault();scrollTo("gallery")}}>{t.nav_gallery}</a>
+        <a href="#location" onClick={(e)=>{e.preventDefault();scrollTo("location")}}>{t.nav_location}</a>
+        <a href="#contact" onClick={(e)=>{e.preventDefault();scrollTo("contact")}}>{t.nav_contact}</a>
+
+        <div className="langs">
+          {[LOCALES.PT, LOCALES.EN, LOCALES.AR].map(code=>(
+            <button
+              key={code}
+              className={locale===code?"active":""}
+              onClick={()=>setLocale(code)}
+              aria-label={`language ${code}`}
+            >
+              {code.toUpperCase()}
+            </button>
+          ))}
+        </div>
       </nav>
     </header>
   );
 }
 
-function LangSwitcher({lang,setLang}) {
-  return (
-    <div className="lang">
-      {["pt","en","ar"].map(code=>(
-        <button
-          key={code}
-          onClick={()=>setLang(code)}
-          className={`pill ${lang===code?"active":""}`}
-          aria-label={code.toUpperCase()}
-        >
-          {code.toUpperCase()}
-        </button>
-      ))}
-    </div>
-  );
-}
-
-function AutoCarousel({ images, interval=3500 }) {
-  const [i,setI] = useState(0);
-  useEffect(()=>{
-    const id = setInterval(()=> setI(prev => (prev+1)%images.length), interval);
-    return ()=>clearInterval(id);
-  },[images.length, interval]);
-  return (
-    <div className="carousel">
-      {images.map((src,idx)=>(
-        <img key={src} src={src} alt="" className={`slide ${idx===i?"on":""}`} loading="eager"/>
-      ))}
-    </div>
-  );
-}
-
 function Hero({ t }) {
-  const heroImgs = [
-    "/images/picanha-grelhada.jpg",
-    "/images/vaca-atolada.jpg",
-    "/images/feijoada-costela.jpg"
-  ];
+  const [idx, setIdx] = useState(0);
+  useEffect(()=>{
+    const id = setInterval(()=>setIdx(i=>(i+1)%heroImages.length), 5000);
+    return ()=>clearInterval(id);
+  },[]);
   return (
     <section className="hero" id="home">
-      <AutoCarousel images={heroImgs}/>
-      <div className="hero-text">
-        <h1>{t.heroTitle}</h1>
-        <p>{t.heroSub}</p>
-        <em className="note">{t.openingNote}</em>
-        <a className="cta" href="#menu">{t.nav.menu}</a>
-      </div>
-    </section>
-  );
-}
-
-function MenuCard({ item, t }) {
-  const tagLabel = {
-    mains: t.category.mains,
-    sides: t.category.sides,
-    desserts: t.category.desserts,
-    beverages: t.category.beverages,
-    seasonal: t.category.seasonal,
-    chef: t.category.chef
-  }[item.tag] || "";
-
-  return (
-    <article className="card">
-      <img src={item.image} alt={item.title} loading="lazy" />
-      <div className="card-body">
-        <div className="card-head">
-          <h3>{item.title}</h3>
-          {tagLabel && <span className="badge">{tagLabel}</span>}
+      <img src={heroImages[idx]} alt="" aria-hidden="true" />
+      <div className="hero-content">
+        <div className="hero-card">
+          <h1 className="hero-title" translate="no">{t.hero_title}</h1>
+          <p className="hero-sub">{t.hero_sub}</p>
+          <p className="hero-note"><em>{t.opening_note}</em></p>
+          <a className="hero-cta" href="#menu" onClick={(e)=>{e.preventDefault();document.getElementById("menu")?.scrollIntoView({behavior:"smooth"})}}>{t.hero_cta}</a>
         </div>
-        <p>{item.desc}</p>
-      </div>
-    </article>
-  );
-}
-
-function MenuPreview({ t }) {
-  const preview = useMemo(()=> MENU.slice(0, 9),[]);
-  return (
-    <section className="wrap" id="menu">
-      <h2>{t.menuPreview}</h2>
-      <div className="grid">
-        {preview.map(m => <MenuCard key={m.id} item={m} t={t}/>)}
-      </div>
-      <div style={{textAlign:"center", marginTop:16}}>
-        <a className="cta outline" href="#menu-full">{t.seeFullMenu}</a>
       </div>
     </section>
-  );
+  )
 }
 
-function Filters({t, value, onChange}) {
+function Filters({ current, setCurrent, t }) {
+  const tabs = [
+    {key:"all", label:t.filters_all},
+    {key:"mains", label:t.filters_mains},
+    {key:"sides", label:t.filters_sides},
+    {key:"desserts", label:t.filters_desserts},
+    {key:"drinks", label:t.filters_drinks},
+    {key:"seasonal", label:t.filters_seasonal},
+    {key:"chef", label:t.filters_chef},
+  ];
   return (
-    <div className="filters">
-      {ALL.map(k=>(
-        <button key={k}
-          className={`pill ${value===k?"active":""}`}
-          onClick={()=>onChange(k)}>
-          {k==="all" ? t.category.all :
-           k==="mains" ? t.category.mains :
-           k==="sides" ? t.category.sides :
-           k==="desserts" ? t.category.desserts :
-           k==="beverages" ? t.category.beverages :
-           k==="seasonal" ? t.category.seasonal :
-           t.category.chef}
+    <div className="pills">
+      {tabs.map(tab=>(
+        <button key={tab.key} className={`pill ${current===tab.key?"active":""}`} onClick={()=>setCurrent(tab.key)}>
+          {tab.label}
         </button>
       ))}
     </div>
   );
 }
 
-function MenuPage({ t }) {
-  const [f,setF] = useState("all");
-  const items = useMemo(()=> f==="all" ? MENU : MENU.filter(m=>m.tag===f), [f]);
+function MenuGrid({ t }) {
+  const [filter, setFilter] = useState("all");
+  const data = useMemo(()=> filter==="all" ? MENU : MENU.filter(i=>i.category===filter), [filter]);
   return (
-    <section className="wrap" id="menu-full">
-      <h2>{t.nav.menu}</h2>
-      <Filters t={t} value={f} onChange={setF}/>
-      <div className="grid">
-        {items.map(m => <MenuCard key={m.id} item={m} t={t}/>)}
+    <section id="menu" className="section">
+      <div className="container">
+        <h2>{t.nav_menu}</h2>
+        <Filters current={filter} setCurrent={setFilter} t={t} />
+        <div className="grid">
+          {data.map(item=>(
+            <article className="card" key={item.id}>
+              <img src={item.image} alt={item.title} />
+              <div className="content">
+                <span className="badge">{item.tag}</span>
+                <h3 style={{margin:"6px 0 6px"}}>{item.title}</h3>
+                <p style={{margin:0,color:"#543"}}>{item.desc}</p>
+              </div>
+            </article>
+          ))}
+        </div>
+      </div>
+    </section>
+  )
+}
+
+function About({ t }){
+  return (
+    <section id="about" className="section">
+      <div className="container">
+        <h2>{t.nav_about}</h2>
+        <p>Chef-owner Quessi Jhones comanda a cozinha com sua mãe, Dona Cleuza, e seu irmão (Head Chef com 10+ anos). </p>
       </div>
     </section>
   );
 }
 
-function Gallery({t}) {
-  const imgs = [
-    "/images/picanha-grelhada.jpg",
-    "/images/feijoada-costela.jpg",
-    "/images/pao-de-queijo.jpg",
-    "/images/polenta-frita.jpg"
-  ];
+function Gallery({ t }){
   return (
-    <section className="wrap" id="gallery">
-      <h2>{t.galleryTitle}</h2>
-      <div className="masonry">
-        {imgs.map((src,i)=> <img key={i} src={src} alt="" loading="lazy"/>)}
+    <section id="gallery" className="section">
+      <div className="container">
+        <h2>{t.nav_gallery}</h2>
+        <div className="grid">
+          {heroImages.map((src,i)=>(
+            <img key={i} src={src} alt="" style={{borderRadius:14}} />
+          ))}
+        </div>
       </div>
     </section>
   );
 }
 
-function Location({t}) {
+function Location({ t }){
   return (
-    <section className="wrap" id="location">
-      <h2>{t.locationTitle}</h2>
-      <p className="lead">{t.locationText}</p>
-      <div className="map">
+    <section id="location" className="section">
+      <div className="container">
+        <h2>{t.location_title}</h2>
+        <p><strong>{t.address}</strong></p>
         <iframe
           title="map"
-          loading="lazy"
+          width="100%" height="300" style={{border:0,borderRadius:12}}
+          loading="lazy" allowFullScreen
           referrerPolicy="no-referrer-when-downgrade"
-          src="https://www.google.com/maps?q=Baraha%20Town%20Doha%20Qatar&output=embed">
+          src="https://www.google.com/maps?q=Baraha%20Town%2C%20Doha%2C%20Qatar&output=embed">
         </iframe>
       </div>
     </section>
   );
 }
 
-function Contact({t}) {
+function Contact({ t }){
   return (
-    <section className="wrap" id="contact">
-      <h2>{t.contactTitle}</h2>
-      <ul className="contact">
-        <li><strong>{t.contactEmail}:</strong> restaurant@paneladebarroqatar.com</li>
-        <li><strong>{t.contactPhone}:</strong> +974 3047 5279</li>
-      </ul>
+    <section id="contact" className="section">
+      <div className="container">
+        <h2>{t.contact_title}</h2>
+        <p><strong>{t.email}:</strong> restaurant@paneladebarroqatar.com</p>
+        <p><strong>{t.phone}:</strong> +974 3047 5279</p>
+      </div>
     </section>
   );
 }
 
 export default function App(){
-  const { lang, setLang, t } = useLang();
-  const route = useHashRoute();
-
-  // rolagem suave ao clicar no menu
-  const onNav = (e)=>{
-    const href = e.currentTarget.getAttribute("href");
-    if (href?.startsWith("#")) {
-      const id = href.slice(1);
-      requestAnimationFrame(()=>{
-        document.getElementById(id)?.scrollIntoView({behavior:"smooth", block:"start"});
-      });
-    }
-  };
+  const { locale, setLocale, t } = useLocale();
 
   return (
     <>
-      <Navbar t={t} onNav={onNav} />
-      <LangSwitcher lang={lang} setLang={setLang}/>
-      {route==="menu-full" ? (
-        <MenuPage t={t}/>
-      ) : (
-        <>
-          <Hero t={t}/>
-          <MenuPreview t={t}/>
-          <Gallery t={t}/>
-          <Location t={t}/>
-          <Contact t={t}/>
-        </>
-      )}
-      <footer className="footer">{t.footer}</footer>
+      <Header locale={locale} setLocale={setLocale} t={t} />
+      <Hero t={t} />
+      <About t={t} />
+      <MenuGrid t={t} />
+      <Gallery t={t} />
+      <Location t={t} />
+      <Contact t={t} />
+      <footer className="footer">© {new Date().getFullYear()} <span translate="no">Panela de Barro</span></footer>
     </>
   );
 }
