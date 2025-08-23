@@ -1,188 +1,252 @@
-// src/App.jsx
-import React, { createContext, useContext, useMemo, useState } from "react";
-import { HashRouter, Routes, Route, Link, useNavigate } from "react-router-dom";
-import { LOCALES, t } from "./i18n";
-import { menu, categories } from "./menuData";
-import "./styles.css";
+import React, { useEffect, useMemo, useRef, useState } from "react";
+import { MENU } from "./menuData";
+import { locales, applyDir } from "./i18n";
 
-const I18nCtx = createContext();
-const useI18n = () => useContext(I18nCtx);
+const ALL = ["all","mains","sides","desserts","beverages","seasonal","chef"];
 
-function LangSwitch() {
-  const { lang, setLang } = useI18n();
+function useLang() {
+  const [lang, setLang] = useState(() => localStorage.getItem("lang") || "pt");
+  const t = locales[lang] || locales.pt;
+  useEffect(() => {
+    localStorage.setItem("lang", lang);
+    applyDir(t.dir);
+    document.documentElement.lang = t.code;
+  }, [lang, t.dir, t.code]);
+  return { lang, setLang, t };
+}
+
+function useHashRoute() {
+  const [hash, setHash] = useState(() => window.location.hash || "#home");
+  useEffect(() => {
+    const onHash = () => setHash(window.location.hash || "#home");
+    window.addEventListener("hashchange", onHash);
+    return () => window.removeEventListener("hashchange", onHash);
+  }, []);
+  return hash.replace("#","") || "home";
+}
+
+function Navbar({ t, onNav }) {
+  const Item = ({href, children}) => (
+    <a href={href} onClick={onNav} className="nav-link">{children}</a>
+  );
+  return (
+    <header className="nav">
+      <a href="#home" className="brand">
+        <img src="/logo.png" alt="logo" />
+        <span>Panela<br/>de Barro</span>
+      </a>
+      <nav>
+        <Item href="#home">{t.nav.about}</Item>
+        <Item href="#menu">{t.nav.menu}</Item>
+        <Item href="#gallery">{t.nav.gallery}</Item>
+        <Item href="#location">{t.nav.location}</Item>
+        <Item href="#contact">{t.nav.contact}</Item>
+      </nav>
+    </header>
+  );
+}
+
+function LangSwitcher({lang,setLang}) {
   return (
     <div className="lang">
-      {Object.entries(LOCALES).map(([k, v]) => (
-        <button key={k} onClick={() => setLang(v)} className={lang === v ? "chip active" : "chip"}>
-          {v === "pt" ? "PT" : v === "en" ? "EN" : "AR"}
+      {["pt","en","ar"].map(code=>(
+        <button
+          key={code}
+          onClick={()=>setLang(code)}
+          className={`pill ${lang===code?"active":""}`}
+          aria-label={code.toUpperCase()}
+        >
+          {code.toUpperCase()}
         </button>
       ))}
     </div>
   );
 }
 
-function Navbar() {
-  const { lang } = useI18n();
-  const nav = t.nav[lang];
+function AutoCarousel({ images, interval=3500 }) {
+  const [i,setI] = useState(0);
+  useEffect(()=>{
+    const id = setInterval(()=> setI(prev => (prev+1)%images.length), interval);
+    return ()=>clearInterval(id);
+  },[images.length, interval]);
   return (
-    <header className="nav">
-      <Link to="/" className="brand"><img src="/logo.png" alt="logo" /> <span>Panela de Barro</span></Link>
-      <nav>
-        <Link to="/#about">{nav.about}</Link>
-        <Link to="/menu">{nav.menu}</Link>
-        <a href="#gallery">{nav.gallery}</a>
-        <a href="#location">{nav.location}</a>
-        <a href="#contact">{nav.contact}</a>
-      </nav>
-      <LangSwitch />
-    </header>
+    <div className="carousel">
+      {images.map((src,idx)=>(
+        <img key={src} src={src} alt="" className={`slide ${idx===i?"on":""}`} loading="eager"/>
+      ))}
+    </div>
   );
 }
 
-function Hero() {
-  const { lang } = useI18n();
+function Hero({ t }) {
+  const heroImgs = [
+    "/images/picanha-grelhada.jpg",
+    "/images/vaca-atolada.jpg",
+    "/images/feijoada-costela.jpg"
+  ];
   return (
-    <section id="about" className="hero">
-      <h1>{t.heroTitle[lang]}</h1>
-      <p>{t.heroText[lang]}</p>
-      <p className="opening">{t.opening[lang]}</p>
+    <section className="hero" id="home">
+      <AutoCarousel images={heroImgs}/>
+      <div className="hero-text">
+        <h1>{t.heroTitle}</h1>
+        <p>{t.heroSub}</p>
+        <em className="note">{t.openingNote}</em>
+        <a className="cta" href="#menu">{t.nav.menu}</a>
+      </div>
     </section>
   );
 }
 
-function Card({ item, onOpen, lang }) {
+function MenuCard({ item, t }) {
+  const tagLabel = {
+    mains: t.category.mains,
+    sides: t.category.sides,
+    desserts: t.category.desserts,
+    beverages: t.category.beverages,
+    seasonal: t.category.seasonal,
+    chef: t.category.chef
+  }[item.tag] || "";
+
   return (
-    <article className="card" onClick={() => onOpen(item)}>
-      <img src={item.img} alt={item.title[lang]} loading="lazy" />
+    <article className="card">
+      <img src={item.image} alt={item.title} loading="lazy" />
       <div className="card-body">
-        <div className="card-title">
-          <h3>{item.title[lang]}</h3>
-          {item.badges?.[0] && <span className="badge">{t.tag[lang][item.badges[0]] || ""}</span>}
+        <div className="card-head">
+          <h3>{item.title}</h3>
+          {tagLabel && <span className="badge">{tagLabel}</span>}
         </div>
-        <p className="muted">{item.short[lang]}</p>
+        <p>{item.desc}</p>
       </div>
     </article>
   );
 }
 
-function Modal({ open, onClose, item, lang }) {
-  if (!open || !item) return null;
+function MenuPreview({ t }) {
+  const preview = useMemo(()=> MENU.slice(0, 9),[]);
   return (
-    <div className="modal" onClick={onClose}>
-      <div className="dialog" onClick={(e) => e.stopPropagation()}>
-        <img src={item.img} alt={item.title[lang]} />
-        <h3>{item.title[lang]}</h3>
-        <p className="muted">{item.long[lang]}</p>
-        <button className="btn" onClick={onClose}>Close</button>
-      </div>
-    </div>
-  );
-}
-
-function Home() {
-  const { lang } = useI18n();
-  const navigate = useNavigate();
-  const [open, setOpen] = useState(false);
-  const [current, setCurrent] = useState(null);
-
-  const preview = useMemo(() => menu.filter(m => m.cat === "mains").slice(0, 3), []);
-  const openItem = (it) => { setCurrent(it); setOpen(true); };
-
-  return (
-    <>
-      <Hero />
-      <section className="section">
-        <div className="section-head">
-          <h2>{t.previewTitle[lang]}</h2>
-          <button className="link" onClick={() => navigate("/menu")}>{t.nav[lang].menu} →</button>
-        </div>
-        <div className="grid">
-          {preview.map((it) => (
-            <Card key={it.id} item={it} lang={lang} onOpen={openItem} />
-          ))}
-        </div>
-      </section>
-
-      <section id="location" className="section">
-        <h2>{t.nav[lang].location}</h2>
-        <p className="muted">
-          {t.footer[lang].address} • {t.footer[lang].phone} • {t.footer[lang].email}
-        </p>
-        <div className="map">
-          <iframe
-            title="map"
-            loading="lazy"
-            src="https://www.google.com/maps?q=Baraha%20Town%20Doha%20Qatar&output=embed"
-          />
-        </div>
-      </section>
-
-      <section id="contact" className="section">
-        <h2>{t.nav[lang].contact}</h2>
-        <ul className="muted">
-          <li>📧 {t.footer[lang].email}</li>
-          <li>📞 {t.footer[lang].phone}</li>
-          <li>📍 {t.footer[lang].address}</li>
-        </ul>
-      </section>
-
-      <Modal open={open} onClose={() => setOpen(false)} item={current} lang={lang} />
-    </>
-  );
-}
-
-function MenuPage() {
-  const { lang } = useI18n();
-  const [filter, setFilter] = useState("all");
-  const filtered = useMemo(
-    () => (filter === "all" ? menu : menu.filter((m) => m.cat === filter)),
-    [filter]
-  );
-  const [open, setOpen] = useState(false);
-  const [current, setCurrent] = useState(null);
-  const openItem = (it) => { setCurrent(it); setOpen(true); };
-
-  return (
-    <section className="section">
-      <div className="section-head">
-        <h2>{t.nav[lang].menu}</h2>
-      </div>
-
-      <div className="filters">
-        {categories.map((c) => (
-          <button
-            key={c.key}
-            className={filter === c.key ? "chip active" : "chip"}
-            onClick={() => setFilter(c.key)}
-          >
-            {c.label[lang]}
-          </button>
-        ))}
-      </div>
-
+    <section className="wrap" id="menu">
+      <h2>{t.menuPreview}</h2>
       <div className="grid">
-        {filtered.map((it) => (
-          <Card key={it.id} item={it} lang={lang} onOpen={openItem} />
-        ))}
+        {preview.map(m => <MenuCard key={m.id} item={m} t={t}/>)}
       </div>
-
-      <Modal open={open} onClose={() => setOpen(false)} item={current} lang={lang} />
+      <div style={{textAlign:"center", marginTop:16}}>
+        <a className="cta outline" href="#menu-full">{t.seeFullMenu}</a>
+      </div>
     </section>
   );
 }
 
-export default function AppRoot() {
-  const [lang, setLang] = useState(LOCALES.PT);
-  const ctx = useMemo(() => ({ lang, setLang }), [lang]);
+function Filters({t, value, onChange}) {
   return (
-    <I18nCtx.Provider value={ctx}>
-      <HashRouter>
-        <Navbar />
-        <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/menu" element={<MenuPage />} />
-        </Routes>
-      </HashRouter>
-    </I18nCtx.Provider>
+    <div className="filters">
+      {ALL.map(k=>(
+        <button key={k}
+          className={`pill ${value===k?"active":""}`}
+          onClick={()=>onChange(k)}>
+          {k==="all" ? t.category.all :
+           k==="mains" ? t.category.mains :
+           k==="sides" ? t.category.sides :
+           k==="desserts" ? t.category.desserts :
+           k==="beverages" ? t.category.beverages :
+           k==="seasonal" ? t.category.seasonal :
+           t.category.chef}
+        </button>
+      ))}
+    </div>
+  );
+}
+
+function MenuPage({ t }) {
+  const [f,setF] = useState("all");
+  const items = useMemo(()=> f==="all" ? MENU : MENU.filter(m=>m.tag===f), [f]);
+  return (
+    <section className="wrap" id="menu-full">
+      <h2>{t.nav.menu}</h2>
+      <Filters t={t} value={f} onChange={setF}/>
+      <div className="grid">
+        {items.map(m => <MenuCard key={m.id} item={m} t={t}/>)}
+      </div>
+    </section>
+  );
+}
+
+function Gallery({t}) {
+  const imgs = [
+    "/images/picanha-grelhada.jpg",
+    "/images/feijoada-costela.jpg",
+    "/images/pao-de-queijo.jpg",
+    "/images/polenta-frita.jpg"
+  ];
+  return (
+    <section className="wrap" id="gallery">
+      <h2>{t.galleryTitle}</h2>
+      <div className="masonry">
+        {imgs.map((src,i)=> <img key={i} src={src} alt="" loading="lazy"/>)}
+      </div>
+    </section>
+  );
+}
+
+function Location({t}) {
+  return (
+    <section className="wrap" id="location">
+      <h2>{t.locationTitle}</h2>
+      <p className="lead">{t.locationText}</p>
+      <div className="map">
+        <iframe
+          title="map"
+          loading="lazy"
+          referrerPolicy="no-referrer-when-downgrade"
+          src="https://www.google.com/maps?q=Baraha%20Town%20Doha%20Qatar&output=embed">
+        </iframe>
+      </div>
+    </section>
+  );
+}
+
+function Contact({t}) {
+  return (
+    <section className="wrap" id="contact">
+      <h2>{t.contactTitle}</h2>
+      <ul className="contact">
+        <li><strong>{t.contactEmail}:</strong> restaurant@paneladebarroqatar.com</li>
+        <li><strong>{t.contactPhone}:</strong> +974 3047 5279</li>
+      </ul>
+    </section>
+  );
+}
+
+export default function App(){
+  const { lang, setLang, t } = useLang();
+  const route = useHashRoute();
+
+  // rolagem suave ao clicar no menu
+  const onNav = (e)=>{
+    const href = e.currentTarget.getAttribute("href");
+    if (href?.startsWith("#")) {
+      const id = href.slice(1);
+      requestAnimationFrame(()=>{
+        document.getElementById(id)?.scrollIntoView({behavior:"smooth", block:"start"});
+      });
+    }
+  };
+
+  return (
+    <>
+      <Navbar t={t} onNav={onNav} />
+      <LangSwitcher lang={lang} setLang={setLang}/>
+      {route==="menu-full" ? (
+        <MenuPage t={t}/>
+      ) : (
+        <>
+          <Hero t={t}/>
+          <MenuPreview t={t}/>
+          <Gallery t={t}/>
+          <Location t={t}/>
+          <Contact t={t}/>
+        </>
+      )}
+      <footer className="footer">{t.footer}</footer>
+    </>
   );
 }
