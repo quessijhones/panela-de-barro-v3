@@ -1,117 +1,58 @@
-/* App.jsx */
 import React from "react";
-
-function Nav() {
-  return (
-    <header className="nav">
-      <div className="brand">
-        <img src="/logo.png" alt="Panela de Barro" />
-        Panela de Barro
-      </div>
-      <nav>
-        <a href="#about">About</a>
-        <a href="#menu">Menu</a>
-        <a href="#gallery">Gallery</a>
-        <a href="#location">Location</a>
-        <a href="#contact">Contact</a>
-        <a href="#reservations">Reservations</a>
-      </nav>
-    </header>
-  );
-}
-
-function ImmersiveLayer({ bg, title, text }) {
-  return (
-    <section className="immersive-layer">
-      <div
-        className="immersive-bg"
-        style={{ backgroundImage: `url(${bg})` }}
-        aria-hidden="true"
-      />
-      <div className="immersive-overlay" aria-hidden="true" />
-      <div className="block immersive-text">
-        <h1>{title}</h1>
-        <p>{text}</p>
-      </div>
-    </section>
-  );
-}
 
 export default function App() {
   return (
-    <>
-      {/* Splash simples; se quebrar aqui, o trap do main.jsx mostra o erro */}
-      <div className="splash" aria-hidden="true">
-        <img className="splash-logo" src="/logo.png" alt="" />
-      </div>
+    <div className="app-safe">
+      <header className="site-header">
+        <img src="/public/logo.png" alt="Panela de Barro" className="logo" />
+        <nav className="nav">
+          <a href="#about">About</a>
+          <a href="#menu">Menu</a>
+          <a href="#gallery">Gallery</a>
+          <a href="#location">Location</a>
+          <a href="#contact">Contact</a>
+          <a href="#reservations">Reservations</a>
+        </nav>
+      </header>
 
-      <Nav />
-
-      <main>
-        {/* Camadas imersivas – só caminhos absolutos para /public */}
-        <section className="immersive">
-          <ImmersiveLayer
-            bg="/immersive/amazonia.jpg"
-            title="Sabores com alma do Brasil"
-            text="Do fogão a lenha ao prato: hospitalidade mineira e ingredientes brasileiros."
-          />
-          <ImmersiveLayer
-            bg="/immersive/lencois.jpg"
-            title="Raiz e tradição"
-            text="Receitas de família, fogo baixo e tempo — o segredo do sabor."
-          />
-          <ImmersiveLayer
-            bg="/immersive/cerrado.jpg"
-            title="Ingredientes do cerrado"
-            text="Milho verde, mandioca, farinhas, temperos e afeto."
-          />
-          <ImmersiveLayer
-            bg="/immersive/litoral.jpg"
-            title="Do mar à mesa"
-            text="Moquecas e frescor — um abraço do litoral brasileiro."
-          />
-          <ImmersiveLayer
-            bg="/immersive/serra.jpg"
-            title="Conforto da Serra"
-            text="Comida que aconchega, música sertaneja e viola."
-          />
-        </section>
-
-        <section id="about" className="block">
-          <h2>Nossa História</h2>
+      <main className="container">
+        <section id="about" style={{padding:"40px 0"}}>
+          <h1>Panela de Barro</h1>
           <p>
-            20 anos de tradição. Chef-proprietário <b>Quessi Jhones</b>, com a
-            mãe Cleuza (mineira) e o irmão (Head Chef). Em Doha, cozinha de raiz
-            com hospitalidade brasileira.
+            A Brazilian family restaurant in Qatar. With 20+ years in hospitality,
+            we bring wood-fire flavors, countryside warmth and Brazilian roots.
           </p>
         </section>
 
-        <section id="menu" className="block">
-          <h2>Menu</h2>
-          <p>
-            Página dedicada, com categorias e imagens. Em breve com reservas
-            também.
-          </p>
-          <a className="btn" href="/#menu">Abrir Menu</a>
+        <section id="menu" style={{padding:"20px 0"}}>
+          <h2>Menu (preview)</h2>
+          <div className="grid">
+            <article className="card">
+              <img src="/public/images/vaca-atolada.jpg" onError={(e)=>{e.currentTarget.src="/public/images/placeholder.jpg"}} alt="Vaca Atolada" />
+              <h3>Vaca Atolada</h3>
+              <p>Ossobuco com polenta cremosa e rúcula cítrica.</p>
+            </article>
+            <article className="card">
+              <img src="/public/images/feijoada-costela.jpg" onError={(e)=>{e.currentTarget.src="/public/images/placeholder.jpg"}} alt="Feijoada de Costela" />
+              <h3>Feijoada de Costela</h3>
+              <p>Feijão preto com costela, farofa de banana e vinagrete.</p>
+            </article>
+          </div>
         </section>
 
-        <section id="location" className="block">
+        <section id="location" style={{padding:"20px 0"}}>
           <h2>Location</h2>
-          <p>Barwa Town, Doha, Qatar — Opening November (coming soon)</p>
+          <p>Barwa Town, Doha, Qatar</p>
         </section>
 
-        <section id="contact" className="block">
+        <section id="contact" style={{padding:"20px 0"}}>
           <h2>Contact</h2>
-          <p>
-            <b>Email:</b> restaurant@paneladebarroqatar.com<br />
-            <b>Phone:</b> +974 3047 5279
-          </p>
+          <p>Email: restaurant@paneladebarroqatar.com</p>
+          <p>Phone: +974 3047 5279</p>
         </section>
       </main>
 
-      <footer className="foot">
-        © {new Date().getFullYear()} Panela de Barro
-      </footer>
-    </>
+      <footer className="site-footer">© {new Date().getFullYear()} Panela de Barro</footer>
+    </div>
   );
 }
