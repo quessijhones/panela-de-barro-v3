@@ -1,390 +1,435 @@
 import React, { useEffect, useMemo, useState } from "react";
-import { dishes as localDishes } from "./menuData";
+import { motion, AnimatePresence } from "framer-motion";
 import "./styles.css";
-import { AnimatePresence, motion } from "framer-motion";
+import menuData from "./menuData";
 
-/* ================== i18n UI ================== */
-const tUI = {
-  en: { about:"About", menu:"Menu", gallery:"Gallery", location:"Location", contact:"Contact", reservations:"Reservations",
-        seeMenu:"See the Menu", reserve:"Reserve a Table", all:"All", mains:"Mains", sides:"Side Dishes", desserts:"Desserts", beverages:"Beverages", seasonal:"Seasonal",
-        ourStory:"Our Story",
-        aboutText: "A Brazilian family restaurant in Qatar. With 20 years in hospitality, we bring fire-kissed flavors from a wood-fired stove and the warmth of countryside music. Chef-owner Quessi Jhones leads the kitchen with his mother Dona Cleuza, from Minas Gerais, and his brother, the Head Chef with 10+ years of experience. Expect soulful regional classics, generous hospitality, and real Brazilian roots.",
-        contactTitle:"Contact",
-        email:"restaurant@paneladebarroqatar.com", phone:"+974 3047 5279", address:"Barwa Town, Doha, Qatar",
-        coming:"Coming soon — opening in November.",
-        close:"Close", send:"Send", name:"Name", emailLbl:"Email", phoneLbl:"Phone", party:"Guests", date:"Date", time:"Time", notes:"Notes",
-        orderSoon:"Order (soon)" },
-  pt: { about:"Sobre", menu:"Menu", gallery:"Galeria", location:"Localização", contact:"Contato", reservations:"Reservas",
-        seeMenu:"Ver o Menu", reserve:"Reservar Mesa", all:"Todos", mains:"Pratos Principais", sides:"Acompanhamentos", desserts:"Sobremesas", beverages:"Bebidas", seasonal:"Sazonal",
-        ourStory:"Nossa História",
-        aboutText: "Um restaurante brasileiro de família no Catar. Há 20 anos na gastronomia, trazemos sabores beijados pelo fogo do fogão a lenha e o aconchego da música do interior. O chef-proprietário Quessi Jhones comanda a cozinha com sua mãe, Dona Cleuza, mineira, e seu irmão, Head Chef com mais de 10 anos de experiência. Clássicos regionais com alma, hospitalidade generosa e raízes brasileiras de verdade.",
-        contactTitle:"Contato",
-        email:"restaurant@paneladebarroqatar.com", phone:"+974 3047 5279", address:"Barwa Town, Doha, Qatar",
-        coming:"Em breve — inauguração em novembro.",
-        close:"Fechar", send:"Enviar", name:"Nome", emailLbl:"E-mail", phoneLbl:"Telefone", party:"Pessoas", date:"Data", time:"Horário", notes:"Observações",
-        orderSoon:"Pedir (em breve)" },
-  ar: { about:"حول", menu:"القائمة", gallery:"معرض", location:"الموقع", contact:"اتصال", reservations:"الحجوزات",
-        seeMenu:"عرض القائمة", reserve:"احجز طاولة", all:"الكل", mains:"الأطباق الرئيسية", sides:"الأطباق الجانبية", desserts:"الحلويات", beverages:"المشروبات", seasonal:"موسمي",
-        ourStory:"قصتنا",
-        aboutText:"مطعم برازيلي عائلي في قطر. لدينا 20 عامًا من الخبرة ونقدم نكهات الموقد الخشبي ودفء موسيقى الريف. يقود المالك-الشيف كُوِسّي جونِس المطبخ مع والدته دونا كليوزا من ميناس جيرايس وأخيه، الشيف الرئيسي صاحب خبرة لأكثر من عشر سنوات. توقّعوا أطباقًا إقليمية أصيلة وضيافة كريمة وجذورًا برازيلية حقيقية.",
-        contactTitle:"اتصال",
-        email:"restaurant@paneladebarroqatar.com", phone:"+974 3047 5279", address:"باروا تاون، الدوحة، قطر",
-        coming:"قريبًا — الافتتاح في نوفمبر.",
-        close:"إغلاق", send:"إرسال", name:"الاسم", emailLbl:"البريد الإلكتروني", phoneLbl:"الهاتف", party:"عدد الضيوف", date:"التاريخ", time:"الوقت", notes:"ملاحظات",
-        orderSoon:"طلب (قريبًا)" }
-};
+const LANGS = ["pt", "en", "ar"];
 
-const categories = [
-  { key:"all", label: (t)=>t.all },
-  { key:"mains", label: (t)=>t.mains },
-  { key:"sides", label: (t)=>t.sides },
-  { key:"desserts", label: (t)=>t.desserts },
-  { key:"beverages", label: (t)=>t.beverages },
-  { key:"seasonal", label: (t)=>t.seasonal },
-];
+// helpers de i18n
+function useI18n() {
+  const [lang, setLang] = useState(() => {
+    const saved = localStorage.getItem("lang");
+    return saved || "pt";
+  });
+  useEffect(() => localStorage.setItem("lang", lang), [lang]);
 
-/* ====== CMS via Google Sheets (TSV) ======
-   1) Crie uma planilha com colunas:
-      id | category | image | name_pt | name_en | name_ar | short_pt | short_en | short_ar | long_pt | long_en | long_ar
-   2) Arquivo > Publicar na Web > Página selecionada > Valores separados por tabulação (.tsv)
-   3) Copie a URL publicada e cole abaixo em SHEET_TSV_URL
-*/
-const SHEET_TSV_URL = ""; // cole aqui quando tiver (opcional)
+  const ui = useMemo(
+    () => ({
+      pt: {
+        brand: "Panela de Barro",
+        about: "Sobre",
+        menu: "Menu",
+        gallery: "Galeria",
+        location: "Localização",
+        contact: "Contato",
+        reservations: "Reservas",
+        all: "Todos",
+        mains: "Pratos Principais",
+        sides: "Acompanhamentos",
+        desserts: "Sobremesas",
+        drinks: "Bebidas",
+        seasonal: "Sazonal",
+        view: "Ver detalhes",
+        close: "Fechar",
+        orderSoon: "Pedir (em breve)",
+        heroTitle: "Panela de Barro",
+        heroSubtitle:
+          "Culinária Brasileira de Raiz no Qatar — lançamento em novembro (em breve).",
+        storyTitle: "Nossa História",
+        storyText:
+          "Restaurante familiar brasileiro em Doha. Há 20 anos na gastronomia, trazemos o sabor da lenha e a música do interior. O chef-proprietário Quessi Jhones lidera a cozinha ao lado de sua mãe, Dona Cleuza (mineira, guardiã das tradições), e do irmão, Head Chef com mais de 10 anos em casas brasileiras. Em novembro abriremos nossas portas para receber você com clássicos regionais, hospitalidade generosa e raízes do Brasil.",
+        contactTitle: "Contato",
+        soon: "Em breve",
+        email: "restaurant@paneladebarroqatar.com",
+        phone: "+974 3047 5279",
+        address: "Barwa Town, Doha, Qatar",
+        badge: {
+          mains: "Prato",
+          sides: "Acomp.",
+          desserts: "Sobrem.",
+          drinks: "Bebidas",
+          seasonal: "Sazonal",
+        },
+      },
+      en: {
+        brand: "Panela de Barro",
+        about: "About",
+        menu: "Menu",
+        gallery: "Gallery",
+        location: "Location",
+        contact: "Contact",
+        reservations: "Reservations",
+        all: "All",
+        mains: "Mains",
+        sides: "Side Dishes",
+        desserts: "Desserts",
+        drinks: "Beverages",
+        seasonal: "Seasonal",
+        view: "View details",
+        close: "Close",
+        orderSoon: "Order (soon)",
+        heroTitle: "Panela de Barro",
+        heroSubtitle:
+          "Brazilian Heritage Cuisine in Qatar — grand opening in November (coming soon).",
+        storyTitle: "Our Story",
+        storyText:
+          "A Brazilian family restaurant in Doha. With 20 years in hospitality, we bring fire-kissed flavors from a wood-fired stove and countryside music. Chef-owner Quessi Jhones leads the kitchen with his mother, Dona Cleuza from Minas Gerais, and his brother, the Head Chef with 10+ years of experience. Opening in November — expect soulful regional classics and generous Brazilian hospitality.",
+        contactTitle: "Contact",
+        soon: "Coming soon",
+        email: "restaurant@paneladebarroqatar.com",
+        phone: "+974 3047 5279",
+        address: "Barwa Town, Doha, Qatar",
+        badge: {
+          mains: "Mains",
+          sides: "Sides",
+          desserts: "Desserts",
+          drinks: "Drinks",
+          seasonal: "Seasonal",
+        },
+      },
+      ar: {
+        brand: "بانيلّا دي بارّو",
+        about: "عن المطعم",
+        menu: "القائمة",
+        gallery: "معرض",
+        location: "الموقع",
+        contact: "اتصال",
+        reservations: "الحجوزات",
+        all: "الكل",
+        mains: "الأطباق الرئيسية",
+        sides: "الأطباق الجانبية",
+        desserts: "الحلويات",
+        drinks: "المشروبات",
+        seasonal: "الموسمي",
+        view: "عرض التفاصيل",
+        close: "إغلاق",
+        orderSoon: "طلب (قريبًا)",
+        heroTitle: "بانيلّا دي بارّو",
+        heroSubtitle:
+          "المطبخ البرازيلي الأصيل في قطر — الافتتاح الكبير في نوفمبر (قريبًا).",
+        storyTitle: "قصتنا",
+        storyText:
+          "مطعم عائلي برازيلي في الدوحة. بخبرة 20 سنة في الضيافة، نقدم نكهات النار من موقد الحطب وموسيقى الريف. يقود المطبخ الشيف المالك كويِسّي جونس مع والدته دونا كليوزا من ميناس جيرايس وأخيه الشيف التنفيذي بخبرة 10+ سنوات. الافتتاح في نوفمبر — أطباق إقليمية أصيلة وضيافة برازيلية كريمة.",
+        contactTitle: "اتصال",
+        soon: "قريبًا",
+        email: "restaurant@paneladebarroqatar.com",
+        phone: "+974 3047 5279",
+        address: "باروا تاون، الدوحة، قطر",
+        badge: {
+          mains: "رئيسي",
+          sides: "جانبي",
+          desserts: "حلويات",
+          drinks: "مشروبات",
+          seasonal: "موسمي",
+        },
+      },
+    }),
+    []
+  );
 
-/* ================== App ================== */
-export default function App(){
-  const [lang,setLang] = useState("pt");
-  const [route,setRoute] = useState("/");       // roteador simples
-  const [filter,setFilter] = useState("all");
-  const [open,setOpen] = useState(null);        // modal do prato
-  const [reserve,setReserve] = useState(false); // modal reserva
-  const [splashDone,setSplashDone] = useState(false);
-  const [sheetDishes,setSheetDishes] = useState(null);
+  return { lang, setLang, t: ui[lang] };
+}
 
-  // carrega da planilha (TSV) se houver URL
-  useEffect(()=>{
-    if(!SHEET_TSV_URL) return;
-    (async()=>{
-      try{
-        const r = await fetch(SHEET_TSV_URL);
-        const text = await r.text();
-        const rows = text.trim().split(/\r?\n/).map(line=>line.split("\t"));
-        const header = rows.shift();
-        const idx = (name)=> header.indexOf(name);
-        const ds = rows.map(c=>({
-          id: c[idx('id')],
-          category: c[idx('category')],
-          image: c[idx('image')],
-          name: { pt:c[idx('name_pt')], en:c[idx('name_en')], ar:c[idx('name_ar')] },
-          short:{ pt:c[idx('short_pt')], en:c[idx('short_en')], ar:c[idx('short_ar')] },
-          long: { pt:c[idx('long_pt')],  en:c[idx('long_en')],  ar:c[idx('long_ar')]  },
-        })).filter(d=>d.id && d.category);
-        if(ds.length) setSheetDishes(ds);
-      }catch(e){ console.warn("Sheet load failed, using local data.", e); }
-    })();
-  },[]);
-
-  const dishes = sheetDishes?.length ? sheetDishes : localDishes;
-  const t = tUI[lang];
-
-  const list = useMemo(()=>{
-    let L = dishes.map(d=>({
-      ...d,
-      title: d.name[lang] || d.name.en,
-      shortTxt: d.short[lang] || d.short.en,
-      longTxt:  (d.long && (d.long[lang] || d.long.en)) || (d.short[lang] || d.short.en),
-    }));
-    return filter==="all" ? L : L.filter(d=>d.category===filter);
-  },[dishes,lang,filter]);
-
-  // ====== Carrossel ======
-  const slides = useMemo(()=>[
-    "/images/Verão-Brasil.jpg",
-    "/images/picanha.jpg",
-    "/images/Mandioca-frita.jpg",
-    "/images/Encanto-de-Coco.jpg",
-    "/images/Moqueca-baiana.jpg",
-  ],[]);
-  const [slide,setSlide] = useState(0);
-  useEffect(()=>{
-    const id = setInterval(()=> setSlide(s=> (s+1)%slides.length ), 4500);
-    return ()=>clearInterval(id);
-  },[slides.length]);
-
+// Splash animado com o logo
+function Splash({ onDone }) {
   return (
-    <>
-      {/* ====== Splash ====== */}
-      <AnimatePresence>
-        {!splashDone && (
-          <motion.div className="splash"
-            initial={{opacity:1}} animate={{opacity:1}} exit={{opacity:0}}
-            transition={{delay:1.8, duration:.6}}
-            onAnimationComplete={()=>setSplashDone(true)}
-          >
-            <motion.img src="/logo.png" alt="logo" className="logo"
-              initial={{scale:.9, opacity:0}}
-              animate={{scale:1.08, opacity:1}}
-              transition={{duration:.7, ease:"easeOut"}}
-            />
-          </motion.div>
-        )}
-      </AnimatePresence>
-
-      {/* ====== NAV ====== */}
-      <div className="nav">
-        <div className="nav-inner">
-          <div className="brand" onClick={()=>setRoute("/")} style={{cursor:"pointer"}}>
-            <img src="/logo.png" alt="logo"/>
-            <span>Panela de Barro</span>
-          </div>
-
-          <div style={{display:"flex",gap:6,alignItems:"center"}}>
-            <a onClick={()=>setRoute("/")} href="#about">{t.about}</a>
-            <a onClick={()=>setRoute("/menu")} href="#menu">{t.menu}</a>
-            <a onClick={()=>setRoute("/")} href="#gallery">{t.gallery}</a>
-            <a onClick={()=>setRoute("/")} href="#location">{t.location}</a>
-            <a onClick={()=>setRoute("/")} href="#contact">{t.contact}</a>
-            <a onClick={()=>setRoute("/")} href="#reservations">{t.reservations}</a>
-          </div>
-
-          <div className="langs">
-            {["pt","en","ar"].map(code=>(
-              <button key={code} className={lang===code?"active":""} onClick={()=>setLang(code)}>
-                {code==="pt"?"BR PT":code==="en"?"GB EN":"QA AR"}
-              </button>
-            ))}
-          </div>
-        </div>
-      </div>
-
-      {/* ====== ROUTES ====== */}
-      {route==="/" ? (
-        <Home
-          t={t}
-          slides={slides}
-          slide={slide}
-          setRoute={setRoute}
-          onReserve={()=>setReserve(true)}
-        />
-      ) : (
-        <MenuPage t={t} lang={lang} filter={filter} setFilter={setFilter} list={list} open={open} setOpen={setOpen}/>
-      )}
-
-      {/* ====== RESERVATION MODAL ====== */}
-      <AnimatePresence>
-      {reserve && (
-        <motion.div className="modal reserve-modal" initial={{opacity:0}} animate={{opacity:1}} exit={{opacity:0}}>
-          <motion.div className="box" initial={{y:30, opacity:0}} animate={{y:0, opacity:1}} exit={{y:30, opacity:0}}>
-            <div className="body">
-              <h3>{t.reservations}</h3>
-              <ReservationForm t={t} onClose={()=>setReserve(false)}/>
-            </div>
-          </motion.div>
-        </motion.div>
-      )}
-      </AnimatePresence>
-
-      {/* ====== FOOTER ====== */}
-      <footer className="footer">
-        <div className="container">
-          <div>© 2025 Panela de Barro</div>
-          <div style={{display:"flex",gap:12}}>
-            <a href="https://instagram.com" target="_blank" rel="noreferrer">Instagram</a>
-            <a href="https://facebook.com" target="_blank" rel="noreferrer">Facebook</a>
-          </div>
-        </div>
-      </footer>
-    </>
+    <motion.div
+      className="splash"
+      initial={{ opacity: 1 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+      transition={{ delay: 1.2, duration: 0.6 }}
+      onAnimationComplete={onDone}
+    >
+      <motion.img
+        src="/logo.png"
+        alt="Logo Panela de Barro"
+        className="splash-logo"
+        initial={{ scale: 0.6, y: 20, opacity: 0 }}
+        animate={{ scale: 1, y: 0, opacity: 1 }}
+        transition={{ type: "spring", stiffness: 120, damping: 12 }}
+      />
+      <motion.div
+        className="splash-smoke"
+        initial={{ opacity: 0, y: 10 }}
+        animate={{ opacity: 1, y: -10 }}
+        transition={{ duration: 1.2, repeat: 2, repeatType: "reverse" }}
+      />
+    </motion.div>
   );
 }
 
-/* ---------- Home (carrossel + seções) ---------- */
-function Home({t, slides, slide, setRoute, onReserve}){
+// Header com seletor de idioma
+function Header({ t, lang, setLang }) {
   return (
-    <>
-      {/* HERO com carrossel */}
-      <section className="hero" id="hero" aria-label="featured">
-        <div className="carousel" aria-hidden>
-          <AnimatePresence mode="popLayout">
-            <motion.div key={slide}
-              className="slide"
-              style={{ backgroundImage:`url(${slides[slide]})` }}
-              initial={{opacity:0, scale:1.05}}
-              animate={{opacity:1, scale:1}}
-              exit={{opacity:0}}
-              transition={{duration:.9}}
-            />
-          </AnimatePresence>
-        </div>
-
-        <div className="paper">
-          <h1>Panela de Barro</h1>
-          <p>Brazilian Heritage Cuisine in Qatar</p>
-          <div className="cta">
-            <button className="btn primary" onClick={()=>setRoute("/menu")}>{t.seeMenu}</button>
-            <button className="btn" onClick={onReserve}>{t.reserve}</button>
-          </div>
-        </div>
-
-        <div className="dots">
-          {slides.map((_,i)=>(
-            <div key={i} className={`dot ${i===slide?'active':''}`} />
+    <header className="nav">
+      <div className="nav-inner">
+        <a href="#hero" className="brand">
+          <img src="/logo.png" alt="" />
+          <span>{t.brand}</span>
+        </a>
+        <nav>
+          <a href="#about">{t.about}</a>
+          <a href="#menu">{t.menu}</a>
+          <a href="#gallery">{t.gallery}</a>
+          <a href="#location">{t.location}</a>
+          <a href="#contact">{t.contact}</a>
+          <a href="#reservations">{t.reservations}</a>
+        </nav>
+        <div className="langs">
+          {LANGS.map((l) => (
+            <button
+              key={l}
+              className={l === lang ? "active" : ""}
+              onClick={() => setLang(l)}
+              aria-label={`set language ${l}`}
+            >
+              {l.toUpperCase()}
+            </button>
           ))}
         </div>
-      </section>
-
-      {/* ABOUT */}
-      <div className="container about" id="about">
-        <h2 className="section-title">{t.ourStory}</h2>
-        <p>{t.aboutText}</p>
-        <p><strong>{t.coming}</strong></p>
       </div>
-
-      {/* GALLERY STRIP */}
-      <div className="container" id="gallery">
-        <div className="gallery-strip">
-          <img src="/images/Verão-Brasil.jpg" alt="1"/>
-          <img src="/images/picanha.jpg" alt="2"/>
-          <img src="/images/Mandioca-frita.jpg" alt="3"/>
-          <img src="/images/Encanto-de-Coco.jpg" alt="4"/>
-          <img src="/images/Moqueca-baiana.jpg" alt="5"/>
-        </div>
-      </div>
-
-      {/* LOCATION + MAP */}
-      <div className="container" id="location">
-        <h2 className="section-title">Doha, Qatar</h2>
-        <p>Barwa Town — easy access & parking.</p>
-        <div className="map-wrap" style={{marginTop:12}}>
-          <iframe
-            title="Barwa Town Doha"
-            width="100%" height="360" style={{border:0}}
-            loading="lazy" allowFullScreen
-            referrerPolicy="no-referrer-when-downgrade"
-            src="https://www.google.com/maps?q=Barwa%20Town%20Doha%20Qatar&output=embed">
-          </iframe>
-        </div>
-      </div>
-
-      {/* CONTACT */}
-      <div className="container" id="contact">
-        <h2 className="section-title">{t.contactTitle}</h2>
-        <p>📧 {t.email}</p>
-        <p>📞 {t.phone}</p>
-        <p>📍 {t.address}</p>
-      </div>
-    </>
+    </header>
   );
 }
 
-/* ---------- Menu Page ---------- */
-function MenuPage({t, lang, filter, setFilter, list, open, setOpen}){
-  return (
-    <div className="container" id="menu" style={{paddingTop:24}}>
-      <h2 className="section-title">Menu</h2>
+// Carrossel simples (hero)
+function Hero({ t }) {
+  const slides = [
+    "/images/picanha-grelhada.jpg",
+    "/images/feijoada-costela.jpg",
+    "/images/moqueca-baiana.jpg",
+  ];
+  const [i, setI] = useState(0);
+  useEffect(() => {
+    const id = setInterval(() => setI((v) => (v + 1) % slides.length), 3500);
+    return () => clearInterval(id);
+  }, []);
 
-      <div className="menu-toolbar">
-        {categories.map(c=>(
-          <button key={c.key}
-            className={`pill ${filter===c.key?"active":""}`}
-            onClick={()=>setFilter(c.key)}>
-            {c.label(t)}
+  return (
+    <section id="hero" className="hero">
+      <AnimatePresence mode="wait">
+        <motion.img
+          key={slides[i]}
+          src={slides[i]}
+          alt="hero"
+          className="hero-bg"
+          initial={{ opacity: 0, scale: 1.04 }}
+          animate={{ opacity: 1, scale: 1 }}
+          exit={{ opacity: 0 }}
+          transition={{ duration: 0.8 }}
+        />
+      </AnimatePresence>
+
+      <div className="hero-content">
+        <motion.h1
+          initial={{ y: 10, opacity: 0 }}
+          animate={{ y: 0, opacity: 1 }}
+          transition={{ duration: 0.6 }}
+        >
+          {t.heroTitle}
+        </motion.h1>
+        <motion.p
+          initial={{ y: 10, opacity: 0 }}
+          animate={{ y: 0, opacity: 1 }}
+          transition={{ duration: 0.7, delay: 0.1 }}
+        >
+          {t.heroSubtitle}
+        </motion.p>
+        <div className="hero-ctas">
+          <a href="#reservations" className="btn primary">
+            {t.reservations}
+          </a>
+          <a href="#menu" className="btn">
+            {t.menu}
+          </a>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+function About({ t }) {
+  return (
+    <section id="about" className="about container">
+      <h2>{t.storyTitle}</h2>
+      <p>{t.storyText}</p>
+    </section>
+  );
+}
+
+// Grid de menu
+const FILTERS = ["all", "mains", "sides", "desserts", "drinks", "seasonal"];
+
+function Menu({ t, lang }) {
+  const [filter, setFilter] = useState("all");
+  const [open, setOpen] = useState(null);
+
+  const items = useMemo(() => {
+    const list = menuData.map((d, idx) => ({ ...d, _id: idx }));
+    return filter === "all" ? list : list.filter((d) => d.type === filter);
+  }, [filter]);
+
+  const badge = (type) => t.badge[type] || "";
+
+  return (
+    <section id="menu" className="menu container">
+      <h2>{t.menu}</h2>
+
+      <div className="chips">
+        {FILTERS.map((f) => (
+          <button
+            key={f}
+            className={f === filter ? "chip active" : "chip"}
+            onClick={() => setFilter(f)}
+          >
+            {t[f]}
           </button>
         ))}
       </div>
 
       <div className="grid">
-        {list.map(item=>(
-          <article key={item.id} className="card" onClick={()=>setOpen(item)} style={{cursor:"pointer"}}>
-            <img src={`/images/${encodeURIComponent(item.image)}`} alt={item.title} loading="lazy"/>
-            <div className="pad">
-              <div style={{display:"flex",justifyContent:"space-between",alignItems:"center"}}>
-                <h4>{item.title}</h4>
-                <span className="badge">{labelCat(item.category,t)}</span>
+        {items.map((item) => {
+          const tr = item.translations[lang];
+          const img = `/images/${item.image}`;
+          return (
+            <article
+              key={item._id}
+              className="card"
+              onClick={() => setOpen(item)}
+            >
+              <img
+                src={img}
+                alt={tr.name}
+                loading="lazy"
+                onError={(e) => {
+                  e.currentTarget.src = "/images/placeholder.jpg";
+                }}
+              />
+              <div className="card-body">
+                <div className="card-title-row">
+                  <h3>{tr.name}</h3>
+                  <span className="badge">{badge(item.type)}</span>
+                </div>
+                <p className="muted">{tr.desc}</p>
               </div>
-              <div style={{color:"#555", fontSize:14}}>{item.shortTxt}</div>
-            </div>
-          </article>
-        ))}
+            </article>
+          );
+        })}
       </div>
 
-      {/* modal/lightbox */}
       <AnimatePresence>
-      {open && (
-        <motion.div className="modal" initial={{opacity:0}} animate={{opacity:1}} exit={{opacity:0}} onClick={()=>setOpen(null)}>
-          <motion.div className="box" initial={{y:30, opacity:0}} animate={{y:0, opacity:1}} exit={{y:30, opacity:0}} onClick={(e)=>e.stopPropagation()}>
-            <img src={`/images/${encodeURIComponent(open.image)}`} alt={open.title}/>
-            <div className="body">
-              <h3>{open.name[lang] || open.name.en}</h3>
-              <p style={{color:"#555"}}>{open.longTxt}</p>
-              <div style={{display:"flex",gap:10, marginTop:12}}>
-                <button className="btn" onClick={()=>setOpen(null)}>{t.close}</button>
-                <button className="btn primary">{t.orderSoon}</button>
+        {open && (
+          <motion.div
+            className="modal-backdrop"
+            onClick={() => setOpen(null)}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+          >
+            <motion.div
+              className="modal"
+              onClick={(e) => e.stopPropagation()}
+              initial={{ y: 30, opacity: 0 }}
+              animate={{ y: 0, opacity: 1 }}
+              exit={{ y: 20, opacity: 0 }}
+            >
+              <img
+                src={`/images/${open.image}`}
+                alt={open.translations[lang].name}
+                onError={(e) => (e.currentTarget.src = "/images/placeholder.jpg")}
+              />
+              <div className="modal-body">
+                <h3>{open.translations[lang].name}</h3>
+                <p>{open.translations[lang].long || open.translations[lang].desc}</p>
+                <div className="modal-actions">
+                  <button className="btn" onClick={() => setOpen(null)}>
+                    {t.close}
+                  </button>
+                  <button className="btn primary" disabled>
+                    {t.orderSoon}
+                  </button>
+                </div>
               </div>
-            </div>
+            </motion.div>
           </motion.div>
-        </motion.div>
-      )}
+        )}
       </AnimatePresence>
-    </div>
+    </section>
   );
 }
 
-function labelCat(c,t){
-  switch(c){
-    case 'mains': return t.mains;
-    case 'sides': return t.sides;
-    case 'desserts': return t.desserts;
-    case 'beverages': return t.beverages;
-    case 'seasonal': return t.seasonal;
-    default: return t.all;
-  }
+function Gallery({ t }) {
+  const imgs = [
+    "/images/picanha-grelhada.jpg",
+    "/images/feijoada-costela.jpg",
+    "/images/moqueca-baiana.jpg",
+    "/images/pastel.jpg",
+  ];
+  return (
+    <section id="gallery" className="gallery container">
+      <h2>{t.gallery}</h2>
+      <div className="grid gallery-grid">
+        {imgs.map((src) => (
+          <img key={src} src={src} alt="gallery" loading="lazy" />
+        ))}
+      </div>
+    </section>
+  );
 }
 
-/* ---------- Reservation Form ---------- */
-function ReservationForm({t, onClose}){
-  // Formspree (gratuito): crie um form e substitua o ID abaixo.
-  const FORM_ENDPOINT = "https://formspree.io/f/xxxxxxxx"; // troque por seu ID; se deixar vazio, cai no fallback mailto
+function Location({ t }) {
+  return (
+    <section id="location" className="location container">
+      <h2>{t.location}</h2>
+      <p className="muted">{t.address}</p>
+      <div className="map-embed">
+        <iframe
+          title="map"
+          loading="lazy"
+          referrerPolicy="no-referrer-when-downgrade"
+          src="https://www.google.com/maps?q=Barwa%20Town%2C%20Doha%2C%20Qatar&output=embed"
+        />
+      </div>
+    </section>
+  );
+}
 
-  const [state,setState] = useState({
-    name:"", email:"", phone:"", party:"2", date:"", time:"19:00", notes:""
-  });
+function Contact({ t }) {
+  return (
+    <section id="contact" className="contact container">
+      <h2>{t.contactTitle}</h2>
+      <ul className="contact-list">
+        <li>📧 {t.email}</li>
+        <li>📞 {t.phone}</li>
+        <li>📍 {t.address}</li>
+      </ul>
+      <p className="muted">© 2025 Panela de Barro — {t.soon}</p>
+    </section>
+  );
+}
 
-  const change = (e)=> setState(s=>({...s,[e.target.name]:e.target.value}));
-
-  const submit = async (e)=>{
-    e.preventDefault();
-    if(FORM_ENDPOINT.includes("xxxx")){
-      // fallback: mailto
-      const body = encodeURIComponent(
-        `Reservation request\nName: ${state.name}\nEmail: ${state.email}\nPhone: ${state.phone}\nGuests: ${state.party}\nDate: ${state.date}\nTime: ${state.time}\nNotes: ${state.notes}`
-      );
-      window.location.href = `mailto:restaurant@paneladebarroqatar.com?subject=Reservation&body=${body}`;
-      onClose();
-      return;
-    }
-    const fd = new FormData();
-    Object.entries(state).forEach(([k,v])=>fd.append(k,v));
-    const r = await fetch(FORM_ENDPOINT,{ method:"POST", body:fd, headers:{ Accept:"application/json" } });
-    if(r.ok){ alert("Pedido enviado! Entraremos em contato para confirmar."); onClose(); }
-    else{ alert("Não foi possível enviar agora. Tente novamente ou use o WhatsApp."); }
-  };
+export default function App() {
+  const { lang, setLang, t } = useI18n();
+  const [showSplash, setShowSplash] = useState(true);
 
   return (
-    <form className="form" onSubmit={submit}>
-      <input name="name" placeholder={t.name} value={state.name} onChange={change} required/>
-      <input name="email" type="email" placeholder={t.emailLbl} value={state.email} onChange={change} required/>
-      <input name="phone" placeholder={t.phoneLbl} value={state.phone} onChange={change} />
-      <select name="party" value={state.party} onChange={change}>
-        {[1,2,3,4,5,6,7,8,9,10].map(n=><option key={n} value={n}>{t.party}: {n}</option>)}
-      </select>
-      <input name="date" type="date" value={state.date} onChange={change} required/>
-      <input name="time" type="time" value={state.time} onChange={change} required/>
-      <textarea name="notes" placeholder={t.notes} value={state.notes} onChange={change}/>
-      <div className="actions">
-        <button type="button" className="btn" onClick={onClose}>{t.close}</button>
-        <button className="btn primary" type="submit">{t.send}</button>
-      </div>
-    </form>
+    <>
+      <AnimatePresence>{showSplash && <Splash onDone={() => setShowSplash(false)} />}</AnimatePresence>
+
+      <Header t={t} lang={lang} setLang={setLang} />
+      <main>
+        <Hero t={t} />
+        <About t={t} />
+        <Menu t={t} lang={lang} />
+        <Gallery t={t} />
+        <Location t={t} />
+        <section id="reservations" className="reservations container">
+          <h2>{t.reservations}</h2>
+          <p className="muted">{t.soon}</p>
+        </section>
+        <Contact t={t} />
+      </main>
+    </>
   );
 }
