@@ -99,7 +99,7 @@ export default function App() {
 
         <section id="location" className="block">
           <h2>Location</h2>
-          <p>Barwa Town, Doha, Qatar — Opening November (coming soon)</p>
+          <p>Baraha Town, Doha, Qatar — Opening November (coming soon)</p>
         </section>
 
         <section id="contact" className="block">
