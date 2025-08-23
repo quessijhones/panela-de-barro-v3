@@ -1,13 +1,23 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Panela de Barro</title>
-  <link rel="icon" href="/logo.png" />
-</head>
-<body>
-  <div id="root"></div>
-  <script type="module" src="/src/main.jsx"></script>
-</body>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Panela de Barro</title>
+
+    <!-- Fontes -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet"
+          href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Inter:wght@300;400;500;600;700&display=swap">
+
+    <!-- Favicon -->
+    <link rel="icon" href="/public/logo.png" />
+  </head>
+  <body>
+    <div id="root"></div>
+
+    <!-- IMPORTANTE: sempre aponte para /main.jsx (na raiz). Nada de /src/ e nada de /assets/ aqui. -->
+    <script type="module" src="/main.jsx"></script>
+  </body>
 </html>
