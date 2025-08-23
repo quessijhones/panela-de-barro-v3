@@ -1,7 +1,8 @@
-// i18n.js – strings de interface + helpers de locale
+// i18n.js — UI strings + controle de locale reativo (sem reload)
 
 export const SUPPORTED_LOCALES = ["pt", "en", "ar"];
 
+/** ---------------- UI STRINGS ---------------- */
 export const UI = {
   brand: { pt: "Panela de Barro", en: "Panela de Barro", ar: "‏Panela de Barro" },
   nav: {
@@ -44,9 +45,7 @@ export const UI = {
     fat: { pt: "Gorduras", en: "Fat", ar: "دهون" },
     allergens: { pt: "Alergênicos", en: "Allergens", ar: "مسببات الحساسية" },
   },
-  gallery: {
-    title: { pt: "Galeria", en: "Gallery", ar: "المعرض" },
-  },
+  gallery: { title: { pt: "Galeria", en: "Gallery", ar: "المعرض" } },
   location: {
     title: { pt: "Localização", en: "Location", ar: "الموقع" },
     address: {
@@ -62,22 +61,28 @@ export const UI = {
   },
 };
 
-export function getLocale() {
-  const p = new URLSearchParams(window.location.search);
-  const q = (p.get("lang") || "").toLowerCase();
+/** ---------------- Controle de locale ---------------- */
+export function currentLocale() {
+  const url = new URL(window.location.href);
+  const q = (url.searchParams.get("lang") || "").toLowerCase();
   if (SUPPORTED_LOCALES.includes(q)) return q;
-  return "pt"; // padrão
+  const saved = (localStorage.getItem("lang") || "").toLowerCase();
+  if (SUPPORTED_LOCALES.includes(saved)) return saved;
+  return "pt";
 }
 
 export function setLocale(lang) {
+  if (!SUPPORTED_LOCALES.includes(lang)) return;
+  // persiste e atualiza URL sem recarregar
+  localStorage.setItem("lang", lang);
   const url = new URL(window.location.href);
   url.searchParams.set("lang", lang);
-  window.location.href = url.toString();
+  window.history.replaceState({}, "", url.toString());
+  // avisa a app para re-renderizar
+  window.dispatchEvent(new Event("langchange"));
 }
 
-export function t(path) {
-  const lang = getLocale();
-  const val = path?.[lang];
-  // fallback para EN se não existir no AR/PT
-  return val ?? path?.en ?? "";
+// helper para pegar string traduzida com fallback EN
+export function t(obj, lang = currentLocale()) {
+  return obj?.[lang] ?? obj?.en ?? "";
 }
