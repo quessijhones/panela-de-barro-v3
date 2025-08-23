@@ -1,172 +1,188 @@
-import React, { useMemo, useState } from "react";
-import { HashRouter, Link, useLocation } from "react-router-dom";
-import { motion, AnimatePresence } from "framer-motion";
-import menu from "./menuData.js";
-import { t, LOCALES } from "./i18n.js";
+// src/App.jsx
+import React, { createContext, useContext, useMemo, useState } from "react";
+import { HashRouter, Routes, Route, Link, useNavigate } from "react-router-dom";
+import { LOCALES, t } from "./i18n";
+import { menu, categories } from "./menuData";
+import "./styles.css";
 
-function useI18n() {
-  const [lang, setLang] = useState("pt");
-  const tr = useMemo(() => t[lang], [lang]);
-  return { lang, setLang, tr };
+const I18nCtx = createContext();
+const useI18n = () => useContext(I18nCtx);
+
+function LangSwitch() {
+  const { lang, setLang } = useI18n();
+  return (
+    <div className="lang">
+      {Object.entries(LOCALES).map(([k, v]) => (
+        <button key={k} onClick={() => setLang(v)} className={lang === v ? "chip active" : "chip"}>
+          {v === "pt" ? "PT" : v === "en" ? "EN" : "AR"}
+        </button>
+      ))}
+    </div>
+  );
 }
 
-function Navbar({ i18n }) {
-  const { tr, lang, setLang } = i18n;
+function Navbar() {
+  const { lang } = useI18n();
+  const nav = t.nav[lang];
   return (
     <header className="nav">
-      <Link to="/" className="brand">
-        <img src="/logo.png" alt="Panela de Barro" />
-        <span>Panela de Barro</span>
-      </Link>
-
-      <nav className="links">
-        <a href="#about">{tr.nav.about}</a>
-        <a href="#menu">{tr.nav.menu}</a>
-        <a href="#gallery">{tr.nav.gallery}</a>
-        <a href="#location">{tr.nav.location}</a>
-        <a href="#contact">{tr.nav.contact}</a>
+      <Link to="/" className="brand"><img src="/logo.png" alt="logo" /> <span>Panela de Barro</span></Link>
+      <nav>
+        <Link to="/#about">{nav.about}</Link>
+        <Link to="/menu">{nav.menu}</Link>
+        <a href="#gallery">{nav.gallery}</a>
+        <a href="#location">{nav.location}</a>
+        <a href="#contact">{nav.contact}</a>
       </nav>
-
-      <div className="langs">
-        {LOCALES.map((l) => (
-          <button
-            key={l}
-            onClick={() => setLang(l)}
-            className={l === lang ? "active" : ""}
-          >
-            {l.toUpperCase()}
-          </button>
-        ))}
-      </div>
+      <LangSwitch />
     </header>
   );
 }
 
-function About({ tr }) {
+function Hero() {
+  const { lang } = useI18n();
   return (
-    <section id="about" className="container">
-      <h1>{tr.heroTitle}</h1>
-      <p>{tr.heroDesc}</p>
-      <p className="soon">{tr.comingSoon}</p>
+    <section id="about" className="hero">
+      <h1>{t.heroTitle[lang]}</h1>
+      <p>{t.heroText[lang]}</p>
+      <p className="opening">{t.opening[lang]}</p>
     </section>
   );
 }
 
-function MenuGrid({ i18n }) {
-  const { tr, lang } = i18n;
-  const [active, setActive] = useState(null);
+function Card({ item, onOpen, lang }) {
+  return (
+    <article className="card" onClick={() => onOpen(item)}>
+      <img src={item.img} alt={item.title[lang]} loading="lazy" />
+      <div className="card-body">
+        <div className="card-title">
+          <h3>{item.title[lang]}</h3>
+          {item.badges?.[0] && <span className="badge">{t.tag[lang][item.badges[0]] || ""}</span>}
+        </div>
+        <p className="muted">{item.short[lang]}</p>
+      </div>
+    </article>
+  );
+}
+
+function Modal({ open, onClose, item, lang }) {
+  if (!open || !item) return null;
+  return (
+    <div className="modal" onClick={onClose}>
+      <div className="dialog" onClick={(e) => e.stopPropagation()}>
+        <img src={item.img} alt={item.title[lang]} />
+        <h3>{item.title[lang]}</h3>
+        <p className="muted">{item.long[lang]}</p>
+        <button className="btn" onClick={onClose}>Close</button>
+      </div>
+    </div>
+  );
+}
+
+function Home() {
+  const { lang } = useI18n();
+  const navigate = useNavigate();
+  const [open, setOpen] = useState(false);
+  const [current, setCurrent] = useState(null);
+
+  const preview = useMemo(() => menu.filter(m => m.cat === "mains").slice(0, 3), []);
+  const openItem = (it) => { setCurrent(it); setOpen(true); };
 
   return (
-    <section id="menu" className="container">
-      <h2>{tr.menuPreview}</h2>
-      <div className="grid">
-        {menu.map((item) => (
-          <article key={item.id} className="card" onClick={() => setActive(item)}>
-            <div className="card-media">
-              <img
-                src={`/images/${item.image}`}
-                alt={item.title[lang]}
-                loading="lazy"
-                onError={(e) => (e.currentTarget.src = "/images/placeholder.jpg")}
-              />
-            </div>
-            <div className="card-body">
-              <h3>{item.title[lang]}</h3>
-              <span className="pill">{tr.category[item.category]}</span>
-              <p>{item.short[lang]}</p>
-            </div>
-          </article>
+    <>
+      <Hero />
+      <section className="section">
+        <div className="section-head">
+          <h2>{t.previewTitle[lang]}</h2>
+          <button className="link" onClick={() => navigate("/menu")}>{t.nav[lang].menu} →</button>
+        </div>
+        <div className="grid">
+          {preview.map((it) => (
+            <Card key={it.id} item={it} lang={lang} onOpen={openItem} />
+          ))}
+        </div>
+      </section>
+
+      <section id="location" className="section">
+        <h2>{t.nav[lang].location}</h2>
+        <p className="muted">
+          {t.footer[lang].address} • {t.footer[lang].phone} • {t.footer[lang].email}
+        </p>
+        <div className="map">
+          <iframe
+            title="map"
+            loading="lazy"
+            src="https://www.google.com/maps?q=Baraha%20Town%20Doha%20Qatar&output=embed"
+          />
+        </div>
+      </section>
+
+      <section id="contact" className="section">
+        <h2>{t.nav[lang].contact}</h2>
+        <ul className="muted">
+          <li>📧 {t.footer[lang].email}</li>
+          <li>📞 {t.footer[lang].phone}</li>
+          <li>📍 {t.footer[lang].address}</li>
+        </ul>
+      </section>
+
+      <Modal open={open} onClose={() => setOpen(false)} item={current} lang={lang} />
+    </>
+  );
+}
+
+function MenuPage() {
+  const { lang } = useI18n();
+  const [filter, setFilter] = useState("all");
+  const filtered = useMemo(
+    () => (filter === "all" ? menu : menu.filter((m) => m.cat === filter)),
+    [filter]
+  );
+  const [open, setOpen] = useState(false);
+  const [current, setCurrent] = useState(null);
+  const openItem = (it) => { setCurrent(it); setOpen(true); };
+
+  return (
+    <section className="section">
+      <div className="section-head">
+        <h2>{t.nav[lang].menu}</h2>
+      </div>
+
+      <div className="filters">
+        {categories.map((c) => (
+          <button
+            key={c.key}
+            className={filter === c.key ? "chip active" : "chip"}
+            onClick={() => setFilter(c.key)}
+          >
+            {c.label[lang]}
+          </button>
         ))}
       </div>
 
-      <AnimatePresence>
-        {active && (
-          <motion.div
-            className="modal"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            onClick={() => setActive(null)}
-          >
-            <motion.div
-              className="modal-body"
-              initial={{ y: 40, scale: 0.98 }}
-              animate={{ y: 0, scale: 1 }}
-              exit={{ y: 20, scale: 0.98 }}
-              onClick={(e) => e.stopPropagation()}
-            >
-              <img
-                src={`/images/${active.image}`}
-                alt={active.title[lang]}
-                onError={(e) => (e.currentTarget.src = "/images/placeholder.jpg")}
-              />
-              <h3>{active.title[lang]}</h3>
-              <p>{active.long[lang]}</p>
-              <button className="btn" onClick={() => setActive(null)}>
-                {tr.close}
-              </button>
-            </motion.div>
-          </motion.div>
-        )}
-      </AnimatePresence>
+      <div className="grid">
+        {filtered.map((it) => (
+          <Card key={it.id} item={it} lang={lang} onOpen={openItem} />
+        ))}
+      </div>
+
+      <Modal open={open} onClose={() => setOpen(false)} item={current} lang={lang} />
     </section>
   );
 }
 
-function Location({ tr }) {
+export default function AppRoot() {
+  const [lang, setLang] = useState(LOCALES.PT);
+  const ctx = useMemo(() => ({ lang, setLang }), [lang]);
   return (
-    <section id="location" className="container">
-      <h2>{tr.locationTitle}</h2>
-      <p>{tr.locationText}</p>
-      <div className="map-placeholder">Mapa fixo – Baraha Town, Doha, Qatar</div>
-    </section>
-  );
-}
-
-function Contact({ tr }) {
-  return (
-    <section id="contact" className="container">
-      <h2>{tr.contactTitle}</h2>
-      <ul className="contact">
-        <li>
-          📧 {tr.email}:{" "}
-          <a href="mailto:restaurant@paneladebarroqatar.com">
-            restaurant@paneladebarroqatar.com
-          </a>
-        </li>
-        <li>
-          📞 {tr.phone}: <a href="tel:+97430475279">+974 3047 5279</a>
-        </li>
-      </ul>
-      <footer className="footer">© 2025 Panela de Barro</footer>
-    </section>
-  );
-}
-
-function ScrollToHash() {
-  const { hash } = useLocation();
-  React.useEffect(() => {
-    if (!hash) return;
-    const el = document.querySelector(hash);
-    if (el) el.scrollIntoView({ behavior: "smooth", block: "start" });
-  }, [hash]);
-  return null;
-}
-
-export default function App() {
-  const i18n = useI18n();
-  const { tr } = i18n;
-
-  return (
-    <HashRouter>
-      <Navbar i18n={i18n} />
-      <ScrollToHash />
-      <main>
-        <About tr={tr} />
-        <MenuGrid i18n={i18n} />
-        <Location tr={tr} />
-        <Contact tr={tr} />
-      </main>
-    </HashRouter>
+    <I18nCtx.Provider value={ctx}>
+      <HashRouter>
+        <Navbar />
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/menu" element={<MenuPage />} />
+        </Routes>
+      </HashRouter>
+    </I18nCtx.Provider>
   );
 }
