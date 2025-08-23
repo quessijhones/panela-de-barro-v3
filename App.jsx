@@ -1,139 +1,172 @@
-import React, { useEffect } from "react";
+import React, { useMemo, useState } from "react";
+import { HashRouter, Link, useLocation } from "react-router-dom";
+import { motion, AnimatePresence } from "framer-motion";
+import menu from "./menuData.js";
+import { t, LOCALES } from "./i18n.js";
 
-const Nav = () => (
-  <header className="nav">
-    <div className="brand">
-      <img src="/logo.png" alt="Panela de Barro" />
-      <span>Panela de Barro</span>
-    </div>
-    <nav>
-      <a href="#about">About</a>
-      <a href="#menu">Menu</a>
-      <a href="#gallery">Gallery</a>
-      <a href="#location">Location</a>
-      <a href="#contact">Contact</a>
-    </nav>
-  </header>
-);
+function useI18n() {
+  const [lang, setLang] = useState("pt");
+  const tr = useMemo(() => t[lang], [lang]);
+  return { lang, setLang, tr };
+}
 
-const Hero = () => (
-  <section className="hero">
-    <div className="hero__bg" />
-    <div className="hero__content">
-      <h1>Brazilian soul food, fire-kissed.</h1>
-      <p>
-        Family restaurant in Qatar. 20+ years in hospitality — wood-fired
-        flavors, countryside warmth and Brazilian roots.
-      </p>
-      <a href="#menu" className="btn">See the menu</a>
-    </div>
-  </section>
-);
+function Navbar({ i18n }) {
+  const { tr, lang, setLang } = i18n;
+  return (
+    <header className="nav">
+      <Link to="/" className="brand">
+        <img src="/logo.png" alt="Panela de Barro" />
+        <span>Panela de Barro</span>
+      </Link>
 
-const Section = ({ id, title, children }) => (
-  <section id={id} className="section">
-    <h2>{title}</h2>
-    <div className="section__body">{children}</div>
-  </section>
-);
+      <nav className="links">
+        <a href="#about">{tr.nav.about}</a>
+        <a href="#menu">{tr.nav.menu}</a>
+        <a href="#gallery">{tr.nav.gallery}</a>
+        <a href="#location">{tr.nav.location}</a>
+        <a href="#contact">{tr.nav.contact}</a>
+      </nav>
 
-const MenuCard = ({ title, tag, desc, img }) => (
-  <article className="card">
-    <div className="card__img">
-      <img src={img} alt={title} loading="lazy" />
-    </div>
-    <div className="card__body">
-      <div className="card__title">
-        <h3>{title}</h3>
-        {tag && <span className="pill">{tag}</span>}
+      <div className="langs">
+        {LOCALES.map((l) => (
+          <button
+            key={l}
+            onClick={() => setLang(l)}
+            className={l === lang ? "active" : ""}
+          >
+            {l.toUpperCase()}
+          </button>
+        ))}
       </div>
-      <p>{desc}</p>
-    </div>
-  </article>
-);
+    </header>
+  );
+}
 
-export default function App() {
-  // só para garantir que o viewport comece no topo após build
-  useEffect(() => window.scrollTo(0, 0), []);
+function About({ tr }) {
+  return (
+    <section id="about" className="container">
+      <h1>{tr.heroTitle}</h1>
+      <p>{tr.heroDesc}</p>
+      <p className="soon">{tr.comingSoon}</p>
+    </section>
+  );
+}
+
+function MenuGrid({ i18n }) {
+  const { tr, lang } = i18n;
+  const [active, setActive] = useState(null);
 
   return (
-    <>
-      <Nav />
+    <section id="menu" className="container">
+      <h2>{tr.menuPreview}</h2>
+      <div className="grid">
+        {menu.map((item) => (
+          <article key={item.id} className="card" onClick={() => setActive(item)}>
+            <div className="card-media">
+              <img
+                src={`/images/${item.image}`}
+                alt={item.title[lang]}
+                loading="lazy"
+                onError={(e) => (e.currentTarget.src = "/images/placeholder.jpg")}
+              />
+            </div>
+            <div className="card-body">
+              <h3>{item.title[lang]}</h3>
+              <span className="pill">{tr.category[item.category]}</span>
+              <p>{item.short[lang]}</p>
+            </div>
+          </article>
+        ))}
+      </div>
 
+      <AnimatePresence>
+        {active && (
+          <motion.div
+            className="modal"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            onClick={() => setActive(null)}
+          >
+            <motion.div
+              className="modal-body"
+              initial={{ y: 40, scale: 0.98 }}
+              animate={{ y: 0, scale: 1 }}
+              exit={{ y: 20, scale: 0.98 }}
+              onClick={(e) => e.stopPropagation()}
+            >
+              <img
+                src={`/images/${active.image}`}
+                alt={active.title[lang]}
+                onError={(e) => (e.currentTarget.src = "/images/placeholder.jpg")}
+              />
+              <h3>{active.title[lang]}</h3>
+              <p>{active.long[lang]}</p>
+              <button className="btn" onClick={() => setActive(null)}>
+                {tr.close}
+              </button>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </section>
+  );
+}
+
+function Location({ tr }) {
+  return (
+    <section id="location" className="container">
+      <h2>{tr.locationTitle}</h2>
+      <p>{tr.locationText}</p>
+      <div className="map-placeholder">Mapa fixo – Baraha Town, Doha, Qatar</div>
+    </section>
+  );
+}
+
+function Contact({ tr }) {
+  return (
+    <section id="contact" className="container">
+      <h2>{tr.contactTitle}</h2>
+      <ul className="contact">
+        <li>
+          📧 {tr.email}:{" "}
+          <a href="mailto:restaurant@paneladebarroqatar.com">
+            restaurant@paneladebarroqatar.com
+          </a>
+        </li>
+        <li>
+          📞 {tr.phone}: <a href="tel:+97430475279">+974 3047 5279</a>
+        </li>
+      </ul>
+      <footer className="footer">© 2025 Panela de Barro</footer>
+    </section>
+  );
+}
+
+function ScrollToHash() {
+  const { hash } = useLocation();
+  React.useEffect(() => {
+    if (!hash) return;
+    const el = document.querySelector(hash);
+    if (el) el.scrollIntoView({ behavior: "smooth", block: "start" });
+  }, [hash]);
+  return null;
+}
+
+export default function App() {
+  const i18n = useI18n();
+  const { tr } = i18n;
+
+  return (
+    <HashRouter>
+      <Navbar i18n={i18n} />
+      <ScrollToHash />
       <main>
-        <Hero />
-
-        <Section id="about" title="Panela de Barro">
-          <p>
-            A Brazilian family restaurant in Qatar. With 20+ years in hospitality, we bring
-            wood-fired flavors, countryside warmth and Brazilian roots. Chef-owner Quessi Jhones
-            comanda a cozinha com sua mãe, Dona Cleuza (mineira) e seu irmão (Head Chef com 10+ anos).
-          </p>
-        </Section>
-
-        <Section id="menu" title="Menu (preview)">
-          <div className="grid">
-            <MenuCard
-              title="Vaca Atolada (Ossobuco)"
-              tag="Mains"
-              desc="Ossobuco com polenta cremosa e rúcula cítrica."
-              img="/public/images/vaca-atolada.jpg"
-            />
-            <MenuCard
-              title="Feijoada de Costela"
-              tag="Mains"
-              desc="Feijão preto com costela, farofa de banana e vinagrete."
-              img="/public/images/feijoada-costela.jpg"
-            />
-            <MenuCard
-              title="Picanha Grelhada"
-              tag="Chef’s"
-              desc="Com risoto de cogumelos, polenta verde e molho de pimenta do reino."
-              img="/public/images/picanha-grelhada.jpg"
-            />
-            <MenuCard
-              title="Pão de Queijo"
-              tag="Side"
-              desc="Tradicional mineiro, macio e quentinho."
-              img="/public/images/pao-de-queijo.jpg"
-            />
-          </div>
-          <p className="muted">* Imagens e texto completos na página de Menu.</p>
-        </Section>
-
-        <Section id="gallery" title="Gallery">
-          <div className="tiles">
-            <img src="/public/images/sol-do-cerrado.jpg" alt="" loading="lazy" />
-            <img src="/public/images/mandioca-frita.jpg" alt="" loading="lazy" />
-            <img src="/public/images/uva-limao-gelo.jpg" alt="" loading="lazy" />
-            <img src="/public/images/moqueca-baiana.jpg" alt="" loading="lazy" />
-          </div>
-        </Section>
-
-        <Section id="location" title="Location">
-          <p>Barwa Town, Doha, Qatar</p>
-          <div className="mapbox">
-            <iframe
-              title="Barwa Town"
-              loading="lazy"
-              referrerPolicy="no-referrer-when-downgrade"
-              src="https://www.google.com/maps?q=Barwa%20Town%2C%20Doha&output=embed"
-            />
-          </div>
-        </Section>
-
-        <Section id="contact" title="Contact">
-          <ul className="contact">
-            <li>📧 restaurant@paneladebarroqatar.com</li>
-            <li>📞 +974 3047 5279</li>
-            <li>📍 Barwa Town, Doha, Qatar</li>
-          </ul>
-        </Section>
+        <About tr={tr} />
+        <MenuGrid i18n={i18n} />
+        <Location tr={tr} />
+        <Contact tr={tr} />
       </main>
-
-      <footer className="footer">
-        © {new Date().getFullYear()} Panela de Barro • Opening November — <em>coming soon</em>
-      </footer>
-    </>
+    </HashRouter>
   );
 }
