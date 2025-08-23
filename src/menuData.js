@@ -1,4 +1,4 @@
-// menuData.js – dados do cardápio com PT/EN + nutrição + alergênicos
+// menuData.js — cardápio PT/EN + nutrição + alergênicos (Halal)
 
 export const CATEGORIES = ["mains", "sides", "desserts", "beverages", "seasonal", "chef"];
 
@@ -8,20 +8,17 @@ export const MENU = [
     image: "/images/vaca-atolada.jpg",
     category: "mains",
     tag: "🥩",
-    title: {
-      pt: "Vaca Atolada (Ossobuco)",
-      en: "Vaca Atolada (Beef Ossobuco)",
-    },
+    title: { pt: "Vaca Atolada (Ossobuco)", en: "Vaca Atolada (Beef Ossobuco)" },
     summary: {
       pt: "Ossobuco lentamente cozido, polenta cremosa e rúcula cítrica.",
       en: "Slow-braised ossobuco with creamy polenta and citrus arugula.",
     },
     description: {
-      pt: "Clássico mineiro de dias de festa. O ossobuco cozinha por horas até desmanchar, puxando alho, cebola e ervas. Servido com polenta cremosa e rúcula cítrica — conforto e raiz no mesmo prato.",
-      en: "A Minas Gerais classic for feast days. Beef ossobuco braises for hours until tender, infused with garlic, onions, and herbs. Served with creamy polenta and citrus arugula — comfort and heritage in one plate.",
+      pt: "Clássico mineiro de dias festivos. O ossobuco cozinha por horas até desmanchar, puxando alho, cebola e ervas. Servido com polenta cremosa e rúcula cítrica — conforto e raiz no mesmo prato.",
+      en: "A Minas Gerais classic for feast days. Beef ossobuco braises for hours until tender, infused with garlic, onions, and herbs. Served with creamy polenta and citrus arugula — comfort and heritage on one plate.",
     },
     nutrition: { kcal: 680, carbs: 18, protein: 42, fat: 48 },
-    allergens: ["gluten-free"],
+    allergens: ["gluten-free"], // naturalmente sem glúten
   },
   {
     id: "feijoada-costela",
@@ -30,15 +27,15 @@ export const MENU = [
     tag: "🥩",
     title: { pt: "Feijoada de Costela", en: "Black Bean Stew with Ribs" },
     summary: {
-      pt: "Feijão preto com costela, farofa de banana e vinagrete.",
-      en: "Black beans with ribs, banana farofa and vinaigrette.",
+      pt: "Feijão preto com costela bovina, farofa de banana e vinagrete.",
+      en: "Black beans with beef ribs, banana farofa and vinaigrette.",
     },
     description: {
-      pt: "Feijoada de quintal: o feijão cozinha devagar, a costela fica macia e a farofa de banana traz o toque doce-salgado típico do Brasil central.",
-      en: "Backyard-style feijoada: slow-cooked black beans, tender ribs, and banana farofa for that sweet-savory note from Brazil’s heartland.",
+      pt: "Feijoada de quintal: o feijão cozinha devagar, a costela bovina fica macia e a farofa de banana traz o toque doce-salgado do Brasil central. 100% halal.",
+      en: "Backyard-style feijoada: slow-cooked black beans, tender beef ribs, and banana farofa for that sweet-savory note from Brazil’s heartland. 100% halal.",
     },
     nutrition: { kcal: 720, carbs: 52, protein: 36, fat: 38 },
-    allergens: ["contains-pork?"],
+    allergens: [], // sem porco, sem álcool
   },
   {
     id: "picanha-grelhada",
@@ -51,8 +48,8 @@ export const MENU = [
       en: "With mushroom risotto, green-corn polenta and peppercorn sauce.",
     },
     description: {
-      pt: "Corte-ícone do churrasco brasileiro, dourado em chapa quente para manter a suculência. Acompanha risoto de cogumelos e polenta verde — toque do chef.",
-      en: "An icon of Brazilian barbecue, seared hot to keep it juicy. Served with mushroom risotto and green-corn polenta — chef’s signature.",
+      pt: "Corte-ícone do churrasco brasileiro, selado quente para manter a suculência. Acompanha risoto de cogumelos e polenta de milho verde — assinatura do chef. Halal.",
+      en: "An icon of Brazilian barbecue, seared hot to keep it juicy. Served with mushroom risotto and green-corn polenta — chef’s signature. Halal.",
     },
     nutrition: { kcal: 640, carbs: 28, protein: 45, fat: 36 },
     allergens: [],
@@ -65,7 +62,7 @@ export const MENU = [
     title: { pt: "Pão de Queijo", en: "Cheese Bread (GF)" },
     summary: { pt: "Tradicional, macio e quentinho.", en: "Traditional, soft and warm." },
     description: {
-      pt: "Receita mineira com polvilho e queijo curado. Sem glúten por natureza, é abraço em forma de pão.",
+      pt: "Receita mineira com polvilho e queijo curado. Naturalmente sem glúten — abraço em forma de pão.",
       en: "Minas-style recipe using cassava starch and aged cheese. Naturally gluten-free — a warm hug in bread form.",
     },
     nutrition: { kcal: 210, carbs: 22, protein: 5, fat: 10 },
@@ -122,7 +119,7 @@ export const MENU = [
     summary: { pt: "Abóbora cremosa, especiarias e sorvete artesanal.", en: "Creamy pumpkin, spices and artisan ice cream." },
     description: {
       pt: "Abóbora cozida com cravo e canela, lembrança doce das cozinhas do interior.",
-      en: "Pumpkin cooked with clove and cinnamon — sweet memory from country kitchens.",
+      en: "Pumpkin cooked with clove and cinnamon — a sweet memory from country kitchens.",
     },
     nutrition: { kcal: 340, carbs: 54, protein: 5, fat: 10 },
     allergens: ["dairy"],
@@ -133,10 +130,10 @@ export const MENU = [
     category: "beverages",
     tag: "🥤",
     title: { pt: "Amazon Breeze", en: "Amazon Breeze" },
-    summary: { pt: "Abacaxi, hortelã e limão.", en: "Pineapple, mint & lime." },
+    summary: { pt: "Abacaxi, hortelã e limão (sem álcool).", en: "Pineapple, mint & lime (non-alcoholic)." },
     description: {
-      pt: "Refresco brilhante com toque herbal, inspirado no Norte do Brasil.",
-      en: "Bright, herbal refreshment inspired by Brazil’s North.",
+      pt: "Refresco brilhante com toque herbal, inspirado no Norte do Brasil. 0% álcool.",
+      en: "Bright, herbal refreshment inspired by Brazil’s North. 0% alcohol.",
     },
     nutrition: { kcal: 120, carbs: 28, protein: 1, fat: 0 },
     allergens: [],
@@ -147,10 +144,10 @@ export const MENU = [
     category: "beverages",
     tag: "🥤",
     title: { pt: "Uva & Limão Gelo", en: "Grape & Lemon Ice" },
-    summary: { pt: "Suco de uva integral com limão e hortelã.", en: "Grape juice with lemon and mint." },
+    summary: { pt: "Suco de uva integral com limão e hortelã (sem álcool).", en: "Grape juice with lemon & mint (non-alcoholic)." },
     description: {
-      pt: "Ácido, frutado e gelado — companhia leve para os pratos.",
-      en: "Tart, fruity and icy — a light companion to food.",
+      pt: "Ácido, frutado e gelado — companhia leve para os pratos. 0% álcool.",
+      en: "Tart, fruity and icy — a light companion to food. 0% alcohol.",
     },
     nutrition: { kcal: 110, carbs: 26, protein: 1, fat: 0 },
     allergens: [],
@@ -161,40 +158,12 @@ export const MENU = [
     category: "beverages",
     tag: "🧉",
     title: { pt: "Pé de Serra", en: "Pé de Serra (Mate Iced Tea)" },
-    summary: { pt: "Chá-mate gelado com limão e gengibre.", en: "Iced yerba mate with lemon & ginger." },
+    summary: { pt: "Chá-mate gelado com limão e gengibre (sem álcool).", en: "Iced yerba mate with lemon & ginger (non-alcoholic)." },
     description: {
       pt: "Bebida refrescante, cara de tarde nordestina e vento de varanda.",
       en: "Refreshing, an afternoon breeze from Brazil’s Northeast.",
     },
     nutrition: { kcal: 35, carbs: 9, protein: 0, fat: 0 },
-    allergens: [],
-  },
-  {
-    id: "pasteis-brasileiros",
-    image: "/images/pasteis-brasileiros.jpg",
-    category: "sides",
-    tag: "🥟",
-    title: { pt: "Pastéis Brasileiros", en: "Brazilian Pastéis" },
-    summary: { pt: "Massa crocante com recheios do dia.", en: "Crispy shells, daily fillings." },
-    description: {
-      pt: "Tradição de feira: massa leve e bolhas douradas. Recheios variam conforme a estação.",
-      en: "Street-fair classic: light dough with golden bubbles. Fillings change with the season.",
-    },
-    nutrition: { kcal: 420, carbs: 38, protein: 10, fat: 24 },
-    allergens: ["gluten"],
-  },
-  {
-    id: "galinhada-caipira",
-    image: "/images/galinhada-caipira.jpg",
-    category: "mains",
-    tag: "🍗",
-    title: { pt: "Galinhada Caipira", en: "Country Chicken Rice" },
-    summary: { pt: "Arroz úmido e aromático com frango caipira.", en: "Aromatic rice with free-range chicken." },
-    description: {
-      pt: "Prato de reunião em panelão: caldo rico, cúrcuma e cheiro verde.",
-      en: "Gathering dish in a big pot: rich broth, turmeric and herbs.",
-    },
-    nutrition: { kcal: 560, carbs: 48, protein: 32, fat: 24 },
     allergens: [],
   },
 ];
