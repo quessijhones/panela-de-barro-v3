@@ -12,7 +12,7 @@ export const t = {
     },
     heroTitle: "Panela de Barro",
     heroDesc:
-      "Restaurante brasileiro familiar no Qatar. Com mais de 20 anos na hospitalidade, trazemos sabores de fogão a lenha, calor do interior e raízes brasileiras. Chef-proprietário Quessi Jhones comanda a cozinha com sua mãe, Dona Cleuza (mineira), e seu irmão (Head Chef com 10+ anos).",
+      "Restaurante brasileiro familiar no Qatar. Com mais de 20 anos na hospitalidade, trazemos sabores de fogão a lenha, calor do interior e raízes brasileiras.",
     menuPreview: "Menu (prévia)",
     category: {
       mains: "Pratos Principais",
@@ -21,8 +21,6 @@ export const t = {
       beverages: "Bebidas",
       seasonal: "Sazonais"
     },
-    view: "Ver detalhes",
-    close: "Fechar",
     locationTitle: "Localização",
     locationText: "Baraha Town, Doha, Qatar",
     contactTitle: "Contato",
@@ -40,7 +38,7 @@ export const t = {
     },
     heroTitle: "Panela de Barro",
     heroDesc:
-      "A Brazilian family restaurant in Qatar. With 20+ years in hospitality, we bring wood-fired flavors, countryside warmth and Brazilian roots. Chef-owner Quessi Jhones leads the kitchen with his mother, Dona Cleuza (from Minas Gerais), and his brother (Head Chef with 10+ years).",
+      "A Brazilian family restaurant in Qatar. With 20+ years in hospitality, we bring wood-fired flavors, countryside warmth and Brazilian roots.",
     menuPreview: "Menu (preview)",
     category: {
       mains: "Mains",
@@ -49,8 +47,6 @@ export const t = {
       beverages: "Beverages",
       seasonal: "Seasonal"
     },
-    view: "View details",
-    close: "Close",
     locationTitle: "Location",
     locationText: "Baraha Town, Doha, Qatar",
     contactTitle: "Contact",
