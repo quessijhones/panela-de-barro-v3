@@ -1,66 +1,11 @@
-// App.jsx
-import React, { useEffect, useState } from "react";
-import { motion, AnimatePresence, useScroll, useTransform } from "framer-motion";
+import React from "react";
 
-const IMAGES = [
-  { id: "amazonia", src: "/immersive/amazonia.jpg", title: "Amazônia", caption: "Florestas que respiram cultura." },
-  { id: "cerrado",  src: "/immersive/cerrado.jpg",  title: "Cerrado",  caption: "Sabores do Brasil central." },
-  { id: "lencois",  src: "/immersive/lencois.jpg",  title: "Lençóis",  caption: "Areia, vento e mar — leveza." },
-  { id: "litoral",  src: "/immersive/litoral.jpg",  title: "Litoral",  caption: "Brasil que encontra o mar." },
-  { id: "serra",    src: "/immersive/serra.jpg",    title: "Serra",    caption: "Brasa, lenha e aconchego." },
-];
-
-// ---------- Error Boundary para evitar tela branca ----------
-class SafeBoundary extends React.Component {
-  constructor(props){ super(props); this.state = { hasError: false }; }
-  static getDerivedStateFromError(){ return { hasError: true }; }
-  componentDidCatch(err, info){ console.error("UI crash:", err, info); }
-  render(){
-    if(this.state.hasError){
-      return (
-        <div style={{padding:"24px"}}>
-          <h2>Algo deu errado ao carregar.</h2>
-          <p>Tente recarregar a página. Se persistir, avise o desenvolvedor.</p>
-        </div>
-      );
-    }
-    return this.props.children;
-  }
-}
-
-// ---------- Splash com logo ----------
-function Splash({ onDone }) {
-  useEffect(() => {
-    const t = setTimeout(onDone, 1600);
-    return () => clearTimeout(t);
-  }, [onDone]);
-
-  return (
-    <motion.div
-      className="splash"
-      initial={{ opacity: 1 }}
-      animate={{ opacity: 1 }}
-      exit={{ opacity: 0 }}
-    >
-      <motion.img
-        src="/logo.png"
-        alt="Panela de Barro"
-        initial={{ scale: 0.8, y: 0, filter: "blur(6px)" }}
-        animate={{ scale: 1, y: -60, filter: "blur(0px)" }}
-        transition={{ duration: 0.9, ease: "easeOut" }}
-        className="splash-logo"
-      />
-    </motion.div>
-  );
-}
-
-// ---------- Navbar simples ----------
 function Nav() {
   return (
     <header className="nav">
       <div className="brand">
         <img src="/logo.png" alt="Panela de Barro" />
-        <span>Panela de Barro</span>
+        Panela de Barro
       </div>
       <nav>
         <a href="#about">About</a>
@@ -69,92 +14,107 @@ function Nav() {
         <a href="#location">Location</a>
         <a href="#contact">Contact</a>
         <a href="#reservations">Reservations</a>
+        <a className="btn" href="#menu">See the Menu</a>
       </nav>
     </header>
   );
 }
 
-// ---------- Seção imersiva com parallax ----------
-function ImmersiveIntro() {
-  const { scrollY } = useScroll();
-  const ySlow = useTransform(scrollY, [0, 800], [0, -120]); // parallax leve
-
+function ImmersiveLayer({ bg, title, text }) {
   return (
-    <section id="about" className="immersive">
-      {IMAGES.map((img, i) => (
-        <div key={img.id} className="immersive-layer">
-          <motion.div
-            className="immersive-bg"
-            style={{ y: ySlow, backgroundImage: `url(${img.src})` }}
-          />
-          <div className="immersive-overlay" />
-          <div className="immersive-text">
-            <h1>{img.title}</h1>
-            <p>{img.caption}</p>
-          </div>
-        </div>
-      ))}
-      <div className="intro-cta">
-        <a className="btn" href="#menu">See the Menu</a>
+    <section className="immersive-layer">
+      <div
+        className="immersive-bg"
+        style={{ backgroundImage: `url(${bg})` }}
+        aria-hidden="true"
+      />
+      <div className="immersive-overlay" aria-hidden="true" />
+      <div className="block immersive-text">
+        <h1>{title}</h1>
+        <p>{text}</p>
       </div>
     </section>
   );
 }
 
-// ---------- Placeholder das outras âncoras ----------
-const Block = ({ id, title, children }) => (
-  <section id={id} className="block">
-    <h2>{title}</h2>
-    {children ? children : <p>Conteúdo em breve.</p>}
-  </section>
-);
-
-// ---------- App ----------
 export default function App() {
-  const [ready, setReady] = useState(false);
-
-  // Evita tela branca por erro de assets: alerta no console se imagens faltarem
-  useEffect(() => {
-    IMAGES.forEach(({ src }) => {
-      const img = new Image();
-      img.src = src;
-      img.onerror = () => console.warn("Imagem não encontrada:", src);
-    });
-  }, []);
-
   return (
-    <SafeBoundary>
-      <AnimatePresence mode="wait">
-        {!ready && <Splash key="splash" onDone={() => setReady(true)} />}
-      </AnimatePresence>
+    <>
+      {/* Splash simples — some sozinho. */}
+      <div className="splash" aria-hidden="true">
+        <img className="splash-logo" src="/logo.png" alt="" />
+      </div>
 
       <Nav />
 
+      {/* IMERSIVO */}
       <main>
-        <ImmersiveIntro />
+        <section className="immersive">
+          <ImmersiveLayer
+            bg="/immersive/amazonia.jpg"
+            title="Sabores com alma do Brasil"
+            text="Do fogão a lenha ao prato: hospitalidade mineira e ingredientes brasileiros."
+          />
+          <ImmersiveLayer
+            bg="/immersive/lencois.jpg"
+            title="Raiz e tradição"
+            text="Receitas de família, fogo baixo e tempo — o segredo do sabor."
+          />
+          <ImmersiveLayer
+            bg="/immersive/cerrado.jpg"
+            title="Ingredientes do cerrado"
+            text="Milho verde, mandioca, farinhas, temperos e afeto."
+          />
+          <ImmersiveLayer
+            bg="/immersive/litoral.jpg"
+            title="Do mar à mesa"
+            text="Moquecas e frescor — um abraço do litoral brasileiro."
+          />
+          <ImmersiveLayer
+            bg="/immersive/serra.jpg"
+            title="Conforto da Serra"
+            text="Comida que aconchega, música sertaneja e viola — do jeitinho do Brasil."
+          />
+        </section>
 
-        <Block id="menu" title="Menu">
+        {/* Seção Exemplos (apenas para garantir que renderiza) */}
+        <section id="about" className="block">
+          <h2>Nossa História</h2>
           <p>
-            Agora o Menu está em sua própria página/âncora com cartões menores.  
-            (Se quiser, te mando um `Menu.jsx` grid pronto — por enquanto mantive o foco em consertar a tela branca.)
+            Restaurante de família com 20 anos de tradição. Chef-proprietário{" "}
+            <strong>Quessi Jhones</strong>, ao lado de sua mãe Cleuza (mineira)
+            e seu irmão (Head Chef, 10+ anos em casas brasileiras). Em Doha,
+            trazemos cozinha de raiz com hospitalidade brasileira.
           </p>
-          <a className="btn" href="/#menu-list">Abrir lista do menu</a>
-        </Block>
+        </section>
 
-        <Block id="gallery" title="Gallery" />
-        <Block id="location" title="Location">
-          <p>Barwa Town, Doha – Qatar</p>
-          <p><strong>Opening:</strong> November (coming soon)</p>
-        </Block>
-        <Block id="contact" title="Contact">
-          <p>restaurant@paneladebarroqatar.com — +974 3047 5279</p>
-        </Block>
-        <Block id="reservations" title="Reservations" />
+        <section id="menu" className="block">
+          <h2>Menu</h2>
+          <p>
+            O cardápio completo fica em uma página dedicada. Clique no botão
+            abaixo para visitar.
+          </p>
+          <a className="btn" href="/#menu">Abrir Menu</a>
+        </section>
+
+        <section id="location" className="block">
+          <h2>Location</h2>
+          <p>Barwa Town, Doha, Qatar — Opening November (coming soon)</p>
+        </section>
+
+        <section id="contact" className="block">
+          <h2>Contact</h2>
+          <p>
+            <strong>Email:</strong> restaurant@paneladebarroqatar.com<br />
+            <strong>Phone:</strong> +974 3047 5279
+          </p>
+        </section>
       </main>
 
       <footer className="foot">
-        © {new Date().getFullYear()} Panela de Barro
+        © {new Date().getFullYear()} Panela de Barro — Todos os direitos
+        reservados.
       </footer>
-    </SafeBoundary>
+    </>
   );
 }
