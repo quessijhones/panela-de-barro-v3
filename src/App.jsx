@@ -3,7 +3,7 @@ import "./styles.css";
 import { MENU } from "./menuData";
 import { LOCALES, STRINGS } from "./i18n";
 
-/** ========= i18n hook ========= */
+/* ===== i18n ===== */
 function useLocale() {
   const [locale, setLocale] = useState(() => {
     const url = new URL(window.location.href);
@@ -21,19 +21,19 @@ function useLocale() {
   return { locale, setLocale, t };
 }
 
-/** ========= dados de herói ========= */
+/* ===== imagens do herói ===== */
 const heroImages = [
   "/images/vaca-atolada.jpg",
   "/images/picanha-grelhada.jpg",
-  "/images/feijoada-costela.jpg"
+  "/images/feijoada-costela.jpg",
 ];
 
-/** ========= HEADER ========= */
+/* ===== Header ===== */
 function Header({ locale, setLocale, t, navigate }) {
   return (
     <header className="header" translate="no">
       <nav className="nav container">
-        <div className="brand" style={{cursor:"pointer"}} onClick={()=>navigate("#/home")}>
+        <div className="brand" style={{ cursor: "pointer" }} onClick={() => navigate("#/home")}>
           <img src="/logo.png" width="28" height="28" alt="" />
           <span translate="no">Panela de Barro</span>
         </div>
@@ -56,7 +56,7 @@ function Header({ locale, setLocale, t, navigate }) {
   );
 }
 
-/** ========= HERO ========= */
+/* ===== Hero / carrossel ===== */
 function Hero({ t, navigate }) {
   const [idx, setIdx] = useState(0);
   useEffect(()=>{ const id=setInterval(()=>setIdx(i=>(i+1)%heroImages.length),5000); return ()=>clearInterval(id)},[]);
@@ -75,7 +75,7 @@ function Hero({ t, navigate }) {
   );
 }
 
-/** ========= HOME SECTIONS ========= */
+/* ===== Seções Home ===== */
 function About({ t }){
   return (
     <section id="about" className="section">
@@ -129,7 +129,7 @@ function Contact({ t }){
   );
 }
 
-/** ========= MENU PAGE (com filtros + MODAL) ========= */
+/* ===== Filtros + Modal ===== */
 function Filters({ current, setCurrent, t }) {
   const tabs = [
     {key:"all", label:t.filters_all},
@@ -197,7 +197,7 @@ function MenuPage({ t }){
   );
 }
 
-/** ========= ROTEADOR MUITO SIMPLES (#/home, #/menu) ========= */
+/* ===== Roteador simples (#/home, #/menu) ===== */
 function useHashRoute(){
   const [hash, setHash] = useState(window.location.hash || "#/home");
   useEffect(()=>{
@@ -219,12 +219,16 @@ function useHashRoute(){
   return { hash, navigate };
 }
 
-/** ========= SPLASH ========= */
+/* ===== Splash (CORRIGIDO: style como OBJETO) ===== */
 function Splash(){
   return (
     <div className="splash" aria-hidden="true">
       <div className="logo-wrap">
-        <img src="/logo.png" alt="" style="width:100%;height:100%;object-fit:contain" />
+        <img
+          src="/logo.png"
+          alt=""
+          style={{ width:"100%", height:"100%", objectFit:"contain" }}
+        />
         <div className="smoke">
           <span></span><span></span><span></span>
         </div>
@@ -233,7 +237,7 @@ function Splash(){
   );
 }
 
-/** ========= APP ========= */
+/* ===== App ===== */
 export default function App(){
   const { locale, setLocale, t } = useLocale();
   const { hash, navigate } = useHashRoute();
