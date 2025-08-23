@@ -1,267 +1,344 @@
-import { useEffect, useMemo, useState } from "react";
-import "./styles.css";
+import React, { useEffect, useMemo, useState } from "react";
 import { MENU } from "./menuData";
-import { LOCALES, STRINGS } from "./i18n";
+import { UI, getLocale, setLocale, t } from "./i18n";
 
-/* ===== i18n ===== */
-function useLocale() {
-  const [locale, setLocale] = useState(() => {
-    const url = new URL(window.location.href);
-    return url.searchParams.get("lang") || localStorage.getItem("lang") || LOCALES.PT;
-  });
-  const t = useMemo(() => STRINGS[locale] ?? STRINGS.pt, [locale]);
+const routes = ["home", "menu", "gallery", "location", "contact"];
+
+function useHashRoute() {
+  const [route, setRoute] = useState(() => (window.location.hash.replace("#/", "") || "home"));
   useEffect(() => {
-    localStorage.setItem("lang", locale);
-    const url = new URL(window.location.href);
-    url.searchParams.set("lang", locale);
-    window.history.replaceState({}, "", url);
-    document.documentElement.lang = locale;
-    document.documentElement.dir = locale === LOCALES.AR ? "rtl" : "ltr";
-  }, [locale]);
-  return { locale, setLocale, t };
+    const onHash = () => setRoute(window.location.hash.replace("#/", "") || "home");
+    window.addEventListener("hashchange", onHash);
+    return () => window.removeEventListener("hashchange", onHash);
+  }, []);
+  return route;
 }
 
-/* ===== imagens do herói ===== */
-const heroImages = [
-  "/images/vaca-atolada.jpg",
-  "/images/picanha-grelhada.jpg",
-  "/images/feijoada-costela.jpg",
-];
-
-/* ===== Header ===== */
-function Header({ locale, setLocale, t, navigate }) {
+function Nav() {
+  const locale = getLocale();
   return (
-    <header className="header" translate="no">
-      <nav className="nav container">
-        <div className="brand" style={{ cursor: "pointer" }} onClick={() => navigate("#/home")}>
-          <img src="/logo.png" width="28" height="28" alt="" />
-          <span translate="no">Panela de Barro</span>
-        </div>
-
-        <a onClick={(e)=>{e.preventDefault();navigate("#/home#about")}} href="#">{t.nav_about}</a>
-        <a onClick={(e)=>{e.preventDefault();navigate("#/menu")}} href="#">{t.nav_menu}</a>
-        <a onClick={(e)=>{e.preventDefault();navigate("#/home#gallery")}} href="#">{t.nav_gallery}</a>
-        <a onClick={(e)=>{e.preventDefault();navigate("#/home#location")}} href="#">{t.nav_location}</a>
-        <a onClick={(e)=>{e.preventDefault();navigate("#/home#contact")}} href="#">{t.nav_contact}</a>
-
-        <div className="langs">
-          {[LOCALES.PT, LOCALES.EN, LOCALES.AR].map(code=>(
-            <button key={code} className={locale===code?"active":""} onClick={()=>setLocale(code)}>
-              {code.toUpperCase()}
-            </button>
-          ))}
-        </div>
+    <header className="nav">
+      <div className="brand" onClick={() => (window.location.hash = "/home")}>
+        <img src="/images/placeholder.jpg" alt="" className="brand-logo" />
+        <span>{t(UI.brand)}</span>
+      </div>
+      <nav>
+        <a href="#/home">{t(UI.nav.about)}</a>
+        <a href="#/menu">{t(UI.nav.menu)}</a>
+        <a href="#/gallery">{t(UI.nav.gallery)}</a>
+        <a href="#/location">{t(UI.nav.location)}</a>
+        <a href="#/contact">{t(UI.nav.contact)}</a>
       </nav>
+      <div className="lang">
+        {["pt", "en", "ar"].map((L) => (
+          <button
+            key={L}
+            className={`chip ${locale === L ? "active" : ""}`}
+            onClick={() => setLocale(L)}
+          >
+            {L.toUpperCase()}
+          </button>
+        ))}
+      </div>
     </header>
   );
 }
 
-/* ===== Hero / carrossel ===== */
-function Hero({ t, navigate }) {
-  const [idx, setIdx] = useState(0);
-  useEffect(()=>{ const id=setInterval(()=>setIdx(i=>(i+1)%heroImages.length),5000); return ()=>clearInterval(id)},[]);
+/* ---------- HOME (hero + preview) ---------- */
+function Home() {
+  const locale = getLocale();
   return (
-    <section className="hero" id="home">
-      <img src={heroImages[idx]} alt="" aria-hidden="true" />
-      <div className="hero-content">
-        <div className="hero-card">
-          <h1 className="hero-title" translate="no">{t.hero_title}</h1>
-          <p className="hero-sub">{t.hero_sub}</p>
-          <p className="hero-note"><em>{t.opening_note}</em></p>
-          <a className="hero-cta" href="#/menu" onClick={(e)=>{e.preventDefault();navigate("#/menu")}}>{t.hero_cta}</a>
+    <main className="container">
+      <section className="hero">
+        <div className="hero-overlay">
+          <h1>{t(UI.home.headline)}</h1>
+          <p>{t(UI.home.sub)}</p>
+          <a href="#/menu" className="btn">
+            {t(UI.home.ctaMenu)}
+          </a>
         </div>
-      </div>
-    </section>
-  );
-}
 
-/* ===== Seções Home ===== */
-function About({ t }){
-  return (
-    <section id="about" className="section">
-      <div className="container">
-        <h2>{t.nav_about}</h2>
-        <p>Chef-owner Quessi Jhones comanda a cozinha com sua mãe, Dona Cleuza, e seu irmão (Head Chef com 10+ anos).</p>
-      </div>
-    </section>
-  );
-}
-
-function Gallery({ t }){
-  return (
-    <section id="gallery" className="section">
-      <div className="container">
-        <h2>{t.nav_gallery}</h2>
-        <div className="gallery-grid">
-          {heroImages.map((src,i)=>(<img key={i} src={src} alt="" />))}
-        </div>
-      </div>
-    </section>
-  );
-}
-
-function Location({ t }){
-  return (
-    <section id="location" className="section">
-      <div className="container">
-        <h2>{t.location_title}</h2>
-        <p><strong>Baraha Town, Doha, Qatar</strong></p>
-        <iframe
-          title="map" width="100%" height="300" style={{border:0,borderRadius:12}}
-          loading="lazy" allowFullScreen
-          referrerPolicy="no-referrer-when-downgrade"
-          src="https://www.google.com/maps?q=Baraha%20Town%2C%20Doha%2C%20Qatar&output=embed">
-        </iframe>
-      </div>
-    </section>
-  );
-}
-
-function Contact({ t }){
-  return (
-    <section id="contact" className="section">
-      <div className="container">
-        <h2>{t.contact_title}</h2>
-        <p><strong>{t.email}:</strong> restaurant@paneladebarroqatar.com</p>
-        <p><strong>{t.phone}:</strong> +974 3047 5279</p>
-      </div>
-    </section>
-  );
-}
-
-/* ===== Filtros + Modal ===== */
-function Filters({ current, setCurrent, t }) {
-  const tabs = [
-    {key:"all", label:t.filters_all},
-    {key:"mains", label:t.filters_mains},
-    {key:"sides", label:t.filters_sides},
-    {key:"desserts", label:t.filters_desserts},
-    {key:"drinks", label:t.filters_drinks},
-    {key:"seasonal", label:t.filters_seasonal},
-    {key:"chef", label:t.filters_chef},
-  ];
-  return (
-    <div className="pills">
-      {tabs.map(tab=>(
-        <button key={tab.key} className={`pill ${current===tab.key?"active":""}`} onClick={()=>setCurrent(tab.key)}>
-          {tab.label}
-        </button>
-      ))}
-    </div>
-  );
-}
-
-function MenuModal({ item, onClose }){
-  return (
-    <div className={`modal ${item?"show":""}`} role="dialog" aria-modal="true" onClick={onClose}>
-      {item && (
-        <div className="modal-card" onClick={e=>e.stopPropagation()}>
-          <button className="modal-close" onClick={onClose}>✕</button>
-          <img src={item.image} alt={item.title} />
-          <div className="modal-body">
-            <span className="badge">{item.tag}</span>
-            <h3 style={{margin:"6px 0 4px"}}>{item.title}</h3>
-            <p style={{margin:0,color:"#543"}}>{item.desc}</p>
-          </div>
-        </div>
-      )}
-    </div>
-  );
-}
-
-function MenuPage({ t }){
-  const [filter, setFilter] = useState("all");
-  const data = useMemo(()=> filter==="all" ? MENU : MENU.filter(i=>i.category===filter), [filter]);
-  const [selected, setSelected] = useState(null);
-
-  return (
-    <main className="section" id="menu-page">
-      <div className="container">
-        <h2>{t.nav_menu}</h2>
-        <Filters current={filter} setCurrent={setFilter} t={t} />
-        <div className="grid">
-          {data.map(item=>(
-            <article className="card" key={item.id} onClick={()=>setSelected(item)} aria-label={item.title}>
-              <img src={item.image} alt={item.title} />
-              <div className="content">
-                <span className="badge">{item.tag}</span>
-                <h3 style={{margin:"6px 0 6px"}}>{item.title}</h3>
-                <p style={{margin:0,color:"#543"}}>{item.desc}</p>
-              </div>
-            </article>
+        {/* carousel simples (3 imagens) */}
+        <div className="hero-carousel">
+          {["vaca-atolada.jpg", "feijoada-costela.jpg", "picanha-grelhada.jpg"].map((f, i) => (
+            <div className="hero-slide" style={{ "--i": i }} key={f}>
+              <img src={`/images/${f}`} alt="" />
+            </div>
           ))}
         </div>
+      </section>
+
+      <h2 className="mt-6">{t(UI.home.preview)}</h2>
+      <div className="grid">
+        {MENU.slice(0, 3).map((item) => (
+          <MenuCard key={item.id} item={item} />
+        ))}
       </div>
-      <MenuModal item={selected} onClose={()=>setSelected(null)} />
     </main>
   );
 }
 
-/* ===== Roteador simples (#/home, #/menu) ===== */
-function useHashRoute(){
-  const [hash, setHash] = useState(window.location.hash || "#/home");
-  useEffect(()=>{
-    const onHash=()=>setHash(window.location.hash || "#/home");
-    window.addEventListener("hashchange", onHash);
-    return ()=>window.removeEventListener("hashchange", onHash);
-  },[]);
-  const navigate=(h)=>{
-    if(h.includes("#/home#")){
-      window.location.hash = "#/home";
-      setTimeout(()=>{
-        const id = h.split("#/home#")[1];
-        document.getElementById(id)?.scrollIntoView({behavior:"smooth"});
-      }, 10);
-    }else{
-      window.location.hash = h;
-    }
-  };
-  return { hash, navigate };
+/* ---------- MENU PAGE ---------- */
+const FILTERS = [
+  { id: "all", label: UI.filters.all },
+  { id: "mains", label: UI.filters.mains },
+  { id: "sides", label: UI.filters.sides },
+  { id: "desserts", label: UI.filters.desserts },
+  { id: "beverages", label: UI.filters.beverages },
+  { id: "seasonal", label: UI.filters.seasonal },
+  { id: "chef", label: UI.filters.chef },
+];
+
+function MenuPage() {
+  const [filter, setFilter] = useState("all");
+  const list = useMemo(
+    () => (filter === "all" ? MENU : MENU.filter((m) => m.category === filter)),
+    [filter]
+  );
+  return (
+    <main className="container">
+      <h1>Menu</h1>
+      <div className="filters">
+        {FILTERS.map((f) => (
+          <button
+            key={f.id}
+            className={`chip ${filter === f.id ? "active" : ""}`}
+            onClick={() => setFilter(f.id)}
+          >
+            {t(f.label)}
+          </button>
+        ))}
+      </div>
+      <div className="grid">
+        {list.map((item) => (
+          <MenuCard key={item.id} item={item} />
+        ))}
+      </div>
+    </main>
+  );
 }
 
-/* ===== Splash (CORRIGIDO: style como OBJETO) ===== */
-function Splash(){
+function MenuCard({ item }) {
+  const locale = getLocale();
+  const [open, setOpen] = useState(false);
   return (
-    <div className="splash" aria-hidden="true">
-      <div className="logo-wrap">
-        <img
-          src="/logo.png"
-          alt=""
-          style={{ width:"100%", height:"100%", objectFit:"contain" }}
-        />
-        <div className="smoke">
-          <span></span><span></span><span></span>
+    <>
+      <article className="card" onClick={() => setOpen(true)}>
+        <div className="card-media">
+          <img src={item.image} alt={item.title[locale] || item.title.en} loading="lazy" />
+        </div>
+        <div className="card-body">
+          <div className="pill-row">
+            <span className="pill">{prettyCategory(item.category)}</span>
+          </div>
+          <h3>{item.title[locale] || item.title.en}</h3>
+          <p className="muted">{item.summary[locale] || item.summary.en}</p>
+        </div>
+      </article>
+      {open && <DishModal item={item} onClose={() => setOpen(false)} />}
+    </>
+  );
+}
+
+function prettyCategory(cat) {
+  switch (cat) {
+    case "mains":
+      return t(UI.filters.mains);
+    case "sides":
+      return t(UI.filters.sides);
+    case "desserts":
+      return t(UI.filters.desserts);
+    case "beverages":
+      return t(UI.filters.beverages);
+    case "seasonal":
+      return t(UI.filters.seasonal);
+    case "chef":
+      return t(UI.filters.chef);
+    default:
+      return "";
+  }
+}
+
+function DishModal({ item, onClose }) {
+  const locale = getLocale();
+  const L = (obj) => obj?.[locale] ?? obj?.en ?? "";
+
+  return (
+    <div className="modal-backdrop" onClick={onClose}>
+      <div className="modal" onClick={(e) => e.stopPropagation()}>
+        <div className="modal-media">
+          <img src={item.image} alt={L(item.title)} />
+        </div>
+        <div className="modal-body">
+          <div className="modal-top">
+            <h3>
+              {item.tag ? <span className="emoji">{item.tag}</span> : null} {L(item.title)}
+            </h3>
+            <button className="chip" onClick={onClose}>
+              {t(UI.modal.close)}
+            </button>
+          </div>
+
+          <div className="pill-row mt-1">
+            <span className="pill">{prettyCategory(item.category)}</span>
+          </div>
+
+          <p className="mt-2">{L(item.description)}</p>
+
+          <div className="meta">
+            <div>
+              <strong>{t(UI.modal.allergens)}:</strong>{" "}
+              {renderAllergens(item.allergens || [])}
+            </div>
+          </div>
+
+          <h4 className="mt-3">{t(UI.modal.nutrition)}</h4>
+          <table className="nutri">
+            <tbody>
+              <tr>
+                <td>{t(UI.modal.kcal)}</td>
+                <td>{item.nutrition.kcal}</td>
+              </tr>
+              <tr>
+                <td>{t(UI.modal.carbs)}</td>
+                <td>{item.nutrition.carbs} g</td>
+              </tr>
+              <tr>
+                <td>{t(UI.modal.protein)}</td>
+                <td>{item.nutrition.protein} g</td>
+              </tr>
+              <tr>
+                <td>{t(UI.modal.fat)}</td>
+                <td>{item.nutrition.fat} g</td>
+              </tr>
+            </tbody>
+          </table>
+
+          <div className="modal-actions">
+            <button className="btn ghost" onClick={onClose}>
+              {t(UI.modal.close)}
+            </button>
+            <button className="btn">{t(UI.modal.orderSoon)}</button>
+          </div>
         </div>
       </div>
     </div>
   );
 }
 
-/* ===== App ===== */
-export default function App(){
-  const { locale, setLocale, t } = useLocale();
-  const { hash, navigate } = useHashRoute();
+function renderAllergens(list) {
+  if (!list.length) return <span>—</span>;
+  const icons = {
+    dairy: "🧀",
+    eggs: "🥚",
+    gluten: "🌾",
+    "gluten-free": "🚫🌾",
+    "contains-pork?": "🐖",
+  };
+  return (
+    <span>
+      {list.map((k, i) => (
+        <span key={k} className="allergen">
+          {icons[k] || "⚠️"} {k}
+          {i < list.length - 1 ? " · " : ""}
+        </span>
+      ))}
+    </span>
+  );
+}
 
-  useEffect(()=>{
-    if(!window.location.hash) window.location.hash = "#/home";
-  },[]);
+/* ---------- GALLERY ---------- */
+function Gallery() {
+  const photos = [
+    "/images/vaca-atolada.jpg",
+    "/images/feijoada-costela.jpg",
+    "/images/picanha-grelhada.jpg",
+    "/images/pasteis-brasileiros.jpg",
+    "/images/polenta-frita.jpg",
+    "/images/pao-de-queijo.jpg",
+    "/images/encanto-de-coco.jpg",
+    "/images/doce-da-roca-com-gelo.jpg",
+    "/images/amazon-breeze.jpg",
+    "/images/uva-limao-gelo.jpg",
+  ];
+  const [big, setBig] = useState(null);
+  return (
+    <main className="container">
+      <h1>{t(UI.gallery.title)}</h1>
+      <div className="gallery">
+        {photos.map((src) => (
+          <button key={src} className="gallery-item" onClick={() => setBig(src)}>
+            <img src={src} loading="lazy" alt="" />
+          </button>
+        ))}
+      </div>
+      {big && (
+        <div className="modal-backdrop" onClick={() => setBig(null)}>
+          <div className="lightbox" onClick={(e) => e.stopPropagation()}>
+            <img src={big} alt="" />
+          </div>
+        </div>
+      )}
+    </main>
+  );
+}
+
+/* ---------- LOCATION ---------- */
+function Location() {
+  return (
+    <main className="container">
+      <h1>{t(UI.location.title)}</h1>
+      <p className="muted">{t(UI.location.address)}</p>
+      <div className="mapBox">
+        <iframe
+          title="map"
+          loading="lazy"
+          referrerPolicy="no-referrer-when-downgrade"
+          src="https://www.google.com/maps?q=Baraha%20Town,%20Doha,%20Qatar&output=embed"
+        ></iframe>
+      </div>
+    </main>
+  );
+}
+
+/* ---------- CONTACT ---------- */
+function Contact() {
+  return (
+    <main className="container">
+      <h1>{t(UI.contact.title)}</h1>
+      <p className="muted">Email: {UI.contact.email}</p>
+      <p className="muted">Phone: {UI.contact.phone}</p>
+    </main>
+  );
+}
+
+/* ---------- APP ROOT ---------- */
+export default function App() {
+  const route = useHashRoute();
+  useEffect(() => {
+    if (!routes.includes(route)) {
+      window.location.hash = "/home";
+    }
+  }, [route]);
 
   return (
     <>
-      <Splash />
-      <Header locale={locale} setLocale={setLocale} t={t} navigate={navigate} />
-      {hash.startsWith("#/menu") ? (
-        <MenuPage t={t} />
-      ) : (
-        <>
-          <Hero t={t} navigate={navigate} />
-          <About t={t} />
-          <Gallery t={t} />
-          <Location t={t} />
-          <Contact t={t} />
-        </>
-      )}
-      <footer className="footer">© {new Date().getFullYear()} <span translate="no">Panela de Barro</span></footer>
+      <Nav />
+      {route === "home" && <Home />}
+      {route === "menu" && <MenuPage />}
+      {route === "gallery" && <Gallery />}
+      {route === "location" && <Location />}
+      {route === "contact" && <Contact />}
+      <Footer />
     </>
+  );
+}
+
+function Footer() {
+  return (
+    <footer className="footer">
+      <div>© {new Date().getFullYear()} {t(UI.brand)}</div>
+      <div className="muted">Doha – Qatar</div>
+    </footer>
   );
 }
