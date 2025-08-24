@@ -1,36 +1,44 @@
 import React, { useMemo, useState } from "react";
-import { Routes, Route, Link, useLocation, useNavigate } from "react-router-dom";
-import { LOCALES, STRINGS, t } from "./i18n";
-import { MENU, CATEGORIES } from "./menuData";
+import { Routes, Route, Link, useNavigate } from "react-router-dom";
+import { LOCALES, STRINGS } from "./i18n";
+import { MENU } from "./menuData";
 
-// util simples de locale no hash ?lang=pt
-function useLang() {
-  const nav = useNavigate();
-  const { search } = useLocation();
-  const params = new URLSearchParams(search);
-  const cur = params.get("lang") || LOCALES.PT;
-  const setLang = (next) => {
-    const p = new URLSearchParams(search);
-    p.set("lang", next);
-    nav({ search: `?${p.toString()}` }, { replace: true });
-  };
-  return [cur, setLang];
+/* ===== helpers de i18n ===== */
+const LangContext = React.createContext({ lang: "pt", setLang: () => {} });
+const useT = () => {
+  const { lang } = React.useContext(LangContext);
+  return { lang, tNav: STRINGS.nav[lang], tHero: STRINGS.hero[lang], tAbout: STRINGS.about[lang], tLoc: STRINGS.location[lang], tContact: STRINGS.contact[lang], filters: STRINGS.filters[lang], badges: STRINGS.badges[lang] };
+};
+
+/* ===== componentes ===== */
+
+function Navbar() {
+  const { lang } = React.useContext(LangContext);
+  const { tNav } = useT();
+  return (
+    <header className="nav">
+      <Link to="/" className="brand">
+        <img src="/logo.png" alt="logo" />
+        <span>Panela de Barro</span>
+      </Link>
+      <nav>
+        <Link to="/about">{tNav.about}</Link>
+        <Link to="/menu">{tNav.menu}</Link>
+        <Link to="/gallery">{tNav.gallery}</Link>
+        <Link to="/location">{tNav.location}</Link>
+        <Link to="/contact">{tNav.contact}</Link>
+      </nav>
+      <LangSwitcher active={lang} />
+    </header>
+  );
 }
 
-function Brand({ lang }) {
-  return <span className="brand">{STRINGS.brand[lang]}</span>;
-}
-
-function LangSwitcher({ lang, setLang }) {
+function LangSwitcher({ active }) {
+  const { setLang } = React.useContext(LangContext);
   return (
     <div className="lang">
-      {[LOCALES.PT, LOCALES.EN, LOCALES.AR].map((l) => (
-        <button
-          key={l}
-          onClick={() => setLang(l)}
-          className={`chip ${lang === l ? "chip--active" : ""}`}
-          aria-label={l.toUpperCase()}
-        >
+      {LOCALES.map((l) => (
+        <button key={l} className={active === l ? "pill active" : "pill"} onClick={() => setLang(l)}>
           {l.toUpperCase()}
         </button>
       ))}
@@ -38,269 +46,207 @@ function LangSwitcher({ lang, setLang }) {
   );
 }
 
-function Navbar({ lang, setLang }) {
-  const N = STRINGS.nav;
+function Hero() {
+  const { tHero } = useT();
+  const navigate = useNavigate();
   return (
-    <header className="nav">
-      <Link to="/#home" className="logo">
-        <img src="/logo.png" alt="logo" />
-        <Brand lang={lang} />
-      </Link>
-      <nav>
-        <a href="#about">{N.about[lang]}</a>
-        <Link to="/#/menu">{N.menu[lang]}</Link>
-        <Link to="/#/gallery">{N.gallery[lang]}</Link>
-        <Link to="/#/location">{N.location[lang]}</Link>
-        <Link to="/#/contact">{N.contact[lang]}</Link>
-      </nav>
-      <LangSwitcher lang={lang} setLang={setLang} />
-    </header>
-  );
-}
-
-/* ---------- UI helpers ---------- */
-function Badge({ children }) {
-  return <span className="badge">{children}</span>;
-}
-function DishCard({ item, lang, onClick }) {
-  return (
-    <article className="card" onClick={() => onClick(item)}>
-      <img src={item.image} alt={item.title[lang]} loading="lazy" />
-      <div className="card__body">
-        <h3>{item.title[lang]}</h3>
-        <Badge>{labelFor(item.badge, lang)}</Badge>
-        <p>{item.short[lang]}</p>
+    <section className="hero">
+      <div className="smoke"></div>
+      <div className="hero-content">
+        <h1>{tHero.title}</h1>
+        <p>{tHero.subtitle}</p>
+        <button className="cta" onClick={() => navigate("/menu")}>{tHero.cta}</button>
       </div>
-    </article>
-  );
-}
-function labelFor(cat, lang) {
-  const F = STRINGS.filters;
-  switch (cat) {
-    case CATEGORIES.MAINS:
-      return F.mains[lang];
-    case CATEGORIES.SIDES:
-      return F.sides[lang];
-    case CATEGORIES.DESSERTS:
-      return F.desserts[lang];
-    case CATEGORIES.BEVERAGES:
-      return F.beverages[lang];
-    case CATEGORIES.SEASONAL:
-      return F.seasonal[lang];
-    case CATEGORIES.CHEF:
-      return F.chef[lang];
-    default:
-      return F.all[lang];
-  }
-}
-
-/* ---------- Pages ---------- */
-function Home({ lang }) {
-  const [open, setOpen] = useState(null);
-  const hero = MENU.slice(0, 3).map((d) => d.image);
-
-  return (
-    <main id="home">
-      {/* Splash simples */}
-      <div className="splash">
-        <img src="/logo.png" alt="logo" />
+      {/* carrossel de fundo: 3 imagens grandes (use seus arquivos existentes) */}
+      <div className="hero-slides">
+        <div style={{ backgroundImage: 'url(/images/vaca-atolada.jpg)' }} />
+        <div style={{ backgroundImage: 'url(/images/feijoada-costela.jpg)' }} />
+        <div style={{ backgroundImage: 'url(/images/picanha-grelhada.jpg)' }} />
       </div>
-
-      {/* Hero / Carrossel automático */}
-      <section className="hero" aria-label="carousel">
-        <div className="hero__track">
-          {hero.concat(hero).map((src, i) => (
-            <img key={i} src={src} alt="" aria-hidden="true" />
-          ))}
-        </div>
-        <div className="hero__text">
-          <h1>{t("home.heroTitle", lang)}</h1>
-          <p>{t("home.heroSubtitle", lang)}</p>
-          <Link className="btn" to="/#/menu">
-            {t("home.ctaMenu", lang)}
-          </Link>
-        </div>
-      </section>
-
-      {/* Preview */}
-      <section className="section">
-        <h2>{t("home.previewTitle", lang)}</h2>
-        <div className="grid">
-          {MENU.slice(0, 3).map((it) => (
-            <DishCard key={it.id} item={it} lang={lang} onClick={setOpen} />
-          ))}
-        </div>
-      </section>
-
-      {open && <DishModal item={open} lang={lang} onClose={() => setOpen(null)} />}
-    </main>
+    </section>
   );
 }
 
-function MenuPage({ lang }) {
+function Home() {
+  return (
+    <>
+      <Hero />
+      <MenuPreview />
+    </>
+  );
+}
+
+function MenuPreview() {
+  const { lang, filters, badges } = useT();
   const [filter, setFilter] = useState("all");
-  const [open, setOpen] = useState(null);
+  const items = useMemo(() => MENU.filter(m => filter === "all" ? true : m.category === filter), [filter]);
 
-  const filtered = useMemo(() => {
-    if (filter === "all") return MENU;
-    return MENU.filter((d) => d.category === filter || d.badge === filter);
-  }, [filter]);
-
-  const F = STRINGS.filters;
-  const chips = [
-    { k: "all", label: F.all[lang] },
-    { k: CATEGORIES.MAINS, label: F.mains[lang] },
-    { k: CATEGORIES.SIDES, label: F.sides[lang] },
-    { k: CATEGORIES.DESSERTS, label: F.desserts[lang] },
-    { k: CATEGORIES.BEVERAGES, label: F.beverages[lang] },
-    { k: CATEGORIES.SEASONAL, label: F.seasonal[lang] },
-    { k: CATEGORIES.CHEF, label: F.chef[lang] },
-  ];
+  const FILTER_KEYS = ["all","mains","sides","desserts","beverages","seasonal","chef"];
 
   return (
-    <main className="section">
-      <h1>{STRINGS.nav.menu[lang]}</h1>
-      <div className="chips">
-        {chips.map((c) => (
-          <button
-            key={c.k}
-            className={`chip ${filter === c.k ? "chip--active" : ""}`}
-            onClick={() => setFilter(c.k)}
-          >
-            {c.label}
-          </button>
+    <section className="section">
+      <h2>Menu (prévia)</h2>
+      <div className="filterbar">
+        {FILTER_KEYS.map((key, idx) => (
+          <button key={key} className={filter === key ? "chip active" : "chip"} onClick={() => setFilter(key)}>{filters[idx]}</button>
         ))}
       </div>
-
       <div className="grid">
-        {filtered.map((it) => (
-          <DishCard key={it.id} item={it} lang={lang} onClick={setOpen} />
-        ))}
+        {items.slice(0,6).map((d) => <DishCard key={d.id} dish={d} lang={lang} badges={badges} />)}
       </div>
-
-      {open && <DishModal item={open} lang={lang} onClose={() => setOpen(null)} />}
-    </main>
-  );
-}
-
-function GalleryPage({ lang }) {
-  // galeria responsiva (usa mesmas imagens do menu)
-  return (
-    <main className="section">
-      <h1>{STRINGS.gallery.title[lang]}</h1>
-      <div className="masonry">
-        {MENU.map((d) => (
-          <img key={d.id} src={d.image} alt={d.title[lang]} loading="lazy" />
-        ))}
+      <div style={{textAlign:"center", marginTop:"16px"}}>
+        <Link to="/menu" className="link-more">Ver todos os pratos →</Link>
       </div>
-    </main>
+    </section>
   );
 }
 
-function LocationPage({ lang }) {
+function DishCard({ dish, lang, badges }) {
+  const [open, setOpen] = useState(false);
   return (
-    <main className="section">
-      <h1>{STRINGS.location.title[lang]}</h1>
-      <p>{STRINGS.location.address[lang]}</p>
-      <iframe
-        className="map"
-        loading="lazy"
-        referrerPolicy="no-referrer-when-downgrade"
-        src="https://maps.google.com/maps?q=Baraha%20Town%20Doha%20Qatar&t=&z=14&ie=UTF8&iwloc=&output=embed"
-        title="map"
-      />
-    </main>
+    <>
+      <article className="card" onClick={() => setOpen(true)}>
+        <div className="thumb" style={{ backgroundImage: `url(${dish.image})`}} />
+        <div className="card-body">
+          <h3>{dish.name}</h3>
+          <span className="badge">{dish.category}</span>
+          <p>{dish.brief[lang]}</p>
+        </div>
+      </article>
+      {open && <DishModal dish={dish} lang={lang} badges={badges} onClose={() => setOpen(false)} />}
+    </>
   );
 }
 
-function ContactPage({ lang }) {
+function DishModal({ dish, lang, badges, onClose }) {
   return (
-    <main className="section">
-      <h1>{STRINGS.contact.title[lang]}</h1>
-      <ul className="list">
-        <li>
-          <strong>{STRINGS.contact.addressLabel[lang]}: </strong>
-          {STRINGS.location.address[lang]}
-        </li>
-        <li>
-          <strong>{STRINGS.contact.phoneLabel[lang]}: </strong>
-          +974 3047 5279
-        </li>
-        <li>
-          <strong>{STRINGS.contact.emailLabel[lang]}: </strong>
-          restaurant@paneladebarroqatar.com
-        </li>
-      </ul>
-    </main>
-  );
-}
-
-/* ---------- Dish Modal ---------- */
-function Tag({ text }) {
-  return <span className="tag">{text}</span>;
-}
-function DishModal({ item, lang, onClose }) {
-  const L = STRINGS.dishLabels;
-  return (
-    <div className="modal" role="dialog" aria-modal="true" onClick={onClose}>
-      <div className="modal__panel" onClick={(e) => e.stopPropagation()}>
-        <img src={item.image} alt={item.title[lang]} />
-        <div className="modal__body">
-          <div className="modal__head">
-            <h3>{item.title[lang]}</h3>
-            <Badge>{labelFor(item.badge, lang)}</Badge>
-          </div>
-          <p className="lead">{item.short[lang]}</p>
-          <p>{item.long[lang]}</p>
-
-          <div className="nutrition">
-            <div>
-              <strong>{L.kcal[lang]}:</strong> {item.nutrition.kcal}
-            </div>
-            <div>
-              <strong>{L.carbs[lang]}:</strong> {item.nutrition.carbs}g
-            </div>
-            <div>
-              <strong>{L.protein[lang]}:</strong> {item.nutrition.protein}g
-            </div>
-            <div>
-              <strong>{L.fat[lang]}:</strong> {item.nutrition.fat}g
-            </div>
-          </div>
-
+    <div className="modal" onClick={onClose}>
+      <div className="modal-inner" onClick={(e)=>e.stopPropagation()}>
+        <button className="modal-close" onClick={onClose}>×</button>
+        <img src={dish.image} alt={dish.name} className="modal-img"/>
+        <div className="modal-body">
+          <h3>{dish.name}</h3>
           <div className="tags">
-            {item.tags.map((t) => (
-              <Tag key={t} text={t} />
-            ))}
-            {item.allergens.length > 0 && (
-              <Tag text={`${STRINGS.dishLabels.allergens[lang]}: ${item.allergens.join(", ")}`} />
-            )}
+            {dish.halal && <span className="tag">{badges.halal}</span>}
+            {dish.tags.includes("beef") && <span className="tag">{badges.beef}</span>}
+            {dish.tags.includes("vegan") && <span className="tag">{badges.vegan}</span>}
+            {dish.tags.includes("shellfish") && <span className="tag">{badges.shellfish}</span>}
           </div>
-
-          <button className="btn btn--ghost" onClick={onClose}>
-            OK
-          </button>
+          <p className="lead">{dish.brief[lang]}</p>
+          <p>{dish.description[lang]}</p>
+          <div className="nutri">
+            <div><strong>kcal</strong><span>{dish.nutrition.kcal}</span></div>
+            <div><strong>carbs</strong><span>{dish.nutrition.carbs}g</span></div>
+            <div><strong>protein</strong><span>{dish.nutrition.protein}g</span></div>
+            <div><strong>fat</strong><span>{dish.nutrition.fat}g</span></div>
+          </div>
+          {dish.allergens.length > 0 && (
+            <p className="allergen">⚠️ Alérgenos: {dish.allergens.join(", ")}</p>
+          )}
         </div>
       </div>
     </div>
   );
 }
 
-/* ---------- App ---------- */
-export default function App() {
-  const [lang, setLang] = useLang();
+/* ===== Páginas ===== */
+
+function MenuPage(){ return (<section className="section"><MenuPreview/></section>); }
+
+function Gallery(){
+  // use as mesmas imagens para exemplo; pode adicionar mais
+  const pics = [
+    "/images/vaca-atolada.jpg","/images/feijoada-costela.jpg","/images/picanha-grelhada.jpg",
+    "/images/pao-de-queijo.jpg","/images/polenta-frita.jpg","/images/encanto-de-coco.jpg"
+  ];
+  return (
+    <section className="section">
+      <h2>Galeria</h2>
+      <div className="gallery">
+        {pics.map((src,i)=>(
+          <img key={i} src={src} alt={`gal-${i}`} loading="lazy"/>
+        ))}
+      </div>
+    </section>
+  );
+}
+
+function About(){
+  const { tAbout } = useT();
+  return (
+    <section className="section">
+      <h2>{tAbout.heading}</h2>
+      <p>{tAbout.text[0]}</p>
+      <p>{tAbout.text[1]}</p>
+      <p>{tAbout.text[2]}</p>
+
+      <div className="team">
+        {tAbout.team.map(m=>(
+          <div className="member" key={m.name}>
+            <img src={m.img} alt={m.name}/>
+            <h4>{m.name}</h4>
+            <span className="role">{m.role}</span>
+            <p>{m.bio}</p>
+          </div>
+        ))}
+      </div>
+    </section>
+  );
+}
+
+function Location(){
+  const { tLoc } = useT();
+  return (
+    <section className="section">
+      <h2>{tLoc.title}</h2>
+      <p><strong>{tLoc.address}</strong></p>
+      <p>{tLoc.note}</p>
+      <div className="mapbox">
+        <!-- Substitua por um embed real de mapa quando quiser -->
+        <img src="/images/placeholder.jpg" alt="map" />
+      </div>
+    </section>
+  );
+}
+
+function Contact(){
+  const { tContact } = useT();
+  return (
+    <section className="section">
+      <h2>{tContact.title}</h2>
+      <p>Email: <a href={`mailto:${tContact.email}`}>{tContact.email}</a></p>
+      <p>Phone: <a href="tel:+97430475279">{tContact.phone}</a></p>
+      <div className="reviews">
+        <h3>Reviews</h3>
+        <p>⭐️⭐️⭐️⭐️⭐️ “Comida incrível no coração de Doha.”</p>
+        <p>⭐️⭐️⭐️⭐️ “Feijoada halal perfeita para a família.”</p>
+      </div>
+    </section>
+  );
+}
+
+function Footer(){
+  return <footer className="footer">© {new Date().getFullYear()} Panela de Barro · panela-de-barro-v3.vercel.app</footer>;
+}
+
+/* ===== App (Router) ===== */
+
+export default function App(){
+  const [lang, setLang] = useState("pt");
+  const ctx = useMemo(()=>({lang, setLang}),[lang]);
 
   return (
-    <>
-      <Navbar lang={lang} setLang={setLang} />
+    <LangContext.Provider value={ctx}>
+      <Navbar/>
       <Routes>
-        <Route path="/" element={<Home lang={lang} />} />
-        <Route path="/menu" element={<MenuPage lang={lang} />} />
-        <Route path="/gallery" element={<GalleryPage lang={lang} />} />
-        <Route path="/location" element={<LocationPage lang={lang} />} />
-        <Route path="/contact" element={<ContactPage lang={lang} />} />
+        <Route path="/" element={<Home/>}/>
+        <Route path="/menu" element={<MenuPage/>}/>
+        <Route path="/gallery" element={<Gallery/>}/>
+        <Route path="/about" element={<About/>}/>
+        <Route path="/location" element={<Location/>}/>
+        <Route path="/contact" element={<Contact/>}/>
       </Routes>
-      <footer className="footer">panela-de-barro-v3.vercel.app</footer>
-    </>
+      <Footer/>
+    </LangContext.Provider>
   );
 }
