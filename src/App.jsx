@@ -1,252 +1,258 @@
-import React, { useMemo, useState } from "react";
-import { Routes, Route, Link, useNavigate } from "react-router-dom";
-import { LOCALES, STRINGS } from "./i18n";
+// src/App.jsx
+import "./styles.css";
 import { MENU } from "./menuData";
+import { LOCALES, STRINGS } from "./i18n";
+import { useEffect, useMemo, useState } from "react";
 
-/* ===== helpers de i18n ===== */
-const LangContext = React.createContext({ lang: "pt", setLang: () => {} });
-const useT = () => {
-  const { lang } = React.useContext(LangContext);
-  return { lang, tNav: STRINGS.nav[lang], tHero: STRINGS.hero[lang], tAbout: STRINGS.about[lang], tLoc: STRINGS.location[lang], tContact: STRINGS.contact[lang], filters: STRINGS.filters[lang], badges: STRINGS.badges[lang] };
-};
+const heroImages = [
+  "/images/vaca-atolada.jpg",
+  "/images/feijoada-costela.jpg",
+  "/images/picanha-grelhada.jpg"
+];
 
-/* ===== componentes ===== */
+export default function App() {
+  const [lang, setLang] = useState(getLangFromURL());
+  const t = useMemo(() => STRINGS[lang], [lang]);
+  const dir = lang === LOCALES.AR ? "rtl" : "ltr";
 
-function Navbar() {
-  const { lang } = React.useContext(LangContext);
-  const { tNav } = useT();
-  return (
-    <header className="nav">
-      <Link to="/" className="brand">
-        <img src="/logo.png" alt="logo" />
-        <span>Panela de Barro</span>
-      </Link>
-      <nav>
-        <Link to="/about">{tNav.about}</Link>
-        <Link to="/menu">{tNav.menu}</Link>
-        <Link to="/gallery">{tNav.gallery}</Link>
-        <Link to="/location">{tNav.location}</Link>
-        <Link to="/contact">{tNav.contact}</Link>
-      </nav>
-      <LangSwitcher active={lang} />
-    </header>
-  );
-}
+  // hash navigation that REALLY scrolls
+  useEffect(() => {
+    const apply = () => {
+      const raw = window.location.hash.replace("#", "");
+      const id = raw.startsWith("/") ? raw.slice(1) : raw;
+      if (!id) return;
+      const el = document.getElementById(id);
+      if (el) el.scrollIntoView({ behavior: "smooth", block: "start" });
+    };
+    window.addEventListener("hashchange", apply);
+    // also run on mount
+    apply();
+    return () => window.removeEventListener("hashchange", apply);
+  }, []);
 
-function LangSwitcher({ active }) {
-  const { setLang } = React.useContext(LangContext);
-  return (
-    <div className="lang">
-      {LOCALES.map((l) => (
-        <button key={l} className={active === l ? "pill active" : "pill"} onClick={() => setLang(l)}>
-          {l.toUpperCase()}
-        </button>
-      ))}
-    </div>
-  );
-}
+  // keep lang in URL
+  useEffect(() => {
+    const u = new URL(window.location.href);
+    u.searchParams.set("lang", lang);
+    window.history.replaceState({}, "", u.toString());
+    document.documentElement.setAttribute("lang", lang);
+    document.documentElement.setAttribute("dir", dir);
+  }, [lang, dir]);
 
-function Hero() {
-  const { tHero } = useT();
-  const navigate = useNavigate();
-  return (
-    <section className="hero">
-      <div className="smoke"></div>
-      <div className="hero-content">
-        <h1>{tHero.title}</h1>
-        <p>{tHero.subtitle}</p>
-        <button className="cta" onClick={() => navigate("/menu")}>{tHero.cta}</button>
-      </div>
-      {/* carrossel de fundo: 3 imagens grandes (use seus arquivos existentes) */}
-      <div className="hero-slides">
-        <div style={{ backgroundImage: 'url(/images/vaca-atolada.jpg)' }} />
-        <div style={{ backgroundImage: 'url(/images/feijoada-costela.jpg)' }} />
-        <div style={{ backgroundImage: 'url(/images/picanha-grelhada.jpg)' }} />
-      </div>
-    </section>
-  );
-}
-
-function Home() {
-  return (
-    <>
-      <Hero />
-      <MenuPreview />
-    </>
-  );
-}
-
-function MenuPreview() {
-  const { lang, filters, badges } = useT();
   const [filter, setFilter] = useState("all");
-  const items = useMemo(() => MENU.filter(m => filter === "all" ? true : m.category === filter), [filter]);
+  const items = useMemo(() => {
+    return MENU.filter(i => filter === "all" || i.category.includes(filter));
+  }, [filter]);
 
-  const FILTER_KEYS = ["all","mains","sides","desserts","beverages","seasonal","chef"];
+  const [open, setOpen] = useState(null);
 
-  return (
-    <section className="section">
-      <h2>Menu (prévia)</h2>
-      <div className="filterbar">
-        {FILTER_KEYS.map((key, idx) => (
-          <button key={key} className={filter === key ? "chip active" : "chip"} onClick={() => setFilter(key)}>{filters[idx]}</button>
-        ))}
-      </div>
-      <div className="grid">
-        {items.slice(0,6).map((d) => <DishCard key={d.id} dish={d} lang={lang} badges={badges} />)}
-      </div>
-      <div style={{textAlign:"center", marginTop:"16px"}}>
-        <Link to="/menu" className="link-more">Ver todos os pratos →</Link>
-      </div>
-    </section>
-  );
-}
-
-function DishCard({ dish, lang, badges }) {
-  const [open, setOpen] = useState(false);
   return (
     <>
-      <article className="card" onClick={() => setOpen(true)}>
-        <div className="thumb" style={{ backgroundImage: `url(${dish.image})`}} />
-        <div className="card-body">
-          <h3>{dish.name}</h3>
-          <span className="badge">{dish.category}</span>
-          <p>{dish.brief[lang]}</p>
+      <header>
+        <nav className="nav">
+          <div className="brand">
+            <img src="/public/logo.png" alt="" />
+            <span>{t.brand}</span>
+          </div>
+          {navLink("#about", t.nav.about)}
+          {navLink("#menu", t.nav.menu)}
+          {navLink("#gallery", t.nav.gallery)}
+          {navLink("#location", t.nav.location)}
+          {navLink("#contact", t.nav.contact)}
+          <div className="lang">
+            {Object.values(LOCALES).map(code => (
+              <button
+                key={code}
+                className={code === lang ? "active" : ""}
+                onClick={() => setLang(code)}
+              >
+                {code.toUpperCase()}
+              </button>
+            ))}
+          </div>
+        </nav>
+      </header>
+
+      <div className="hero" id="home">
+        <div className="slides">
+          {heroImages.map((src, i) => (
+            <img key={i} src={src} alt="" loading="eager" />
+          ))}
         </div>
-      </article>
-      {open && <DishModal dish={dish} lang={lang} badges={badges} onClose={() => setOpen(false)} />}
+        <div className="smoke">
+          <span></span><span></span><span></span>
+        </div>
+        <div className="copy">
+          <div>
+            <h1>{t.hero.title}</h1>
+            <p>{t.hero.blurb}</p>
+            <button
+              className="cta"
+              onClick={() => (window.location.hash = "#menu")}
+            >
+              {t.hero.cta}
+            </button>
+          </div>
+        </div>
+      </div>
+
+      {/* ABOUT */}
+      <section id="about">
+        <h2>{t.sections.about.title}</h2>
+        <p className="lead" dangerouslySetInnerHTML={{ __html: t.sections.about.lead }} />
+        <p dangerouslySetInnerHTML={{ __html: t.sections.about.story1 }} />
+        <p dangerouslySetInnerHTML={{ __html: t.sections.about.story2 }} />
+
+        <h3 style={{marginTop:18}}>{t.sections.about.teamTitle}</h3>
+        <div className="team">
+          <div className="person">
+            <img src="/images/encanto-de-coco.jpg" alt="" />
+            <strong>{t.sections.about.ownerTitle}: Quessi Jhones</strong>
+            <p>10 anos em hospitalidade; 6 em cozinha brasileira (Abu Dhabi & Qatar). Curadoria de sabores de fazenda e fogo.</p>
+          </div>
+          <div className="person">
+            <img src="/images/fraldinha-inteira.jpg" alt="" />
+            <strong>{t.sections.about.headChefTitle}: Alex</strong>
+            <p dangerouslySetInnerHTML={{ __html: t.sections.about.alexBio }} />
+          </div>
+          <div className="person">
+            <img src="/images/mandioca-real.jpg" alt="" />
+            <strong>{t.sections.about.chefMatriarchTitle}: Cleusa Gonçalves</strong>
+            <p dangerouslySetInnerHTML={{ __html: t.sections.about.cleusaBio }} />
+          </div>
+        </div>
+      </section>
+
+      {/* MENU */}
+      <section id="menu">
+        <h2>{t.sections.menu.title}</h2>
+        <div className="chips">
+          {[
+            ["all", t.sections.menu.filters.all],
+            ["mains", t.sections.menu.filters.mains],
+            ["sides", t.sections.menu.filters.sides],
+            ["desserts", t.sections.menu.filters.desserts],
+            ["beverages", t.sections.menu.filters.beverages],
+            ["seasonal", t.sections.menu.filters.seasonal],
+            ["chef", t.sections.menu.filters.chef],
+          ].map(([key, label]) => (
+            <button key={key} className={filter === key ? "active" : ""} onClick={() => setFilter(key)}>{label}</button>
+          ))}
+        </div>
+
+        <div className="grid">
+          {items.map(item => (
+            <article className="card" key={item.id}>
+              <img src={item.image} alt={item.name[lang]} />
+              <div className="pad">
+                <div className="badge">{labelForCategory(item.category, t)}</div>
+                <h3 style={{marginTop:0}}>{item.name[lang]}</h3>
+                <p style={{color:"var(--muted)"}}>{item.short[lang]}</p>
+                <button className="cta" onClick={() => setOpen(item)} style={{marginTop:8}}>
+                  {t.sections.menu.readMore}
+                </button>
+              </div>
+            </article>
+          ))}
+        </div>
+      </section>
+
+      {/* MODAL dish */}
+      <div className={`modal ${open ? "open" : ""}`} onClick={() => setOpen(null)}>
+        {open && (
+          <div className="sheet" onClick={e => e.stopPropagation()}>
+            <img src={open.image} alt={open.name[lang]} />
+            <div className="body">
+              <button className="close" onClick={() => setOpen(null)}>{t.sections.menu.close}</button>
+              <h3 style={{marginTop:0}}>{open.name[lang]}</h3>
+              <p style={{color:"var(--muted)"}}>{open.long[lang]}</p>
+              <div className="tags">
+                <span className="tag">Halal</span>
+                {open.tags?.map(tag => <span key={tag} className="tag">{prettyTag(tag, t)}</span>)}
+              </div>
+              <div className="kv">
+                <span>{open.nutrition.kcal} {t.sections.menu.nutrition.kcal}</span>
+                <span>{open.nutrition.carbs} {t.sections.menu.nutrition.carbs}</span>
+                <span>{open.nutrition.protein} {t.sections.menu.nutrition.protein}</span>
+                <span>{open.nutrition.fat} {t.sections.menu.nutrition.fat}</span>
+              </div>
+              {open.allergens?.length ? (
+                <p style={{marginTop:10, fontSize:13}}>
+                  <strong>{t.sections.menu.allergensKey}:</strong> {open.allergens.map(a => prettyTag(a, t)).join(", ")}
+                </p>
+              ) : null}
+            </div>
+          </div>
+        )}
+      </div>
+
+      {/* GALLERY */}
+      <section id="gallery">
+        <h2>{t.sections.gallery.title}</h2>
+        <div className="gallery">
+          {[
+            "/images/encanto-de-coco.jpg",
+            "/images/picanha-grelhada.jpg",
+            "/images/feijoada-costela.jpg",
+            "/images/pao-de-queijo.jpg",
+            "/images/mandioca-frita.jpg",
+            "/images/sol-do-cerrado.jpg",
+            "/images/lasanha-banana.jpg"
+          ].map((g,i)=> <img key={i} src={g} alt="" loading="lazy"/>)}
+        </div>
+      </section>
+
+      {/* LOCATION */}
+      <section id="location">
+        <h2>{t.sections.location.title}</h2>
+        <p className="lead">{t.sections.location.addr}</p>
+        <iframe
+          className="map"
+          src="https://www.google.com/maps?q=Barwa%20Town%20Doha&output=embed"
+          loading="lazy"
+          title="Map"
+          onClick={()=>window.open("https://maps.google.com/?q=Barwa+Town+Doha","_blank")}
+        ></iframe>
+        <small>{t.sections.location.hint}</small>
+      </section>
+
+      {/* CONTACT */}
+      <section id="contact">
+        <h2>{t.sections.contact.title}</h2>
+        <p><strong>{t.sections.contact.email}:</strong> restaurant@paneladebarroqatar.com</p>
+        <p><strong>{t.sections.contact.phone}:</strong> +974 3047 5279</p>
+        <h3 style={{marginTop:18}}>{t.sections.contact.reviewTitle}</h3>
+        <p><a href="https://forms.gle/" target="_blank">{t.sections.contact.reviewCTA}</a></p>
+      </section>
+
+      <footer>panela-de-barro-v3.vercel.app</footer>
     </>
   );
 }
 
-function DishModal({ dish, lang, badges, onClose }) {
-  return (
-    <div className="modal" onClick={onClose}>
-      <div className="modal-inner" onClick={(e)=>e.stopPropagation()}>
-        <button className="modal-close" onClick={onClose}>×</button>
-        <img src={dish.image} alt={dish.name} className="modal-img"/>
-        <div className="modal-body">
-          <h3>{dish.name}</h3>
-          <div className="tags">
-            {dish.halal && <span className="tag">{badges.halal}</span>}
-            {dish.tags.includes("beef") && <span className="tag">{badges.beef}</span>}
-            {dish.tags.includes("vegan") && <span className="tag">{badges.vegan}</span>}
-            {dish.tags.includes("shellfish") && <span className="tag">{badges.shellfish}</span>}
-          </div>
-          <p className="lead">{dish.brief[lang]}</p>
-          <p>{dish.description[lang]}</p>
-          <div className="nutri">
-            <div><strong>kcal</strong><span>{dish.nutrition.kcal}</span></div>
-            <div><strong>carbs</strong><span>{dish.nutrition.carbs}g</span></div>
-            <div><strong>protein</strong><span>{dish.nutrition.protein}g</span></div>
-            <div><strong>fat</strong><span>{dish.nutrition.fat}g</span></div>
-          </div>
-          {dish.allergens.length > 0 && (
-            <p className="allergen">⚠️ Alérgenos: {dish.allergens.join(", ")}</p>
-          )}
-        </div>
-      </div>
-    </div>
-  );
+function navLink(href, label){ return <a href={href}>{label}</a>; }
+
+function labelForCategory(arr, t){
+  if (arr.includes("chef")) return t.sections.menu.filters.chef;
+  if (arr.includes("mains")) return t.sections.menu.filters.mains;
+  if (arr.includes("desserts")) return t.sections.menu.filters.desserts;
+  if (arr.includes("beverages")) return t.sections.menu.filters.beverages;
+  if (arr.includes("sides")) return t.sections.menu.filters.sides;
+  if (arr.includes("seasonal")) return t.sections.menu.filters.seasonal;
+  return t.sections.menu.filters.all;
 }
 
-/* ===== Páginas ===== */
-
-function MenuPage(){ return (<section className="section"><MenuPreview/></section>); }
-
-function Gallery(){
-  // use as mesmas imagens para exemplo; pode adicionar mais
-  const pics = [
-    "/images/vaca-atolada.jpg","/images/feijoada-costela.jpg","/images/picanha-grelhada.jpg",
-    "/images/pao-de-queijo.jpg","/images/polenta-frita.jpg","/images/encanto-de-coco.jpg"
-  ];
-  return (
-    <section className="section">
-      <h2>Galeria</h2>
-      <div className="gallery">
-        {pics.map((src,i)=>(
-          <img key={i} src={src} alt={`gal-${i}`} loading="lazy"/>
-        ))}
-      </div>
-    </section>
-  );
+function prettyTag(tag, t){
+  const m = t.sections.menu.tags;
+  return ({
+    halal: m.halal, gluten: m.gluten, dairy: m.dairy, nuts: m.nuts, soy: m.soy,
+    spicy: m.spicy, seafood: m.seafood, vegetarian: m.vegetarian, vegan: m.vegan,
+    "gluten-free": "Gluten-free"
+  })[tag] || tag;
 }
 
-function About(){
-  const { tAbout } = useT();
-  return (
-    <section className="section">
-      <h2>{tAbout.heading}</h2>
-      <p>{tAbout.text[0]}</p>
-      <p>{tAbout.text[1]}</p>
-      <p>{tAbout.text[2]}</p>
-
-      <div className="team">
-        {tAbout.team.map(m=>(
-          <div className="member" key={m.name}>
-            <img src={m.img} alt={m.name}/>
-            <h4>{m.name}</h4>
-            <span className="role">{m.role}</span>
-            <p>{m.bio}</p>
-          </div>
-        ))}
-      </div>
-    </section>
-  );
-}
-
-function Location(){
-  const { tLoc } = useT();
-  return (
-    <section className="section">
-      <h2>{tLoc.title}</h2>
-      <p><strong>{tLoc.address}</strong></p>
-      <p>{tLoc.note}</p>
-      <div className="mapbox">
-        <!-- Substitua por um embed real de mapa quando quiser -->
-        <img src="/images/placeholder.jpg" alt="map" />
-      </div>
-    </section>
-  );
-}
-
-function Contact(){
-  const { tContact } = useT();
-  return (
-    <section className="section">
-      <h2>{tContact.title}</h2>
-      <p>Email: <a href={`mailto:${tContact.email}`}>{tContact.email}</a></p>
-      <p>Phone: <a href="tel:+97430475279">{tContact.phone}</a></p>
-      <div className="reviews">
-        <h3>Reviews</h3>
-        <p>⭐️⭐️⭐️⭐️⭐️ “Comida incrível no coração de Doha.”</p>
-        <p>⭐️⭐️⭐️⭐️ “Feijoada halal perfeita para a família.”</p>
-      </div>
-    </section>
-  );
-}
-
-function Footer(){
-  return <footer className="footer">© {new Date().getFullYear()} Panela de Barro · panela-de-barro-v3.vercel.app</footer>;
-}
-
-/* ===== App (Router) ===== */
-
-export default function App(){
-  const [lang, setLang] = useState("pt");
-  const ctx = useMemo(()=>({lang, setLang}),[lang]);
-
-  return (
-    <LangContext.Provider value={ctx}>
-      <Navbar/>
-      <Routes>
-        <Route path="/" element={<Home/>}/>
-        <Route path="/menu" element={<MenuPage/>}/>
-        <Route path="/gallery" element={<Gallery/>}/>
-        <Route path="/about" element={<About/>}/>
-        <Route path="/location" element={<Location/>}/>
-        <Route path="/contact" element={<Contact/>}/>
-      </Routes>
-      <Footer/>
-    </LangContext.Provider>
-  );
+function getLangFromURL(){
+  const p = new URLSearchParams(window.location.search);
+  const v = (p.get("lang")||"").toLowerCase();
+  return v === "en" ? "en" : v === "ar" ? "ar" : "pt";
 }
