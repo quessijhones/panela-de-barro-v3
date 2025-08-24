@@ -1,297 +1,306 @@
-import React, { useEffect, useMemo, useState } from "react";
-import { MENU } from "./menuData";
-import { UI, t, currentLocale, setLocale } from "./i18n";
+import React, { useMemo, useState } from "react";
+import { Routes, Route, Link, useLocation, useNavigate } from "react-router-dom";
+import { LOCALES, STRINGS, t } from "./i18n";
+import { MENU, CATEGORIES } from "./menuData";
 
-const routes = ["home", "menu", "gallery", "location", "contact"];
-
-function useHashRoute() {
-  const [route, setRoute] = useState(() => (window.location.hash.replace("#/", "") || "home"));
-  useEffect(() => {
-    const onHash = () => setRoute(window.location.hash.replace("#/", "") || "home");
-    window.addEventListener("hashchange", onHash);
-    return () => window.removeEventListener("hashchange", onHash);
-  }, []);
-  return route;
+// util simples de locale no hash ?lang=pt
+function useLang() {
+  const nav = useNavigate();
+  const { search } = useLocation();
+  const params = new URLSearchParams(search);
+  const cur = params.get("lang") || LOCALES.PT;
+  const setLang = (next) => {
+    const p = new URLSearchParams(search);
+    p.set("lang", next);
+    nav({ search: `?${p.toString()}` }, { replace: true });
+  };
+  return [cur, setLang];
 }
 
-function useLocale() {
-  const [lang, setLang] = useState(currentLocale());
-  useEffect(() => {
-    const onLang = () => setLang(currentLocale());
-    window.addEventListener("langchange", onLang);
-    window.addEventListener("popstate", onLang);
-    return () => {
-      window.removeEventListener("langchange", onLang);
-      window.removeEventListener("popstate", onLang);
-    };
-  }, []);
-  return lang;
+function Brand({ lang }) {
+  return <span className="brand">{STRINGS.brand[lang]}</span>;
 }
 
-function Nav() {
-  const lang = useLocale();
+function LangSwitcher({ lang, setLang }) {
+  return (
+    <div className="lang">
+      {[LOCALES.PT, LOCALES.EN, LOCALES.AR].map((l) => (
+        <button
+          key={l}
+          onClick={() => setLang(l)}
+          className={`chip ${lang === l ? "chip--active" : ""}`}
+          aria-label={l.toUpperCase()}
+        >
+          {l.toUpperCase()}
+        </button>
+      ))}
+    </div>
+  );
+}
+
+function Navbar({ lang, setLang }) {
+  const N = STRINGS.nav;
   return (
     <header className="nav">
-      <div className="brand" onClick={() => (window.location.hash = "/home")}>
-        <img src="/images/placeholder.jpg" alt="" className="brand-logo" />
-        <span>{t(UI.brand, lang)}</span>
-      </div>
+      <Link to="/#home" className="logo">
+        <img src="/logo.png" alt="logo" />
+        <Brand lang={lang} />
+      </Link>
       <nav>
-        <a href="#/home">{t(UI.nav.about, lang)}</a>
-        <a href="#/menu">{t(UI.nav.menu, lang)}</a>
-        <a href="#/gallery">{t(UI.nav.gallery, lang)}</a>
-        <a href="#/location">{t(UI.nav.location, lang)}</a>
-        <a href="#/contact">{t(UI.nav.contact, lang)}</a>
+        <a href="#about">{N.about[lang]}</a>
+        <Link to="/#/menu">{N.menu[lang]}</Link>
+        <Link to="/#/gallery">{N.gallery[lang]}</Link>
+        <Link to="/#/location">{N.location[lang]}</Link>
+        <Link to="/#/contact">{N.contact[lang]}</Link>
       </nav>
-      <div className="lang">
-        {["pt", "en", "ar"].map((L) => (
-          <button
-            key={L}
-            className={`chip ${lang === L ? "active" : ""}`}
-            onClick={() => setLocale(L)}
-          >
-            {L.toUpperCase()}
-          </button>
-        ))}
-      </div>
+      <LangSwitcher lang={lang} setLang={setLang} />
     </header>
   );
 }
 
-/* ---------------- HOME ---------------- */
-function Home() {
-  const lang = useLocale();
+/* ---------- UI helpers ---------- */
+function Badge({ children }) {
+  return <span className="badge">{children}</span>;
+}
+function DishCard({ item, lang, onClick }) {
   return (
-    <main className="container">
-      <section className="hero">
-        <div className="hero-overlay">
-          <h1>{t(UI.home.headline, lang)}</h1>
-          <p>{t(UI.home.sub, lang)}</p>
-          <a href="#/menu" className="btn">{t(UI.home.ctaMenu, lang)}</a>
+    <article className="card" onClick={() => onClick(item)}>
+      <img src={item.image} alt={item.title[lang]} loading="lazy" />
+      <div className="card__body">
+        <h3>{item.title[lang]}</h3>
+        <Badge>{labelFor(item.badge, lang)}</Badge>
+        <p>{item.short[lang]}</p>
+      </div>
+    </article>
+  );
+}
+function labelFor(cat, lang) {
+  const F = STRINGS.filters;
+  switch (cat) {
+    case CATEGORIES.MAINS:
+      return F.mains[lang];
+    case CATEGORIES.SIDES:
+      return F.sides[lang];
+    case CATEGORIES.DESSERTS:
+      return F.desserts[lang];
+    case CATEGORIES.BEVERAGES:
+      return F.beverages[lang];
+    case CATEGORIES.SEASONAL:
+      return F.seasonal[lang];
+    case CATEGORIES.CHEF:
+      return F.chef[lang];
+    default:
+      return F.all[lang];
+  }
+}
+
+/* ---------- Pages ---------- */
+function Home({ lang }) {
+  const [open, setOpen] = useState(null);
+  const hero = MENU.slice(0, 3).map((d) => d.image);
+
+  return (
+    <main id="home">
+      {/* Splash simples */}
+      <div className="splash">
+        <img src="/logo.png" alt="logo" />
+      </div>
+
+      {/* Hero / Carrossel automático */}
+      <section className="hero" aria-label="carousel">
+        <div className="hero__track">
+          {hero.concat(hero).map((src, i) => (
+            <img key={i} src={src} alt="" aria-hidden="true" />
+          ))}
         </div>
-        <div className="hero-carousel">
-          {["vaca-atolada.jpg", "feijoada-costela.jpg", "picanha-grelhada.jpg"].map((f, i) => (
-            <div className="hero-slide" style={{ "--i": i }} key={f}>
-              <img src={`/images/${f}`} alt="" />
-            </div>
+        <div className="hero__text">
+          <h1>{t("home.heroTitle", lang)}</h1>
+          <p>{t("home.heroSubtitle", lang)}</p>
+          <Link className="btn" to="/#/menu">
+            {t("home.ctaMenu", lang)}
+          </Link>
+        </div>
+      </section>
+
+      {/* Preview */}
+      <section className="section">
+        <h2>{t("home.previewTitle", lang)}</h2>
+        <div className="grid">
+          {MENU.slice(0, 3).map((it) => (
+            <DishCard key={it.id} item={it} lang={lang} onClick={setOpen} />
           ))}
         </div>
       </section>
 
-      <h2 className="mt-6">{t(UI.home.preview, lang)}</h2>
-      <div className="grid">
-        {MENU.slice(0, 3).map((item) => (
-          <MenuCard key={item.id} item={item} />
-        ))}
-      </div>
+      {open && <DishModal item={open} lang={lang} onClose={() => setOpen(null)} />}
     </main>
   );
 }
 
-/* ---------------- MENU ---------------- */
-const FILTERS = [
-  { id: "all", label: UI.filters.all },
-  { id: "mains", label: UI.filters.mains },
-  { id: "sides", label: UI.filters.sides },
-  { id: "desserts", label: UI.filters.desserts },
-  { id: "beverages", label: UI.filters.beverages },
-  { id: "seasonal", label: UI.filters.seasonal },
-  { id: "chef", label: UI.filters.chef },
-];
-
-function MenuPage() {
-  const lang = useLocale();
+function MenuPage({ lang }) {
   const [filter, setFilter] = useState("all");
-  const list = useMemo(() => (filter === "all" ? MENU : MENU.filter((m) => m.category === filter)), [filter]);
+  const [open, setOpen] = useState(null);
+
+  const filtered = useMemo(() => {
+    if (filter === "all") return MENU;
+    return MENU.filter((d) => d.category === filter || d.badge === filter);
+  }, [filter]);
+
+  const F = STRINGS.filters;
+  const chips = [
+    { k: "all", label: F.all[lang] },
+    { k: CATEGORIES.MAINS, label: F.mains[lang] },
+    { k: CATEGORIES.SIDES, label: F.sides[lang] },
+    { k: CATEGORIES.DESSERTS, label: F.desserts[lang] },
+    { k: CATEGORIES.BEVERAGES, label: F.beverages[lang] },
+    { k: CATEGORIES.SEASONAL, label: F.seasonal[lang] },
+    { k: CATEGORIES.CHEF, label: F.chef[lang] },
+  ];
+
   return (
-    <main className="container">
-      <h1>{t(UI.nav.menu, lang)}</h1>
-      <div className="filters">
-        {FILTERS.map((f) => (
+    <main className="section">
+      <h1>{STRINGS.nav.menu[lang]}</h1>
+      <div className="chips">
+        {chips.map((c) => (
           <button
-            key={f.id}
-            className={`chip ${filter === f.id ? "active" : ""}`}
-            onClick={() => setFilter(f.id)}
+            key={c.k}
+            className={`chip ${filter === c.k ? "chip--active" : ""}`}
+            onClick={() => setFilter(c.k)}
           >
-            {t(f.label, lang)}
+            {c.label}
           </button>
         ))}
       </div>
+
       <div className="grid">
-        {list.map((item) => (
-          <MenuCard key={item.id} item={item} />
+        {filtered.map((it) => (
+          <DishCard key={it.id} item={it} lang={lang} onClick={setOpen} />
+        ))}
+      </div>
+
+      {open && <DishModal item={open} lang={lang} onClose={() => setOpen(null)} />}
+    </main>
+  );
+}
+
+function GalleryPage({ lang }) {
+  // galeria responsiva (usa mesmas imagens do menu)
+  return (
+    <main className="section">
+      <h1>{STRINGS.gallery.title[lang]}</h1>
+      <div className="masonry">
+        {MENU.map((d) => (
+          <img key={d.id} src={d.image} alt={d.title[lang]} loading="lazy" />
         ))}
       </div>
     </main>
   );
 }
 
-function MenuCard({ item }) {
-  const lang = useLocale();
-  const [open, setOpen] = useState(false);
-  const L = (o) => (o?.[lang] ?? o?.en ?? "");
+function LocationPage({ lang }) {
   return (
-    <>
-      <article className="card" onClick={() => setOpen(true)}>
-        <div className="card-media">
-          <img src={item.image} alt={L(item.title)} loading="lazy" />
-        </div>
-        <div className="card-body">
-          <div className="pill-row"><span className="pill">{prettyCategory(item.category, lang)}</span></div>
-          <h3>{L(item.title)}</h3>
-          <p className="muted">{L(item.summary)}</p>
-        </div>
-      </article>
-      {open && <DishModal item={item} onClose={() => setOpen(false)} lang={lang} />}
-    </>
+    <main className="section">
+      <h1>{STRINGS.location.title[lang]}</h1>
+      <p>{STRINGS.location.address[lang]}</p>
+      <iframe
+        className="map"
+        loading="lazy"
+        referrerPolicy="no-referrer-when-downgrade"
+        src="https://maps.google.com/maps?q=Baraha%20Town%20Doha%20Qatar&t=&z=14&ie=UTF8&iwloc=&output=embed"
+        title="map"
+      />
+    </main>
   );
 }
 
-function prettyCategory(cat, lang) {
-  switch (cat) {
-    case "mains": return t(UI.filters.mains, lang);
-    case "sides": return t(UI.filters.sides, lang);
-    case "desserts": return t(UI.filters.desserts, lang);
-    case "beverages": return t(UI.filters.beverages, lang);
-    case "seasonal": return t(UI.filters.seasonal, lang);
-    case "chef": return t(UI.filters.chef, lang);
-    default: return "";
-  }
+function ContactPage({ lang }) {
+  return (
+    <main className="section">
+      <h1>{STRINGS.contact.title[lang]}</h1>
+      <ul className="list">
+        <li>
+          <strong>{STRINGS.contact.addressLabel[lang]}: </strong>
+          {STRINGS.location.address[lang]}
+        </li>
+        <li>
+          <strong>{STRINGS.contact.phoneLabel[lang]}: </strong>
+          +974 3047 5279
+        </li>
+        <li>
+          <strong>{STRINGS.contact.emailLabel[lang]}: </strong>
+          restaurant@paneladebarroqatar.com
+        </li>
+      </ul>
+    </main>
+  );
 }
 
-function DishModal({ item, onClose, lang }) {
-  const L = (o) => (o?.[lang] ?? o?.en ?? "");
+/* ---------- Dish Modal ---------- */
+function Tag({ text }) {
+  return <span className="tag">{text}</span>;
+}
+function DishModal({ item, lang, onClose }) {
+  const L = STRINGS.dishLabels;
   return (
-    <div className="modal-backdrop" onClick={onClose}>
-      <div className="modal" onClick={(e) => e.stopPropagation()}>
-        <div className="modal-media">
-          <img src={item.image} alt={L(item.title)} />
-        </div>
-        <div className="modal-body">
-          <div className="modal-top">
-            <h3>{L(item.title)}</h3>
-            <button className="chip" onClick={onClose}>{t(UI.modal.close, lang)}</button>
+    <div className="modal" role="dialog" aria-modal="true" onClick={onClose}>
+      <div className="modal__panel" onClick={(e) => e.stopPropagation()}>
+        <img src={item.image} alt={item.title[lang]} />
+        <div className="modal__body">
+          <div className="modal__head">
+            <h3>{item.title[lang]}</h3>
+            <Badge>{labelFor(item.badge, lang)}</Badge>
+          </div>
+          <p className="lead">{item.short[lang]}</p>
+          <p>{item.long[lang]}</p>
+
+          <div className="nutrition">
+            <div>
+              <strong>{L.kcal[lang]}:</strong> {item.nutrition.kcal}
+            </div>
+            <div>
+              <strong>{L.carbs[lang]}:</strong> {item.nutrition.carbs}g
+            </div>
+            <div>
+              <strong>{L.protein[lang]}:</strong> {item.nutrition.protein}g
+            </div>
+            <div>
+              <strong>{L.fat[lang]}:</strong> {item.nutrition.fat}g
+            </div>
           </div>
 
-          <div className="pill-row mt-1"><span className="pill">{prettyCategory(item.category, lang)}</span></div>
-          <p className="mt-2">{L(item.description)}</p>
-
-          <div className="meta">
-            <div><strong>{t(UI.modal.allergens, lang)}:</strong> {renderAllergens(item.allergens || [])}</div>
+          <div className="tags">
+            {item.tags.map((t) => (
+              <Tag key={t} text={t} />
+            ))}
+            {item.allergens.length > 0 && (
+              <Tag text={`${STRINGS.dishLabels.allergens[lang]}: ${item.allergens.join(", ")}`} />
+            )}
           </div>
 
-          <h4 className="mt-3">{t(UI.modal.nutrition, lang)}</h4>
-          <table className="nutri">
-            <tbody>
-              <tr><td>{t(UI.modal.kcal, lang)}</td><td>{item.nutrition.kcal}</td></tr>
-              <tr><td>{t(UI.modal.carbs, lang)}</td><td>{item.nutrition.carbs} g</td></tr>
-              <tr><td>{t(UI.modal.protein, lang)}</td><td>{item.nutrition.protein} g</td></tr>
-              <tr><td>{t(UI.modal.fat, lang)}</td><td>{item.nutrition.fat} g</td></tr>
-            </tbody>
-          </table>
-
-          <div className="modal-actions">
-            <button className="btn ghost" onClick={onClose}>{t(UI.modal.close, lang)}</button>
-            <button className="btn">{t(UI.modal.orderSoon, lang)}</button>
-          </div>
+          <button className="btn btn--ghost" onClick={onClose}>
+            OK
+          </button>
         </div>
       </div>
     </div>
   );
 }
 
-function renderAllergens(list) {
-  if (!list.length) return <span>—</span>;
-  const icons = { dairy: "🧀", eggs: "🥚", gluten: "🌾", "gluten-free": "🚫🌾" };
-  return (
-    <span>
-      {list.map((k, i) => (
-        <span key={k} className="allergen">
-          {icons[k] || "⚠️"} {k}{i < list.length - 1 ? " · " : ""}
-        </span>
-      ))}
-    </span>
-  );
-}
-
-/* ---------------- GALLERY / LOCATION / CONTACT ---------------- */
-function Gallery() {
-  const lang = useLocale();
-  const photos = [
-    "/images/vaca-atolada.jpg","/images/feijoada-costela.jpg","/images/picanha-grelhada.jpg",
-    "/images/pasteis-brasileiros.jpg","/images/polenta-frita.jpg","/images/pao-de-queijo.jpg",
-    "/images/encanto-de-coco.jpg","/images/doce-da-roca-com-gelo.jpg","/images/amazon-breeze.jpg","/images/uva-limao-gelo.jpg",
-  ];
-  const [big, setBig] = useState(null);
-  return (
-    <main className="container">
-      <h1>{t(UI.gallery.title, lang)}</h1>
-      <div className="gallery">
-        {photos.map((src) => (
-          <button key={src} className="gallery-item" onClick={() => setBig(src)}>
-            <img src={src} loading="lazy" alt="" />
-          </button>
-        ))}
-      </div>
-      {big && (
-        <div className="modal-backdrop" onClick={() => setBig(null)}>
-          <div className="lightbox" onClick={(e) => e.stopPropagation()}><img src={big} alt="" /></div>
-        </div>
-      )}
-    </main>
-  );
-}
-
-function Location() {
-  const lang = useLocale();
-  return (
-    <main className="container">
-      <h1>{t(UI.location.title, lang)}</h1>
-      <p className="muted">{t(UI.location.address, lang)}</p>
-      <div className="mapBox">
-        <iframe title="map" loading="lazy" referrerPolicy="no-referrer-when-downgrade"
-          src="https://www.google.com/maps?q=Baraha%20Town,%20Doha,%20Qatar&output=embed"></iframe>
-      </div>
-    </main>
-  );
-}
-
-function Contact() {
-  const lang = useLocale();
-  return (
-    <main className="container">
-      <h1>{t(UI.contact.title, lang)}</h1>
-      <p className="muted">Email: {UI.contact.email}</p>
-      <p className="muted">Phone: {UI.contact.phone}</p>
-    </main>
-  );
-}
-
-/* ---------------- APP ROOT ---------------- */
+/* ---------- App ---------- */
 export default function App() {
-  const route = useHashRoute();
-  useEffect(() => {
-    if (!routes.includes(route)) window.location.hash = "/home";
-  }, [route]);
+  const [lang, setLang] = useLang();
 
   return (
     <>
-      <Nav />
-      {route === "home" && <Home />}
-      {route === "menu" && <MenuPage />}
-      {route === "gallery" && <Gallery />}
-      {route === "location" && <Location />}
-      {route === "contact" && <Contact />}
-      <Footer />
+      <Navbar lang={lang} setLang={setLang} />
+      <Routes>
+        <Route path="/" element={<Home lang={lang} />} />
+        <Route path="/menu" element={<MenuPage lang={lang} />} />
+        <Route path="/gallery" element={<GalleryPage lang={lang} />} />
+        <Route path="/location" element={<LocationPage lang={lang} />} />
+        <Route path="/contact" element={<ContactPage lang={lang} />} />
+      </Routes>
+      <footer className="footer">panela-de-barro-v3.vercel.app</footer>
     </>
-  );
-}
-
-function Footer() {
-  return (
-    <footer className="footer">
-      <div>© {new Date().getFullYear()} Panela de Barro</div>
-      <div className="muted">Doha – Qatar · Halal</div>
-    </footer>
   );
 }
