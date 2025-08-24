@@ -1,10 +1,14 @@
-// src/main.jsx
 import React from "react";
-import ReactDOM from "react-dom/client";
+import { createRoot } from "react-dom/client";
 import App from "./App.jsx";
+import "./styles.css";
 
-ReactDOM.createRoot(document.getElementById("root")).render(
-  <React.StrictMode>
-    <App />
-  </React.StrictMode>
-);
+const root = createRoot(document.getElementById("root"));
+
+function render() {
+  root.render(<App />);
+}
+
+// garante render em mudanças de hash (roteamento simples)
+window.addEventListener("hashchange", render);
+render();
