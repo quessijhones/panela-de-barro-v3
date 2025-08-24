@@ -1,203 +1,140 @@
-// Categorias: mains | sides | desserts | beverages | seasonal | chef
+// src/menuData.js
 export const MENU = [
   {
     id: "vaca-atolada",
-    name: "Vaca Atolada (Ossobuco)",
+    category: ["mains", "chef"],
     image: "/images/vaca-atolada.jpg",
-    category: "mains",
-    tags: ["beef", "halal"],
-    brief: {
+    name: {
+      pt: "Vaca Atolada (Ossobuco)",
+      en: "Vaca Atolada (Ossobuco)",
+      ar: "‏Vaca Atolada (أوسوبوكو)"
+    },
+    short: {
       pt: "Ossobuco com polenta cremosa e rúcula cítrica.",
-      en: "Braised beef shank with creamy polenta and citrus arugula.",
-      ar: "عظم لحم بقر مطهو ببطء مع بولينتا كريمية وجرجير حمضي.",
+      en: "Braised ossobuco with creamy polenta and citrus arugula.",
+      ar: "أوسوبوكو مطهو مع بولينتا كريمية وجرجير بنكهة الحمضيات."
     },
-    description: {
-      pt: "Clássico mineiro de fazenda, a ‘vaca atolada’ nasceu do cozimento lento do ossobuco até soltar colágeno e sabor. Servimos com polenta cremosa ao estilo do interior — fogo baixo e paciência.",
-      en: "A countryside Minas classic. Slow-braised beef shank releases collagen and deep flavor. Served with velvety polenta cooked low and slow.",
-      ar: "طبق ريفي من ميناس جيرايس. يُطهى عظم لحم البقر ببطء حتى يذوب الكولاجين ويبرز الطعم العميق مع بولينتا ناعمة.",
+    long: {
+      pt: "Clássico caipira que ganhou o Brasil. A carne é cozida lentamente até soltar do osso, servida sobre polenta cremosa — técnica trazida por imigrantes italianos — finalizada com rúcula cítrica. Cozimento lento no estilo fogão a lenha.",
+      en: "A countryside classic embraced across Brazil. Beef shank is slowly braised until tender, served over creamy polenta — a technique brought by Italian immigrants — finished with citrus arugula. Slow-cooked as on a wood-fire stove.",
+      ar: "طبق ريفي تبناه البرازيليون. يُطهى لحم الساق ببطء حتى يذوب ويُقدَّم فوق بولينتا كريمية (تقنية إيطالية) ويُنهى بجرجير حمضي. بطهي بطيء كموقد الحطب."
     },
-    nutrition: { kcal: 720, carbs: 45, protein: 58, fat: 32 },
-    allergens: ["milk"],
-    halal: true,
+    nutrition: { kcal: 720, carbs: 48, protein: 42, fat: 36 },
+    allergens: ["dairy", "gluten"],
+    tags: ["halal"]
   },
   {
     id: "feijoada-costela",
-    name: "Feijoada de Costela",
+    category: ["mains"],
     image: "/images/feijoada-costela.jpg",
-    category: "mains",
-    tags: ["beef", "halal"],
-    brief: {
+    name: { pt: "Feijoada de Costela", en: "Beef Rib Feijoada", ar: "فيجوادا بالضلوع" },
+    short: {
       pt: "Feijão preto com costela, farofa de banana e vinagrete.",
       en: "Black beans with beef ribs, banana farofa and vinaigrette.",
-      ar: "فاصوليا سوداء مع ضلع لحم بقر وفاروفا الموز وصلصة خل.",
+      ar: "فاصوليا سوداء مع ضلوع البقر وفاروفا الموز وصوص فيناغريت."
     },
-    description: {
-      pt: "Nossa feijoada é 100% halal e sem porco. Inspirada nas reuniões de domingo, leva costela bovina lentamente cozida, feijão preto, farofa de banana e arroz soltinho.",
-      en: "Our feijoada is fully halal (no pork). Sunday-style: slow beef ribs, black beans, banana farofa and fluffy rice.",
-      ar: "فيجوادا حلال بالكامل بدون لحم خنزير: ضلع لحم بقر مطهو ببطء مع فاصوليا سوداء وفاروفا الموز وأرز مفلفل.",
+    long: {
+      pt: "Herança africana que se tornou símbolo do Brasil. Nossa versão usa cortes bovinos halal e técnica de fogo longo para um caldo brilhante e profundo. Acompanha farofa de banana e vinagrete.",
+      en: "An African heritage that became a Brazilian icon. Our version uses halal beef cuts and long fire technique for a glossy, deep broth. Served with banana farofa and vinaigrette.",
+      ar: "إرث إفريقي أصبح رمزاً للبرازيل. نسختنا بلحم بقر حلال وطهي طويل لنكهة غنية، مع فاروفا الموز وخلّ الفيناغريت."
     },
-    nutrition: { kcal: 690, carbs: 60, protein: 42, fat: 28 },
+    nutrition: { kcal: 850, carbs: 65, protein: 55, fat: 38 },
     allergens: [],
-    halal: true,
+    tags: ["halal", "gluten"] // por causa da farofa dependendo da farinha
   },
   {
     id: "picanha-grelhada",
-    name: "Picanha Grelhada",
+    category: ["mains", "chef"],
     image: "/images/picanha-grelhada.jpg",
-    category: "chef",
-    tags: ["beef", "halal"],
-    brief: {
+    name: { pt: "Picanha Grelhada", en: "Grilled Picanha", ar: "بيكانيا مشوية" },
+    short: {
       pt: "Com risoto de cogumelos, polenta verde e molho de pimenta do reino.",
       en: "With mushroom risotto, green polenta and black-pepper sauce.",
-      ar: "مع ريزوتو الفطر وبولينتا خضراء وصلصة فلفل أسود.",
+      ar: "مع ريزوتو الفطر وبولينتا خضراء وصلصة الفلفل الأسود."
     },
-    description: {
-      pt: "A picanha, corte-símbolo dos churrascos brasileiros, ganhou fama nos anos 1960 pelo equilíbrio entre maciez e capa de gordura. Selamos em alta temperatura para crosta dourada e suculência.",
-      en: "Picanha — Brazil’s iconic steak — rose in the 1960s for its tender meat and fat cap. We sear hot for a golden crust and juicy center.",
-      ar: "البيكانيا هي قطعة لحم أيقونية في البرازيل تتميّز بطراوتها وغطائها الدهني؛ تُحمر بحرارة عالية لقشرة ذهبية وقلب عصاري.",
+    long: {
+      pt: "A picanha nasce dos churrascos do Sul do Brasil. Corte nobre com capa de gordura que protege e perfuma a carne na brasa — tradição gaúcha. Aqui, grelhada com crosta, servida com risoto de cogumelos e polenta verde.",
+      en: "Picanha is a Southern Brazilian barbecue icon. A noble cut whose fat cap protects and perfumes the meat over fire. Here it’s seared with a crust and served with mushroom risotto and green polenta.",
+      ar: "البيكانيا من رموز الشواء في جنوب البرازيل. طبقة الدهن تحمي اللحم وتمنحه عطراً على النار. نقدّمها محمّرة بقشرة مع ريزوتو الفطر وبولينتا خضراء."
     },
-    nutrition: { kcal: 680, carbs: 35, protein: 55, fat: 34 },
-    allergens: ["milk"],
-    halal: true,
+    nutrition: { kcal: 780, carbs: 52, protein: 46, fat: 40 },
+    allergens: ["dairy"],
+    tags: ["halal"]
   },
   {
     id: "pao-de-queijo",
-    name: "Pão de Queijo",
+    category: ["sides", "vegetarian"],
     image: "/images/pao-de-queijo.jpg",
-    category: "sides",
-    tags: ["vegetarian"],
-    brief: {
+    name: { pt: "Pão de Queijo", en: "Cheese Bread", ar: "خبز الجبن" },
+    short: {
       pt: "Tradicional, macio e quentinho.",
       en: "Traditional, soft and warm.",
-      ar: "خبز الجبن البرازيلي — طري ودافئ.",
+      ar: "تقليدي، طري ودافئ."
     },
-    description: {
-      pt: "Receita mineira com polvilho e queijo curado. Assamos para casquinha fina e miolo elástico.",
-      en: "Minas-style tapioca-starch dough with aged cheese. Baked for thin crust and stretchy crumb.",
-      ar: "وصفة ميناس مع نشا الكسافا وجبن معتّق، تُخبز لقشرة رقيقة وحشوة مطاطية.",
+    long: {
+      pt: "Minas Gerais em forma de pão. Massa de polvilho com queijo curado que estufa e vira casquinha por fora e maciez por dentro.",
+      en: "A bite of Minas Gerais. Cassava starch dough with aged cheese — crisp outside, airy inside.",
+      ar: "لقمة من ولاية ميناس جيرايس. عجين نشا الكسافا مع الجبن المعتّق — قشرة خفيفة وقلب هاش."
     },
-    nutrition: { kcal: 320, carbs: 30, protein: 9, fat: 18 },
-    allergens: ["milk", "eggs"],
-    halal: true,
+    nutrition: { kcal: 280, carbs: 26, protein: 9, fat: 14 },
+    allergens: ["dairy"],
+    tags: ["gluten-free", "vegetarian"]
   },
   {
-    id: "polenta-frita",
-    name: "Polenta Frita",
-    image: "/images/polenta-frita.jpg",
-    category: "sides",
-    tags: [],
-    brief: {
-      pt: "Dourada por fora, cremosa por dentro.",
-      en: "Crispy outside, creamy inside.",
-      ar: "مقرمشة من الخارج وكريمية من الداخل.",
+    id: "moqueca-baiana",
+    category: ["mains", "seafood"],
+    image: "/images/moqueca-baiana.jpg",
+    name: { pt: "Moqueca Baiana", en: "Bahian Moqueca", ar: "موكيكا باهيا" },
+    short: {
+      pt: "Peixe em leite de coco, coentro e dendê. Arroz e farofa.",
+      en: "Fish in coconut milk, cilantro and dendê. With rice and farofa.",
+      ar: "سمك في حليب جوز الهند وكزبرة ودنْدي. مع الأرز والفاروفا."
     },
-    description: {
-      pt: "Herança ítalo-brasileira: polenta firme cortada e frita, servida com molho de tomate da casa.",
-      en: "Italo-Brazilian staple: firm polenta cut and fried, served with house tomato sauce.",
-      ar: "وصفة إيطالية-برازيلية: بولينتا صلبة تُقطع وتُقلى مع صلصة طماطم منزلية.",
+    long: {
+      pt: "Fusão afro-indígena com leite de coco e azeite de dendê. Cozimento gentil em panela de barro, mantendo o peixe suculento e aromático.",
+      en: "Afro-indigenous fusion with coconut milk and dendê oil. Gently cooked in clay pot, keeping the fish juicy and aromatic.",
+      ar: "دمج إفريقي-سكان أصليين بحليب جوز الهند وزيت الدنْدي. يُطهى برفق في قدر فخاري ليحافظ على عصارة السمك وعطره."
     },
-    nutrition: { kcal: 360, carbs: 48, protein: 6, fat: 15 },
-    allergens: [],
-    halal: true,
+    nutrition: { kcal: 620, carbs: 44, protein: 38, fat: 28 },
+    allergens: ["seafood"],
+    tags: ["halal", "seafood"]
   },
   {
     id: "encanto-de-coco",
-    name: "Encanto de Coco",
+    category: ["desserts"],
     image: "/images/encanto-de-coco.jpg",
-    category: "desserts",
-    tags: ["vegetarian"],
-    brief: {
+    name: { pt: "Encanto de Coco", en: "Coconut Delight", ar: "حلوى جوز الهند" },
+    short: {
       pt: "Pudim de coco com caramelo claro.",
-      en: "Coconut flan with light caramel.",
-      ar: "فلان جوز الهند بكراميل خفيف.",
+      en: "Coconut custard with light caramel.",
+      ar: "كاسترد جوز الهند بكراميل خفيف."
     },
-    description: {
-      pt: "Sobremesa afetiva de festas populares. Textura sedosa, doçura equilibrada e coco fresco.",
-      en: "A festive classic: silky texture, balanced sweetness and fresh coconut.",
-      ar: "حلوى شعبية ذات قوام ناعم وحلاوة متوازنة وجوز هند طازج.",
+    long: {
+      pt: "Sobremesa fresca e cremosa, lembrança das casas do litoral brasileiro. Leve, aromática e final perfeita para o menu.",
+      en: "Silky and fresh — a memory of Brazil’s coast homes. Light, aromatic, a perfect finish.",
+      ar: "حلوى ناعمة ومنعشة تذكّر ببيوت الساحل البرازيلي — خفيفة وعطرية وخاتمة مثالية."
     },
-    nutrition: { kcal: 410, carbs: 44, protein: 8, fat: 22 },
-    allergens: ["milk", "eggs"],
-    halal: true,
-  },
-  {
-    id: "doce-da-roca-com-gelo",
-    name: "Doce da Roça com Gelo",
-    image: "/images/doce-da-roca-com-gelo.jpg",
-    category: "desserts",
-    tags: ["vegetarian"],
-    brief: {
-      pt: "Abóbora cremosa com especiarias e sorvete artesanal.",
-      en: "Spiced creamy pumpkin with artisanal ice cream.",
-      ar: "قرع كريمي متبّل مع آيس كريم مصنوع يدوياً.",
-    },
-    description: {
-      pt: "Abóbora cozida lentamente com cravo e canela, lembrança das cozinhas de fazenda.",
-      en: "Pumpkin slowly cooked with clove and cinnamon — farm kitchen memories.",
-      ar: "قرع يُطهى ببطء مع القرنفل والقرفة على طريقة المزارع.",
-    },
-    nutrition: { kcal: 380, carbs: 55, protein: 6, fat: 14 },
-    allergens: ["milk"],
-    halal: true,
-  },
-  {
-    id: "pamonha",
-    name: "Pamonha (Sazonal)",
-    image: "/images/pamonha.jpg",
-    category: "seasonal",
-    tags: ["vegetarian"],
-    brief: {
-      pt: "Clássico de milho verde — doce ou salgada.",
-      en: "Green-corn classic — sweet or savory.",
-      ar: "طبق الذرة الخضراء الكلاسيكي — حلو أو مالح.",
-    },
-    description: {
-      pt: "Milho ralado fresco, cozido em palha. Tradição junina que perfuma a casa inteira.",
-      en: "Fresh grated corn cooked in husk. A June-festival tradition.",
-      ar: "ذرة طازجة مبشورة تُطهى داخل القشور — تقليد مهرجانات يونيو.",
-    },
-    nutrition: { kcal: 300, carbs: 58, protein: 6, fat: 6 },
-    allergens: [],
-    halal: true,
+    nutrition: { kcal: 430, carbs: 50, protein: 7, fat: 22 },
+    allergens: ["dairy"],
+    tags: []
   },
   {
     id: "sol-do-cerrado",
-    name: "Sol do Cerrado",
+    category: ["beverages"],
     image: "/images/sol-do-cerrado.jpg",
-    category: "beverages",
-    tags: [],
-    brief: {
+    name: { pt: "Sol do Cerrado", en: "Savanna Sun", ar: "شمس السافانا" },
+    short: {
       pt: "Manga com maracujá, hortelã e toque cítrico.",
-      en: "Mango & passion fruit with mint and citrus.",
-      ar: "مانجو مع فاكهة العاطفة والنعناع ولمسة حمضية.",
+      en: "Mango & passionfruit, mint and citrus.",
+      ar: "مانجو وباشن فروت مع نعناع ولمسة حمضية."
     },
-    description: {
-      pt: "Refresco sem álcool que homenageia frutas do cerrado.",
-      en: "Alcohol-free refresher honoring Brazilian savanna fruits.",
-      ar: "مشروب منعش دون كحول يحتفي بثمار السافانا البرازيلية.",
+    long: {
+      pt: "Refresco não alcoólico inspirado no bioma do Cerrado. Frutado, aromático e vibrante.",
+      en: "Non-alcoholic refresher inspired by the Cerrado biome. Fruity, aromatic and vibrant.",
+      ar: "مشروب غير كحولي مستوحى من بيئة السافانا البرازيلية. فواكه وعطر وحيوية."
     },
     nutrition: { kcal: 160, carbs: 38, protein: 1, fat: 0 },
     allergens: [],
-    halal: true,
-  },
-  {
-    id: "uva-limao-gelo",
-    name: "Uva & Limão Gelo",
-    image: "/images/uva-limao-gelo.jpg",
-    category: "beverages",
-    tags: [],
-    brief: {
-      pt: "Suco de uva integral com limão e hortelã.",
-      en: "Pure grape juice with lemon and mint.",
-      ar: "عصير عنب طبيعي مع ليمون ونعناع.",
-    },
-    description: {
-      pt: "Clássico sem álcool, cítrico e perfumado.",
-      en: "A classic alcohol-free, citrusy and aromatic.",
-      ar: "منعش وخالٍ من الكحول بنفحات حمضية وعطرية.",
-    },
-    nutrition: { kcal: 150, carbs: 36, protein: 1, fat: 0 },
-    allergens: [],
-    halal: true,
+    tags: ["vegan", "halal"]
   }
 ];
