@@ -1,4 +1,3 @@
-// src/i18n.js
 export const LOCALES = { PT: "pt", EN: "en", AR: "ar" };
 
 export const STRINGS = {
@@ -7,68 +6,52 @@ export const STRINGS = {
     nav: { about: "Sobre", menu: "Menu", gallery: "Galeria", location: "Localização", contact: "Contato" },
     hero: {
       title: "Sabores brasileiros, calor de família",
-      blurb: "Restaurante familiar no Qatar. 20+ anos de hospitalidade, fogão a lenha e raízes brasileiras.",
+      subtitle:
+        "Restaurante familiar no Qatar. 20+ anos de hospitalidade, fogão a lenha e raízes brasileiras.",
       cta: "Ver Menu"
     },
-    sections: {
+    badges: {
+      mains: "Pratos Principais", sides: "Acompanhamentos", desserts: "Sobremesas",
+      beverages: "Bebidas", seasonal: "Sazonal", chef: "Do Chef",
+      halal: "Halal", beef: "Carne", seafood: "Mar", veg: "Veg", gluten: "Glúten", dairy: "Lácteos", nuts: "Castanhas"
+    },
+    pages: {
       about: {
-        title: "Sobre nós",
-        lead:
-          "A Panela de Barro nasce do fogão à lenha e da memória. Trazemos técnicas e ingredientes do interior do Brasil com hospitalidade de família.",
-        story1:
-          "O proprietário **Quessi Jhones** atuou 10 anos em hospitalidade, sendo 6 anos focado em cozinha brasileira entre Abu Dhabi e Qatar. Em Foz do Iguaçu, comandou um restaurante de comida caipira com a mãe **Cleusa** e o irmão **Alex**.",
-        story2:
-          "Nascido em Rondônia e criado na fazenda, Quessi aprendeu desde cedo sobre a essência do ingrediente — milho, mandioca, café, feijão — e o respeito ao tempo do fogo. Essa raiz chega ao Qatar em um cardápio 100% halal, sem álcool e sem porco.",
-        teamTitle: "Nossa equipe",
-        ownerTitle: "Proprietário",
-        headChefTitle: "Head Chef",
-        chefMatriarchTitle: "Cozinheira-mestra",
-        alexBio:
-          "**Alex** — mais de 10 anos de cozinha brasileira e italiana. Forjado ao lado da família, lidera a execução e a padronização dos preparos.",
-        cleusaBio:
-          "**Cleusa Gonçalves** — mais de 25 anos de cozinha. Cozinha desde os 12, no fogão a lenha da avó (de ascendência italiana). Guardiã de técnicas e temperos mineiros."
-      },
-      menu: {
-        title: "Menu",
-        filters: {
-          all: "Todos",
-          mains: "Pratos Principais",
-          sides: "Acompanhamentos",
-          desserts: "Sobremesas",
-          beverages: "Bebidas",
-          seasonal: "Sazonal",
-          chef: "Do Chef"
-        },
-        nutrition: { kcal: "kcal", carbs: "carbs", protein: "proteína", fat: "gordura" },
-        allergensKey: "Alergênicos",
-        tags: {
-          halal: "Halal",
-          gluten: "Glúten",
-          dairy: "Lácteos",
-          nuts: "Castanhas",
-          soy: "Soja",
-          spicy: "Picante",
-          seafood: "Frutos do mar",
-          vegetarian: "Vegetariano",
-          vegan: "Vegano"
-        },
-        readMore: "Ver detalhes",
-        close: "Fechar"
+        title: "Sobre o Panela de Barro",
+        intro:
+          "Panela de Barro nasce do desejo de unir Brasil e Oriente Médio através da comida. Cozinhamos em fogo e carinho, como nas fazendas do interior.",
+        whyClay:
+          "Por que panela de barro? Do tacho indígena à mesa mineira, o barro atravessa séculos no Brasil, preserva umidade, distribui o calor e realça temperos. É tradição viva também em culturas árabes e indianas — um elo perfeito com o Qatar.",
+        foundersTitle: "Nossa Família de Cozinha",
+        owners: [
+          {
+            name: "Quessi Jhones — Proprietário & Chef",
+            img: "/images/placeholder.jpg",
+            bio:
+              "10 anos de trajetória, 6 deles como chef de cozinha brasileira em Abu Dhabi e Qatar. Filho de Rondônia, criado em fazenda, aprendeu desde cedo a plantar, colher e cozinhar no fogão a lenha. Foi sócio de um restaurante caipira em Foz do Iguaçu ao lado da mãe, Cleusa, e do irmão, Alex. Hoje traz ao Qatar a verdadeira gastronomia brasileira — calor humano, ingredientes honestos e técnica."
+          },
+          {
+            name: "Alex — Head Chef",
+            img: "/images/placeholder.jpg",
+            bio:
+              "Mais de 10 anos na cozinha brasileira e italiana. Experiência de fogão a lenha, massas e assados. Cresceu na mesma cozinha familiar, lapidando o respeito aos ingredientes e o gosto por sabor profundo."
+          },
+          {
+            name: "Cleusa Gonçalves — Chef Matriarca",
+            img: "/images/placeholder.jpg",
+            bio:
+              "Cozinheira há 25+ anos (na verdade, desde os 12). Aprendeu com a mãe, de descendência italiana, e levou a alma mineira para o tacho. A base dos nossos caldos, farofas, doces e do tempero que abraça."
+          }
+        ]
       },
       gallery: { title: "Galeria" },
-      location: {
-        title: "Localização",
-        addr: "Barwa Town, Doha, Qatar",
-        hint: "Clique no mapa para traçar rota."
-      },
-      contact: {
-        title: "Contato",
-        email: "E-mail",
-        phone: "Telefone",
-        reviewTitle: "Avaliações",
-        reviewCTA: "Deixe sua avaliação"
-      }
-    }
+      location: { title: "Localização", where: "Barwa Town, Doha, Qatar (Baraha Town)", soon: "Mapa interativo em breve." },
+      contact: { title: "Contato", email: "E-mail", phone: "Telefone", review: "Deixe sua avaliação" },
+      menu: { title: "Menu", filters: { all: "Todos" } }
+    },
+    nutrition: { kcal: "kcal", carbs: "carbo", protein: "proteína", fat: "gordura" },
+    readMore: "Ver detalhes",
+    close: "Fechar"
   },
 
   en: {
@@ -76,126 +59,110 @@ export const STRINGS = {
     nav: { about: "About", menu: "Menu", gallery: "Gallery", location: "Location", contact: "Contact" },
     hero: {
       title: "Brazilian flavors, family warmth",
-      blurb: "Family-run restaurant in Qatar. 20+ years in hospitality, wood-fire cooking and Brazilian roots.",
+      subtitle:
+        "Family-run restaurant in Qatar. 20+ years in hospitality, wood-fire cooking and Brazilian roots.",
       cta: "View Menu"
     },
-    sections: {
+    badges: {
+      mains: "Mains", sides: "Sides", desserts: "Desserts",
+      beverages: "Beverages", seasonal: "Seasonal", chef: "Chef’s",
+      halal: "Halal", beef: "Beef", seafood: "Sea", veg: "Veg", gluten: "Gluten", dairy: "Dairy", nuts: "Nuts"
+    },
+    pages: {
       about: {
-        title: "About us",
-        lead:
-          "Panela de Barro is born from wood-fire cooking and memory. We bring countryside techniques and Brazilian ingredients with family hospitality.",
-        story1:
-          "Owner **Quessi Jhones** has 10 years in hospitality, 6 focused on Brazilian cuisine across Abu Dhabi and Qatar. In Foz do Iguaçu, he ran a rustic restaurant with his mother **Cleusa** and his brother **Alex**.",
-        story2:
-          "Raised on a farm in Rondônia, Quessi learned early the essence of ingredients — corn, cassava, coffee, beans — and respect for fire. Our menu is 100% halal, no alcohol and no pork.",
-        teamTitle: "Our team",
-        ownerTitle: "Owner",
-        headChefTitle: "Head Chef",
-        chefMatriarchTitle: "Master Cook",
-        alexBio:
-          "**Alex** — 10+ years in Brazilian and Italian cuisine. Trained alongside the family, leads execution and standards in the kitchen.",
-        cleusaBio:
-          "**Cleusa Gonçalves** — 25+ years cooking. Started at 12 on her grandmother’s wood stove (Italian ancestry). Keeper of Minas flavors."
-      },
-      menu: {
-        title: "Menu",
-        filters: {
-          all: "All",
-          mains: "Mains",
-          sides: "Sides",
-          desserts: "Desserts",
-          beverages: "Beverages",
-          seasonal: "Seasonal",
-          chef: "Chef's"
-        },
-        nutrition: { kcal: "kcal", carbs: "carbs", protein: "protein", fat: "fat" },
-        allergensKey: "Allergens",
-        tags: {
-          halal: "Halal",
-          gluten: "Gluten",
-          dairy: "Dairy",
-          nuts: "Nuts",
-          soy: "Soy",
-          spicy: "Spicy",
-          seafood: "Seafood",
-          vegetarian: "Vegetarian",
-          vegan: "Vegan"
-        },
-        readMore: "View details",
-        close: "Close"
+        title: "About Panela de Barro",
+        intro:
+          "Panela de Barro is our bridge between Brazil and the Middle East. We cook over fire and care — like in the Brazilian countryside.",
+        whyClay:
+          "Why clay pots? From indigenous pots to Minas’ kitchens, clay has seasoned Brazil for centuries. It holds moisture, spreads heat gently and lifts spices — also a living tradition across Arab and Indian cuisines, a perfect link with Qatar.",
+        foundersTitle: "Our Kitchen Family",
+        owners: [
+          {
+            name: "Quessi Jhones — Owner & Chef",
+            img: "/images/placeholder.jpg",
+            bio:
+              "10 years in the craft; 6 as a Brazilian chef in Abu Dhabi and Qatar. Raised on a farm in Rondônia, he learned to plant, harvest and cook over wood-fire. Co-owned a countryside restaurant in Foz do Iguaçu with his mother, Cleusa, and brother, Alex."
+          },
+          {
+            name: "Alex — Head Chef",
+            img: "/images/placeholder.jpg",
+            bio:
+              "10+ years in Brazilian and Italian kitchens. Wood-fire, roasts and pasta — and the same family kitchen as a school."
+          },
+          {
+            name: "Cleusa Gonçalves — Matriarch Chef",
+            img: "/images/placeholder.jpg",
+            bio:
+              "25+ years cooking (since age 12) — Italian roots, Minas soul. The backbone of our stocks, farofas and sweets."
+          }
+        ]
       },
       gallery: { title: "Gallery" },
-      location: {
-        title: "Location",
-        addr: "Barwa Town, Doha, Qatar",
-        hint: "Click the map to open directions."
-      },
-      contact: {
-        title: "Contact",
-        email: "Email",
-        phone: "Phone",
-        reviewTitle: "Reviews",
-        reviewCTA: "Leave a review"
-      }
-    }
+      location: { title: "Location", where: "Barwa Town, Doha, Qatar (Baraha Town)", soon: "Interactive map coming soon." },
+      contact: { title: "Contact", email: "Email", phone: "Phone", review: "Leave a review" },
+      menu: { title: "Menu", filters: { all: "All" } }
+    },
+    nutrition: { kcal: "kcal", carbs: "carbs", protein: "protein", fat: "fat" },
+    readMore: "View details",
+    close: "Close"
   },
 
   ar: {
-    brand: "‏Panela de Barro",
-    nav: { about: "نبذة", menu: "القائمة", gallery: "المعرض", location: "الموقع", contact: "التواصل" },
+    brand: "قدر من الفخار",
+    nav: { about: "نبذة", menu: "القائمة", gallery: "المعرض", location: "الموقع", contact: "تواصل" },
     hero: {
       title: "نكهات برازيلية ودفء العائلة",
-      blurb: "مطعم عائلي في قطر. أكثر من 20 سنة في الضيافة وطهي الحطب وجذور برازيلية.",
+      subtitle: "مطعم عائلي في قطر، خبرة تفوق 20 عامًا ومطبخ نار الحطب وجذور برازيلية.",
       cta: "عرض القائمة"
     },
-    sections: {
+    badges: {
+      mains: "الأطباق الرئيسية", sides: "المقبلات", desserts: "الحلويات",
+      beverages: "المشروبات", seasonal: "موسمي", chef: "اختيار الشيف",
+      halal: "حلال", beef: "لحم", seafood: "بحري", veg: "نباتي", gluten: "غلوتين", dairy: "ألبان", nuts: "مكسرات"
+    },
+    pages: {
       about: {
-        title: "من نحن",
-        lead:
-          "وُلد Panela de Barro من نار الحطب والذكريات. نقدم تقنيات الريف ومكونات البرازيل بضيافة عائلية.",
-        story1:
-          "المالك **كويِسّي جونِس** لديه 10 سنوات في الضيافة، منها 6 سنوات في المطبخ البرازيلي بين أبوظبي وقطر. في فوز دو إيغواسو، أدار مطعماً ريفياً مع والدته **كلوزا** وأخيه **أليكس**.",
-        story2:
-          "نشأ في رونديًّا على مزرعة، فتعلّم مبكرًا جوهر المكونات — الذرة والكسافا والقهوة والفاصوليا — واحترام نار الحطب. قائمتنا حلال 100% بدون كحول وبدون لحم خنزير.",
-        teamTitle: "فريقنا",
-        ownerTitle: "المالك",
-        headChefTitle: "الشيف التنفيذي",
-        chefMatriarchTitle: "طاهية المنزل",
-        alexBio:
-          "**أليكس** — أكثر من 10 سنوات في المطبخ البرازيلي والإيطالي. يقود التنفيذ وتوحيد المعايير.",
-        cleusaBio:
-          "**كلوزا غونزالفِس** — أكثر من 25 سنة في الطبخ. بدأت في سن 12 على موقد الحطب لدى جدتها ذات الأصول الإيطالية."
-      },
-      menu: {
-        title: "القائمة",
-        filters: {
-          all: "الكل",
-          mains: "الأطباق الرئيسية",
-          sides: "المقبلات",
-          desserts: "الحلويات",
-          beverages: "المشروبات",
-          seasonal: "موسمي",
-          chef: "اختيار الشيف"
-        },
-        nutrition: { kcal: "سعر حراري", carbs: "كربوهيدرات", protein: "بروتين", fat: "دهون" },
-        allergensKey: "المسببات التحسسية",
-        tags: {
-          halal: "حلال",
-          gluten: "جلوتين",
-          dairy: "ألبان",
-          nuts: "مكسرات",
-          soy: "صويا",
-          spicy: "حار",
-          seafood: "مأكولات بحرية",
-          vegetarian: "نباتي",
-          vegan: "نباتي صرف"
-        },
-        readMore: "التفاصيل",
-        close: "إغلاق"
+        title: "عن مطعم قدر الفخار",
+        intro:
+          "نربط البرازيل بالشرق الأوسط عبر الطعام. نطبخ على نار الحطب وبالاهتمام كما في الريف البرازيلي.",
+        whyClay:
+          "لماذا أواني الفخار؟ من أواني السكان الأصليين إلى مطابخ ميناس، يحفظ الفخار النكهة والرطوبة، وهو إرث حاضر كذلك في الثقافتين العربية والهندية.",
+        foundersTitle: "عائلتنا في المطبخ",
+        owners: [
+          { name: "Quessi Jhones — المالك والشيف", img: "/images/placeholder.jpg", bio: "10 سنوات خبرة، منها 6 سنوات شيف برازيلي في أبوظبي وقطر..." },
+          { name: "Alex — الشيف التنفيذي", img: "/images/placeholder.jpg", bio: "أكثر من 10 سنوات في المطبخ البرازيلي والإيطالي..." },
+          { name: "Cleusa Gonçalves — الشيف الأم", img: "/images/placeholder.jpg", bio: "أكثر من 25 سنة في الطبخ منذ سن 12..." }
+        ]
       },
       gallery: { title: "المعرض" },
-      location: { title: "الموقع", addr: "باروا تاون، الدوحة، قطر", hint: "اضغط على الخريطة لفتح الاتجاهات." },
-      contact: { title: "التواصل", email: "البريد", phone: "الهاتف", reviewTitle: "المراجعات", reviewCTA: "أرسل تقييمك" }
-    }
+      location: { title: "الموقع", where: "باروا تاون، الدوحة، قطر (باراحة تاون)", soon: "الخريطة التفاعلية قريبًا." },
+      contact: { title: "تواصل", email: "البريد", phone: "الهاتف", review: "اترك تقييمك" },
+      menu: { title: "القائمة", filters: { all: "الكل" } }
+    },
+    nutrition: { kcal: "سعرة", carbs: "كربوه", protein: "بروتين", fat: "دهون" },
+    readMore: "التفاصيل",
+    close: "إغلاق"
   }
 };
+
+export function getLocale() {
+  const q = new URLSearchParams(location.search);
+  const fromQuery = q.get("lang");
+  if (fromQuery && STRINGS[fromQuery]) return fromQuery;
+  return localStorage.getItem("lang") || LOCALES.PT;
+}
+
+export function setLocale(lang) {
+  if (STRINGS[lang]) {
+    localStorage.setItem("lang", lang);
+    const url = new URL(location.href);
+    url.searchParams.set("lang", lang);
+    history.replaceState({}, "", url.toString());
+  }
+}
+
+export function t(path) {
+  const lang = getLocale();
+  const obj = STRINGS[lang];
+  return path.split(".").reduce((acc, key) => (acc ? acc[key] : undefined), obj);
+}
