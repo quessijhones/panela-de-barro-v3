@@ -74,7 +74,7 @@ Nossa casa
 • Ambiente acolhedor — elegância simples, jeito de casa de família.
 
 Equipe
-Chef-proprietário Quessi Jhones, nascido em Rondônia. Cresceu na fazenda entre café, milho, feijão e mandioca, aprendendo a valorizar o ingrediente e o fogão a lenha. Com a mãe Dona Cleuza e o irmão Alex (Head Chef, 10+ anos na cozinha brasileira e italiana), comandou um restaurante caipira em Foz do Iguaçu. Hoje, trazem ao Qatar a essência do Brasil: hospitalidade e panela de barro.`,
+Chef-proprietário Quessi Jhones, nascido em Rondônia. Cresceu na fazenda entre café, milho, feijão e mandioca, aprendendo a valorizar o ingrediente e o fogão a lenha. Com a mãe Dona Cleusa e o irmão Alex (Head Chef, 10+ anos na cozinha brasileira e italiana), comandou um restaurante caipira em Foz do Iguaçu. Hoje, trazem ao Qatar a essência do Brasil: hospitalidade e panela de barro.`,
     wood_title:"Fogão a Lenha",
     wood_long:
 `O fogão a lenha moldou o paladar brasileiro. No campo, era centro da casa: aquecia, reunia e dava tempo para os sabores amadurecerem. A lenha queima lenta, as panelas vibram com calor constante e suave — feijões ficam cremosos, carnes se rendem, farofas ganham perfume.
@@ -114,7 +114,7 @@ Why “Panela de Barro”?
 Clay pots predate Brazil itself: indigenous peoples shaped earth into vessels; with the African diaspora, slow stews and feijoadas flourished; dendê met fish and moqueca was born. Clay is a symbol of mixture, creativity and memory. It doesn’t rush food — it lets flavors talk.
 
 Team
-Chef-owner Quessi Jhones, from Rondônia, raised on a farm among coffee, corn, beans and cassava. With his mother Dona Cleuza and brother Alex (Head Chef), he ran a caipira restaurant in Foz do Iguaçu. Now we bring Brazil’s essence to Qatar.`,
+Chef-owner Quessi Jhones, from Rondônia, raised on a farm among coffee, corn, beans and cassava. With his mother Dona Cleusa and brother Alex (Head Chef), he ran a caipira restaurant in Foz do Iguaçu. Now we bring Brazil’s essence to Qatar.`,
     wood_title:"Wood-Fire",
     wood_long:
 `Wood-fire shaped Brazilian taste. It keeps a steady, gentle heat — beans turn creamy, meats relax, farofas get perfumed. We cook with patience and respect for the ingredient, with a subtle kiss of smoke.`
