@@ -1,381 +1,307 @@
 import React, { useEffect, useMemo, useState } from "react";
-import { getLang, setLang, t, trDish } from "./i18n";
-import { MENU, CATS } from "./menuData";
+import { LOCALES, getLang, setLang, t } from "./i18n";
+import MENU from "./menuData"; // seu arquivo atual
+// imagens imersivas (já na pasta public/immersive)
+const IMMS = ["amazonia","cerrado","lencois","litoral","serra"].map(n=>`/immersive/${n}.jpg`);
 
-const useHashRoute = () => {
-  const [route, setRoute] = useState(() => (location.hash || "#/home"));
-  useEffect(() => {
-    const onHash = () => setRoute(location.hash || "#/home");
+function usePage() {
+  const hashToPage = () => {
+    const h = (location.hash || "#/").replace("#/","");
+    return h || "home";
+  };
+  const [page,setPage] = useState(hashToPage());
+  useEffect(()=>{
+    const onHash = ()=> setPage(hashToPage());
     window.addEventListener("hashchange", onHash);
-    return () => window.removeEventListener("hashchange", onHash);
-  }, []);
-  return route.replace("#", "");
-};
+    return ()=> window.removeEventListener("hashchange", onHash);
+  },[]);
+  return [page,setPage];
+}
+function useLang() {
+  const [lang,setL] = useState(getLang());
+  useEffect(()=>{
+    const onChange = ()=> setL(getLang());
+    window.addEventListener("langchange", onChange);
+    return ()=> window.removeEventListener("langchange", onChange);
+  },[]);
+  return lang;
+}
 
 const Brand = () => (
-  <div className="brand">
+  <div className="brand" onClick={()=>{location.hash="#/";}}>
     <img src="/logo.png" alt="logo" />
     <span>Panela de Barro</span>
   </div>
 );
 
-const LangSwitch = () => {
-  const current = getLang();
+function Langs() {
+  const lang = useLang();
   return (
-    <div className="langs">
-      {["pt", "en", "ar"].map((l) => (
-        <button
-          key={l}
-          className={current === l ? "chip active" : "chip"}
-          onClick={() => setLang(l)}
-          aria-label={l.toUpperCase()}
-        >
-          {t(`lang_${l}`)}
-        </button>
+    <div className="langs" role="group" aria-label="language">
+      {Object.values(LOCALES).map(l=>(
+        <button key={l} className={`chip ${lang===l?"active":""}`}
+          onClick={()=>setLang(l)}>{t("lang_"+l)}</button>
       ))}
     </div>
   );
-};
+}
 
-const Nav = () => (
-  <nav className="topnav">
-    <Brand />
-    <ul>
-      <li><a href="#/about">{t("nav_about")}</a></li>
-      <li><a href="#/menu">{t("nav_menu")}</a></li>
-      <li><a href="#/gallery">{t("nav_gallery")}</a></li>
-      <li><a href="#/location">{t("nav_location")}</a></li>
-      <li><a href="#/contact">{t("nav_contact")}</a></li>
-    </ul>
-    <LangSwitch />
-  </nav>
-);
-
-// ====== HERO + smoke ======
-const Hero = () => (
-  <section className="hero">
-    <div className="smoke" aria-hidden="true"></div>
-    <div className="hero-inner">
-      <h1 className="title">{t("hero_title")}</h1>
-      <p className="sub">{t("hero_sub")}</p>
-      <p className="soon">{t("coming_soon")}</p>
-      <a
-        className="btn"
-        href="#/menu"
-        target="_blank"
-        rel="noreferrer"
-      >
-        {t("hero_cta")}
-      </a>
-    </div>
-  </section>
-);
-
-// ====== HOME preview ======
-const HomePreview = () => {
-  // 6 primeiros itens para preview
-  const preview = useMemo(() => MENU.slice(0, 6), []);
+function TopNav() {
   return (
-    <section className="wrap">
-      <h2>{t("menu_preview")}</h2>
-      <div className="grid">
-        {preview.map((d) => (
-          <DishCard key={d.id} dish={d} />
-        ))}
+    <nav className="topnav">
+      <Brand/>
+      <ul>
+        <li><a href="#/about">{t("nav_about")}</a></li>
+        <li><a href="#/menu">{t("nav_menu")}</a></li>
+        <li><a href="#/gallery">{t("nav_gallery")}</a></li>
+        <li><a href="#/wood">{t("nav_wood")}</a></li>
+        <li><a href="#/location">{t("nav_location")}</a></li>
+        <li><a href="#/contact">{t("nav_contact")}</a></li>
+      </ul>
+      <Langs/>
+    </nav>
+  );
+}
+
+/* ---------- HERO com splash e fumaça ---------- */
+function Splash({done}) {
+  return (
+    <div className={`splash ${done?"hide":""}`}>
+      <img src="/logo.png" alt="Panela de Barro" />
+      <div className="splash-smoke"></div>
+    </div>
+  );
+}
+function Hero() {
+  const lang = useLang();
+  return (
+    <header className="hero">
+      <div className="smoke"></div>
+      <div className="hero-inner">
+        <h1 className="title">{t("hero_title")}</h1>
+        <p className="sub">{t("hero_sub")}</p>
+        <p className="soon">{t("coming_soon")}</p>
+        <div style={{display:"flex",gap:12,justifyContent:"center"}}>
+          <a className="btn" onClick={()=>{
+            const base = location.origin + location.pathname;
+            const url = `${base}?lang=${getLang()}#/menu`;
+            window.open(url,"_blank");
+          }}>{t("hero_cta")}</a>
+          <a className="btn ghost" href="#/about">{t("nav_about")}</a>
+        </div>
       </div>
-
-      {/* Seções imersivas de fundo */}
-      <ImmersiveStrip />
-    </section>
+    </header>
   );
-};
+}
 
-const ImmersiveStrip = () => {
-  const imgs = [
-    "/immersive/amazonia.jpg",
-    "/immersive/cerrado.jpg",
-    "/immersive/lencois.jpg",
-    "/immersive/litoral.jpg",
-    "/immersive/serra.jpg",
-  ];
-  // IntersectionObserver para efeito de parallax simples
-  useEffect(() => {
-    const sections = document.querySelectorAll(".immersive");
-    const io = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((e) => {
-          if (e.isIntersecting) e.target.classList.add("show");
-        });
-      },
-      { threshold: 0.2 }
-    );
-    sections.forEach((s) => io.observe(s));
-    return () => io.disconnect();
-  }, []);
-
-  return (
-    <div className="immersive-stack">
-      {imgs.map((src, i) => (
-        <section
-          key={src}
-          className="immersive"
-          style={{ "--bg": `url(${src})` }}
-        >
-          <div className="immersive-text">
-            <h3>Brasil • {i + 1}</h3>
-            <p>
-              {i === 0
-                ? "Amazônia – frutas, castanhas e rios que inspiram nossos sucos."
-                : i === 1
-                ? "Cerrado – doçura do caju e do pequi, energia do interior."
-                : i === 2
-                ? "Lençóis – brancos e azuis, lembrando o sal e o vento do Nordeste."
-                : i === 3
-                ? "Litoral – perfumes da moqueca e do coentro fresco."
-                : "Serra – friozinho que pede caldo e panela de barro."}
-            </p>
-          </div>
-        </section>
-      ))}
-    </div>
-  );
-};
-
-// ====== MENU PAGE ======
-const Filters = ({ value, onChange }) => {
-  const chips = [
-    ["all", t("all")],
-    [CATS.MAINS, t("mains")],
-    [CATS.SIDES, t("sides")],
-    [CATS.DESSERTS, t("desserts")],
-    [CATS.BEV, t("beverages")],
-    [CATS.SEASONAL, t("seasonal")],
-    [CATS.CHEF, t("chefs")],
+/* ---------- HOME: imersivo ---------- */
+function ImmersiveStack() {
+  useEffect(()=>{
+    const obs = new IntersectionObserver((es)=>{
+      es.forEach(e=>{
+        if(e.isIntersecting) e.target.classList.add("show");
+      });
+    },{threshold:.2});
+    document.querySelectorAll(".immersive").forEach(el=>obs.observe(el));
+    return ()=> obs.disconnect();
+  },[]);
+  const captions = [
+    "Amazônia – sabores de floresta e rios",
+    "Cerrado – frutos, castanhas e mel",
+    "Lençóis – simplicidade que encanta",
+    "Litoral – mar, brisa e moquecas",
+    "Serra – fogão a lenha e conforto"
   ];
   return (
-    <div className="filters">
-      {chips.map(([k, label]) => (
-        <button
-          key={k}
-          className={value === k ? "chip active" : "chip"}
-          onClick={() => onChange(k)}
-        >
-          {label}
-        </button>
-      ))}
-    </div>
-  );
-};
-
-const DishCard = ({ dish, onClick }) => (
-  <article className="card" onClick={() => onClick?.(dish)}>
-    <div className="thumb" style={{ backgroundImage: `url(${dish.image})` }} />
-    <div className="body">
-      <h3>{trDish(dish, "name")}</h3>
-      {dish.badge?.includes("mains") && <span className="chip">{t("mains")}</span>}
-      <p className="muted">{trDish(dish, "short")}</p>
-      <div className="tags">
-        {dish.badge?.map((b) => (
-          <span key={b} className="pill">{t(b)}</span>
-        ))}
-      </div>
-    </div>
-  </article>
-);
-
-const DishModal = ({ dish, onClose }) =>
-  !dish ? null : (
-    <div className="modal" onClick={onClose}>
-      <div className="modal-card" onClick={(e) => e.stopPropagation()}>
-        <img src={dish.image} alt={trDish(dish, "name")} />
-        <div className="modal-body">
-          <h3>{trDish(dish, "name")}</h3>
-          <div className="tags">
-            {dish.badge?.map((b) => (
-              <span key={b} className="pill">{t(b)}</span>
-            ))}
-          </div>
-          <p>{trDish(dish, "long")}</p>
-
-          <h4>{t("nutrition")}</h4>
-          <ul className="nutri">
-            <li>{t("kcal")}: {dish.nutri?.kcal ?? 0}</li>
-            <li>{t("carbs")}: {dish.nutri?.carbs ?? 0} g</li>
-            <li>{t("protein")}: {dish.nutri?.protein ?? 0} g</li>
-            <li>{t("fat")}: {dish.nutri?.fat ?? 0} g</li>
-          </ul>
-
-          <button className="btn ghost" onClick={onClose}>{t("close")}</button>
+    <section className="wrap immersive-stack">
+      {IMMS.map((src,i)=>(
+        <div key={i} className="immersive" style={{"--bg":`url(${src})`}}>
+          <div className="immersive-text">{captions[i]}</div>
         </div>
-      </div>
-    </div>
-  );
-
-const MenuPage = () => {
-  const [filter, setFilter] = useState("all");
-  const [open, setOpen] = useState(null);
-
-  const list = useMemo(
-    () => (filter === "all" ? MENU : MENU.filter((d) => d.category === filter)),
-    [filter]
-  );
-
-  return (
-    <section className="wrap">
-      <h2>{t("menu")}</h2>
-      <Filters value={filter} onChange={setFilter} />
-      <div className="grid">
-        {list.map((d) => (
-          <DishCard key={d.id} dish={d} onClick={setOpen} />
-        ))}
-      </div>
-      <DishModal dish={open} onClose={() => setOpen(null)} />
+      ))}
     </section>
   );
-};
-
-// ====== GALLERY ======
-const Gallery = () => (
-  <section className="wrap">
-    <h2>{t("nav_gallery")}</h2>
-    <div className="masonry">
-      {MENU.slice(0, 18).map((d) => (
-        <img key={d.id} src={d.image} alt={trDish(d, "name")} loading="lazy" />
-      ))}
-    </div>
-  </section>
-);
-
-// ====== LOCATION ======
-const Location = () => (
-  <section className="wrap">
-    <h2>{t("location")}</h2>
-    <p className="lead">{t("where")}</p>
-    <p className="muted">{t("map_soon")}</p>
-    <div className="map-skeleton" />
-  </section>
-);
-
-// ====== CONTACT + reviews ======
-const Stars = ({ value, onChange }) => (
-  <div className="stars">
-    {[1,2,3,4,5].map(i => (
-      <button
-        key={i}
-        className={i <= value ? "star on" : "star"}
-        onClick={() => onChange(i)}
-        aria-label={`${i} star`}
-      >★</button>
-    ))}
-  </div>
-);
-
-const Contact = () => {
-  const [stars, setStars] = useState(Number(localStorage.getItem("stars") || 0));
-  const [msg, setMsg] = useState("");
-
-  const send = () => {
-    localStorage.setItem("stars", String(stars));
-    alert(t("thanks"));
-  };
-
-  return (
-    <section className="wrap">
-      <h2>{t("nav_contact")}</h2>
-      <div className="contact">
-        <div>
-          <h3>{t("review_title")}</h3>
-          <Stars value={stars} onChange={setStars} />
-          <textarea
-            rows="4"
-            placeholder="Mensagem / Message"
-            value={msg}
-            onChange={(e) => setMsg(e.target.value)}
-          />
-          <div className="row">
-            <button className="btn" onClick={send}>{t("review_cta")}</button>
-            <a className="btn ghost" href="https://wa.me/97430475279" target="_blank" rel="noreferrer">
-              WhatsApp
-            </a>
-            <a className="btn ghost" href="mailto:restaurant@paneladebarroqatar.com">
-              {t("email")}
-            </a>
-          </div>
-        </div>
-        <div>
-          <h3>{t("support")}</h3>
-          <p className="muted">
-            Quer apoiar a inauguração? Fale com a gente pelo WhatsApp para pré-reserva de eventos,
-            jantares a domicílio e parcerias.
-          </p>
-        </div>
-      </div>
-    </section>
-  );
-};
-
-// ====== ABOUT ======
-const About = () => (
-  <section className="wrap">
-    <h2>{t("about_title")}</h2>
-    <div className="about-grid">
-      <img src="/images/picanha-grelhada.jpg" alt="Restaurant" />
-      <div>
-        <p style={{ whiteSpace: "pre-line" }}>{t("about_long")}</p>
-        <div className="team">
-          <article>
-            <img src="/images/galinhada-caipira.jpg" alt="Quessi Jhones" />
-            <h4>Quessi Jhones — Chef-Owner</h4>
-            <p>10+ anos, 6 anos como Chef de cozinha brasileira em Abu Dhabi e Qatar.</p>
-          </article>
-          <article>
-            <img src="/images/fraldinha-inteira.jpg" alt="Alex" />
-            <h4>Alex — Head Chef</h4>
-            <p>Mais de 10 anos em cozinha brasileira e italiana. Ponto perfeito e fogão a lenha.</p>
-          </article>
-          <article>
-            <img src="/images/encanto-de-coco.jpg" alt="Dona Cleuza" />
-            <h4>Dona Cleuza — Mãe & Cozinheira</h4>
-            <p>25+ anos de cozinha, tradição de Minas e herança italiana — desde os 12 no fogão a lenha.</p>
-          </article>
-        </div>
-      </div>
-    </div>
-  </section>
-);
-
-// ====== APP (router) ======
-export default function App() {
-  const route = useHashRoute();
-
-  useEffect(() => {
-    // força aplicar a direção em cada navegação
-    document.documentElement.dir = getLang() === "ar" ? "rtl" : "ltr";
-  }, [route, getLang()]);
-
+}
+function Home() {
   return (
     <>
-      <Nav />
-      {route === "/home" || route === "/" ? (
-        <>
-          <Hero />
-          <HomePreview />
-        </>
-      ) : route === "/menu" ? (
-        <MenuPage />
-      ) : route === "/gallery" ? (
-        <Gallery />
-      ) : route === "/location" ? (
-        <Location />
-      ) : route === "/contact" ? (
-        <Contact />
-      ) : route === "/about" ? (
-        <About />
-      ) : (
-        <>
-          <Hero />
-          <HomePreview />
-        </>
+      <Hero/>
+      <section className="wrap">
+        <h2>{t("menu_preview")}</h2>
+        <MenuGrid limit={6}/>
+      </section>
+      <ImmersiveStack/>
+    </>
+  );
+}
+
+/* ---------- MENU ---------- */
+function MenuGrid({limit}) {
+  const items = useMemo(()=> limit? MENU.slice(0,limit) : MENU,[limit]);
+  return (
+    <div className="grid">
+      {items.map((m)=>(
+        <article key={m.id} className="card">
+          <div className="thumb" style={{backgroundImage:`url(${m.img})`}} />
+          <div className="body">
+            <h3>{m.name[getLang()]||m.name.pt}</h3>
+            <p className="muted">{m.brief?.[getLang()]||m.brief?.pt||""}</p>
+            <div>
+              {m.badges?.map(b=> <span key={b} className="pill">{t(b)}</span>)}
+            </div>
+          </div>
+        </article>
+      ))}
+    </div>
+  );
+}
+function MenuPage(){ return (
+  <section className="wrap">
+    <h2>{t("menu")}</h2>
+    <MenuGrid/>
+  </section>
+); }
+
+/* ---------- GALLERY ---------- */
+function Gallery(){
+  const pics = MENU.map(m=>m.img);
+  return (
+    <section className="wrap">
+      <h2>{t("gallery")}</h2>
+      <div className="masonry">
+        {pics.map((src,i)=>(
+          <img key={i} src={src} alt="" loading="lazy"
+               onError={e=>e.currentTarget.src="/images/placeholder.jpg"} />
+        ))}
+      </div>
+    </section>
+  );
+}
+
+/* ---------- LOCATION (mapa interativo) ---------- */
+function Location(){
+  const q = encodeURIComponent("Baraha Town, Doha, Qatar");
+  const embed = `https://www.google.com/maps?q=${q}&output=embed`;
+  const openLink = "https://maps.google.com/?q=Baraha+Town,+Doha,+Qatar";
+  return (
+    <section className="wrap">
+      <h2>{t("location")}</h2>
+      <p className="muted">{t("where")}</p>
+      <div className="map-skeleton">
+        <iframe
+          title="map"
+          src={embed}
+          style={{border:0,width:"100%",height:"100%",borderRadius:20}}
+          allowFullScreen="" loading="lazy" referrerPolicy="no-referrer-when-downgrade"></iframe>
+      </div>
+      <a className="btn" href={openLink} target="_blank" rel="noreferrer">{t("open_maps")}</a>
+    </section>
+  );
+}
+
+/* ---------- CONTACT (simples) ---------- */
+function Contact(){
+  return (
+    <section className="wrap">
+      <h2>{t("contact")}</h2>
+      <div className="contact">
+        <div>
+          <p><strong>{t("email")}:</strong> restaurant@paneladebarroqatar.com</p>
+          <p><strong>{t("phone")}:</strong> +974 3047 5279</p>
+          <p><strong>{t("support")}:</strong> <a href="mailto:restaurant@paneladebarroqatar.com">restaurant@paneladebarroqatar.com</a></p>
+        </div>
+        <div>
+          <p><strong>{t("review_title")}</strong></p>
+          <div className="row">
+            {Array.from({length:5}).map((_,i)=><button key={i} className="star">★</button>)}
+          </div>
+          <textarea rows={5} placeholder="Deixe seu comentário..." />
+          <div style={{marginTop:10}}>
+            <button className="btn">{t("review_cta")}</button>
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+/* ---------- ABOUT ---------- */
+function About(){
+  return (
+    <section className="wrap">
+      <h2>{t("about_title")}</h2>
+      <div className="about-grid">
+        <img src="/heritage/panela-artesanal.jpg" alt="" onError={e=>e.currentTarget.src="/images/placeholder.jpg"}/>
+        <div>
+          {t("about_long").split("\n").map((p,i)=> <p key={i}>{p}</p>)}
+          <div className="team">
+            <article>
+              <img src="/heritage/chef-quessi.jpg" alt="" onError={e=>e.currentTarget.src="/images/placeholder.jpg"}/>
+              <h4>Quessi Jhones — Chef & Proprietário</h4>
+              <p>10+ anos de cozinha brasileira no GCC; raízes em Rondônia e restaurante de família em Foz do Iguaçu.</p>
+            </article>
+            <article>
+              <img src="/heritage/chef-alex.jpg" alt="" onError={e=>e.currentTarget.src="/images/placeholder.jpg"}/>
+              <h4>Alex — Head Chef</h4>
+              <p>Mais de 10 anos em cozinha brasileira e italiana. Técnica, brasa e fogão a lenha.</p>
+            </article>
+            <article>
+              <img src="/heritage/cleuza.jpg" alt="" onError={e=>e.currentTarget.src="/images/placeholder.jpg"}/>
+              <h4>Dona Cleuza — Cozinheira</h4>
+              <p>25+ anos de panela; ensinamentos da mãe (descendência italiana) e raízes mineiras.</p>
+            </article>
+          </div>
+        </div>
+      </div>
+
+      <h2 style={{marginTop:28}}>{t("nav_gallery")}: Panela de barro</h2>
+      <div className="masonry">
+        <img src="/heritage/panela-1.jpg" onError={e=>e.currentTarget.src="/images/placeholder.jpg"} />
+        <img src="/heritage/panela-2.jpg" onError={e=>e.currentTarget.src="/images/placeholder.jpg"} />
+        <img src="/heritage/panela-mao.jpg" onError={e=>e.currentTarget.src="/images/placeholder.jpg"} />
+      </div>
+    </section>
+  );
+}
+
+/* ---------- WOOD-FIRE (Fogão a Lenha) ---------- */
+function WoodFire(){
+  return (
+    <section className="wrap">
+      <h2>{t("wood_title")}</h2>
+      {t("wood_long").split("\n").map((p,i)=><p key={i}>{p}</p>)}
+      <div className="masonry">
+        <img src="/heritage/fogao-1.jpg" onError={e=>e.currentTarget.src="/images/placeholder.jpg"} />
+        <img src="/heritage/fogao-2.jpg" onError={e=>e.currentTarget.src="/images/placeholder.jpg"} />
+        <img src="/heritage/fogao-3.jpg" onError={e=>e.currentTarget.src="/images/placeholder.jpg"} />
+      </div>
+    </section>
+  );
+}
+
+/* ---------- APP ---------- */
+export default function App(){
+  const [page] = usePage();
+  const [splashDone,setSplashDone] = useState(false);
+  useEffect(()=>{
+    const id = setTimeout(()=> setSplashDone(true), 1200);
+    return ()=> clearTimeout(id);
+  },[]);
+  return (
+    <>
+      <Splash done={splashDone}/>
+      <TopNav/>
+      {page==="home" && <Home/>}
+      {page==="menu" && <MenuPage/>}
+      {page==="gallery" && <Gallery/>}
+      {page==="location" && <Location/>}
+      {page==="contact" && <Contact/>}
+      {page==="about" && <About/>}
+      {page==="wood" && <WoodFire/>}
+
+      {/* botão flutuante para voltar */}
+      {page!=="home" && (
+        <a className="btn back-home" href="#/">{t("back_home")}</a>
       )}
     </>
   );
