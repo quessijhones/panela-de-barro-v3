@@ -246,8 +246,8 @@ function About(){
               <p>Mais de 10 anos em cozinha brasileira e italiana. Técnica, brasa e fogão a lenha.</p>
             </article>
             <article>
-              <img src="/heritage/cleuza.jpg" alt="" onError={e=>e.currentTarget.src="/images/placeholder.jpg"}/>
-              <h4>Dona Cleuza — Cozinheira</h4>
+              <img src="/heritage/Cleusa.jpg" alt="" onError={e=>e.currentTarget.src="/images/placeholder.jpg"}/>
+              <h4>Dona Cleusa — Cozinheira</h4>
               <p>25+ anos de panela; ensinamentos da mãe (descendência italiana) e raízes mineiras.</p>
             </article>
           </div>
