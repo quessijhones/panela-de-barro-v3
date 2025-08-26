@@ -1,9 +1,5 @@
 // src/i18n.js
-// -------------------------------------------------
-// i18n super simples com PT/EN/AR + helpers públicos
-// -------------------------------------------------
-
-const STORAGE_KEY = "lang";
+const KEY = "pdblang";
 
 export const LOCALES = {
   pt: { label: "Português", short: "PT", dir: "ltr" },
@@ -11,168 +7,232 @@ export const LOCALES = {
   ar: { label: "العربية", short: "AR", dir: "rtl" },
 };
 
-// textos (mantive curtos para caber aqui; pode alongar depois)
-const STR = {
-  // nav
-  "nav.about": { pt: "Sobre", en: "About", ar: "حول" },
-  "nav.menu": { pt: "Menu", en: "Menu", ar: "القائمة" },
-  "nav.gallery": { pt: "Galeria", en: "Gallery", ar: "المعرض" },
-  "nav.woodfire": { pt: "Fogão a Lenha", en: "Wood-Fire", ar: "الطهي بالحطب" },
-  "nav.location": { pt: "Localização", en: "Location", ar: "الموقع" },
-  "nav.support": { pt: "Suporte", en: "Support", ar: "الدعم" },
-  "nav.back": { pt: "Voltar ao início", en: "Back to home", ar: "العودة إلى البداية" },
+let current = (localStorage.getItem(KEY) || "pt").toLowerCase();
+if (!LOCALES[current]) current = "pt";
 
-  // hero
-  "hero.title": {
-    pt: "Sabores brasileiros, calor de família",
-    en: "Brazilian flavors, family warmth",
-    ar: "نكهات برازيلية ودفء عائلي",
-  },
-  "hero.subtitle": {
-    pt: "Restaurante familiar no Qatar. 20+ anos de hospitalidade, fogão a lenha e raízes brasileiras.",
-    en: "Family-run restaurant in Qatar. 20+ years in hospitality, wood-fire cooking and Brazilian roots.",
-    ar: "مطعم عائلي في قطر. أكثر من 20 سنة من الضيافة وطهي الحطب والجذور البرازيلية.",
-  },
-  "hero.soon": {
-    pt: "Inauguração em Novembro — reservas online em breve.",
-    en: "Opening in November — online reservations soon.",
-    ar: "الافتتاح في نوفمبر — الحجز عبر الإنترنت قريبًا.",
-  },
-  "hero.cta": { pt: "Ver Menu", en: "View Menu", ar: "عرض القائمة" },
-
-  // menu
-  "menu.title": { pt: "Menu", en: "Menu", ar: "القائمة" },
-  "menu.tabs.all": { pt: "Todos", en: "All", ar: "الكل" },
-  "menu.tabs.mains": { pt: "Pratos", en: "Mains", ar: "الأطباق" },
-  "menu.tabs.seasonal": { pt: "Sazonais", en: "Seasonal", ar: "موسمية" },
-  "menu.tabs.beverages": { pt: "Bebidas", en: "Beverages", ar: "المشروبات" },
-  "menu.tabs.desserts": { pt: "Sobremesas", en: "Desserts", ar: "الحلويات" },
-
-  // about (resumo; pode ampliar depois)
-  "about.title": { pt: "Sobre", en: "About", ar: "حول" },
-  "about.p1": {
-    pt: "Panela de Barro é um tributo às raízes brasileiras: cozinha de fazenda, ingredientes frescos e fogo de lenha. Nossa família acumula décadas de cozinha — e traz essa memória para Doha.",
-    en: "Panela de Barro is a tribute to Brazilian roots: farm cooking, fresh ingredients and wood-fire. Our family brings decades of kitchen memories to Doha.",
-    ar: "بانِيلا دي بارّو هو تكريم للجذور البرازيلية: طبخ ريفي ومكوّنات طازجة ونار الحطب. عائلتنا تجلب خبرة عقود إلى الدوحة.",
-  },
-  "about.h1": {
-    pt: "Por que “Panela de Barro”?",
-    en: "Why “Panela de Barro”?",
-    ar: "لماذا «قدر الطين»؟",
-  },
-  "about.p2": {
-    pt: "A panela de barro representa mistura, resistência e criatividade na culinária brasileira — da herança indígena às influências africanas e portuguesas.",
-    en: "Clay pots symbolize the blend, resilience and creativity of Brazilian cuisine — from Indigenous heritage to African and Portuguese influences.",
-    ar: "قدر الطين يرمز إلى المزج والصلابة والإبداع في المطبخ البرازيلي — من الإرث الأصلي إلى التأثيرات الأفريقية والبرتغالية.",
-  },
-  "about.p3": {
-    pt: "Cozimento lento, caldos encorpados e sabor terroso: é o que buscamos servir todos os dias.",
-    en: "Slow cooking, rich broths and an earthy flavor — that’s what we serve every day.",
-    ar: "الطهي البطيء والمرق الغني والنكهة الترابية — هذا ما نقدمه يوميًا.",
-  },
-  "about.team": { pt: "Nossa Família", en: "Our Family", ar: "عائلتنا" },
-  "about.cap.panela": {
-    pt: "Panela de barro em uso",
-    en: "Clay pot in use",
-    ar: "قدر طيني أثناء الاستخدام",
-  },
-  "about.cap.artesanal": {
-    pt: "Artesanato feito à mão",
-    en: "Hand-made craft",
-    ar: "حِرَف يدوية",
-  },
-  "about.owner": { pt: "fundadora", en: "founder", ar: "المؤسِّسة" },
-  "about.headchef": { pt: "chef executivo", en: "head chef", ar: "الطاهي الرئيسي" },
-  "about.mom": { pt: "mãe e inspiração", en: "mother & inspiration", ar: "الأم والإلهام" },
-  "about.quessi": {
-    pt: "Quessi lidera a visão e a hospitalidade da casa.",
-    en: "Quessi leads the vision and hospitality of the house.",
-    ar: "تقود كيسي رؤية المكان وضيافته.",
-  },
-  "about.alex": {
-    pt: "Alex assina os sabores do fogão a lenha.",
-    en: "Alex develops the wood-fire flavors.",
-    ar: "أليكس يبدع نكهات الطهي على الحطب.",
-  },
-  "about.cleusa": {
-    pt: "Dona Cleusa guarda as receitas de família que nos trouxeram até aqui.",
-    en: "Mrs. Cleusa keeps the family recipes that brought us here.",
-    ar: "السيدة كليوزا تحفظ وصفات العائلة التي أوصلتنا إلى هنا.",
-  },
-
-  // woodfire
-  "wood.title": { pt: "Fogão a Lenha", en: "Wood-Fire", ar: "الطهي بالحطب" },
-  "wood.p1": {
-    pt: "No Brasil, o fogão a lenha é memória afetiva e técnica: calor constante e fumaça aromática que abraçam o alimento.",
-    en: "In Brazil, wood-fire is memory and technique: steady heat and fragrant smoke that embrace the food.",
-    ar: "في البرازيل، طهي الحطب ذاكرة وتقنية: حرارة ثابتة ودخان عطِر يعانق الطعام.",
-  },
-  "wood.p2": {
-    pt: "Em breve publicaremos histórias, fotos e receitas dessa tradição.",
-    en: "Soon we’ll publish stories, photos and recipes from this tradition.",
-    ar: "سننشر قريبًا قصصًا وصورًا ووصفات من هذا التراث.",
-  },
-
-  // others
-  "gallery.title": { pt: "Galeria", en: "Gallery", ar: "المعرض" },
-  "loc.title": { pt: "Localização", en: "Location", ar: "الموقع" },
-  "loc.subtitle": {
-    pt: "Baraha Town, Doha, Qatar",
-    en: "Baraha Town, Doha, Qatar",
-    ar: "براها تاون، الدوحة، قطر",
-  },
-  "support.title": { pt: "Suporte", en: "Support", ar: "الدعم" },
-  "support.p1": {
-    pt: "Quer apoiar nosso restaurante? Veja algumas formas simples:",
-    en: "Want to support our restaurant? Here are some simple ways:",
-    ar: "تود دعم مطعمنا؟ إليك بعض الطرق البسيطة:",
-  },
-  "support.opt1": { pt: "Siga e compartilhe nas redes sociais", en: "Follow & share on social media", ar: "المتابعة والمشاركة على الشبكات الاجتماعية" },
-  "support.opt2": { pt: "Avalie quando abrirmos", en: "Leave a review once we open", ar: "اترك تقييماً عند الافتتاح" },
-  "support.opt3": { pt: "Indique para amigos", en: "Recommend to friends", ar: "انصح به الأصدقاء" },
-  notfound: { pt: "Página não encontrada.", en: "Page not found.", ar: "الصفحة غير موجودة." },
-
-  // modal de prato
-  "dish.more": { pt: "Ver detalhes", en: "View details", ar: "عرض التفاصيل" },
-  "dish.close": { pt: "Fechar", en: "Close", ar: "إغلاق" },
-};
-
-// ---------- helpers ----------
 export function getLang() {
-  const k = localStorage.getItem(STORAGE_KEY);
-  return LOCALES[k] ? k : "pt";
+  return current;
 }
 
-export function setLang(k) {
-  const nk = LOCALES[k] ? k : "pt";
-  localStorage.setItem(STORAGE_KEY, nk);
-  applyDocumentLang(nk);
+export function setLang(l) {
+  if (!LOCALES[l]) return;
+  current = l;
+  localStorage.setItem(KEY, l);
+  applyDocumentLang(l);
   window.dispatchEvent(new Event("langchange"));
 }
 
-export function t(key, lang) {
-  const k = lang || getLang();
-  const v = STR[key];
-  if (!v) return key;
-  return v[k] ?? v["pt"] ?? key;
+export function applyDocumentLang(l = current) {
+  const html = document.documentElement;
+  html.lang = l;
+  html.dir = LOCALES[l]?.dir || "ltr";
 }
 
-export function applyDocumentLang(lang = getLang()) {
-  const meta = LOCALES[lang] || LOCALES.pt;
-  document.documentElement.lang = lang;
-  document.documentElement.dir = meta.dir || "ltr";
-}
-
-// pega ?lang= em window.location.search ou no hash (#/rota?lang=xx)
+/**
+ * Lê ?lang= no hash (ex.: #/menu?lang=ar) ou na query normal (?lang=ar)
+ * e aplica antes de montar o app.
+ */
 export function initLangFromURL() {
-  const fromSearch = (window.location.search || "").match(/[?&]lang=(pt|en|ar)/i);
-  let lang = fromSearch && fromSearch[1];
+  const fromHash = (h) => {
+    const q = (h.split("?")[1] || "").split("&");
+    const found = q.find((p) => p.startsWith("lang="));
+    return found ? decodeURIComponent(found.split("=")[1]) : null;
+  };
+  const hLang = fromHash(window.location.hash || "");
+  const sLang = new URLSearchParams(window.location.search).get("lang");
+  const cand = (hLang || sLang || "").toLowerCase();
+  if (cand && LOCALES[cand]) setLang(cand);
+}
 
-  if (!lang && window.location.hash.includes("?")) {
-    const qs = window.location.hash.split("?")[1] || "";
-    const m = qs.match(/(?:^|&)lang=(pt|en|ar)/i);
-    lang = m && m[1];
-  }
-  if (lang) setLang(lang.toLowerCase());
-  else applyDocumentLang(getLang());
+// -------------------- TRADUÇÕES --------------------
+const dict = {
+  pt: {
+    "nav.about": "Sobre",
+    "nav.menu": "Menu",
+    "nav.gallery": "Galeria",
+    "nav.woodfire": "Fogão a Lenha",
+    "nav.location": "Localização",
+    "nav.support": "Suporte",
+    "nav.back": "Voltar ao início",
+
+    "hero.title": "Sabores brasileiros, calor de família",
+    "hero.subtitle":
+      "Restaurante familiar no Qatar. 20+ anos de hospitalidade, fogão a lenha e raízes brasileiras.",
+    "hero.soon": "Inauguração em Novembro — reservas online em breve.",
+    "hero.cta": "Ver Menu",
+
+    "about.title": "Sobre",
+    "about.p1":
+      "Panela de Barro é um tributo às raízes brasileiras: cozinha de fazenda, ingredientes frescos e fogo de lenha. Nossa família acumula décadas de cozinha — e traz essa memória para Doha.",
+    "about.h1": "Por que “Panela de Barro”?",
+    "about.p2":
+      "A panela de barro atravessa a nossa história: dos povos indígenas à criatividade das cozinhas afro-brasileiras. Ela cozinha devagar, permite que os sabores conversem e imprime um toque terroso inconfundível.",
+    "about.p3":
+      "Esse é o sabor que buscamos em cada prato. Tradição, calma e afeto — servidos à mesa.",
+    "about.cap.panela": "Panelas artesanais de barro",
+    "about.cap.artesanal": "Feita à mão, como manda a tradição",
+    "about.team": "Nossa família",
+    "about.owner": "Proprietária",
+    "about.headchef": "Chef de Cozinha",
+    "about.mom": "Mãe & Guardiã das Receitas",
+    "about.quessi":
+      "Quessi conduz a casa e preserva o propósito: cozinhar com alma, acolher com carinho.",
+    "about.alex":
+      "Alex lidera a cozinha com técnica e memória afetiva — ponto perfeito e fogo certo.",
+    "about.cleusa":
+      "Dona Cleusa inspira nossos sabores: panelas no fogo, histórias e receitas passadas de geração em geração.",
+
+    "wood.title": "Fogão a Lenha",
+    "wood.p1":
+      "Do interior do Brasil ao mundo: madeiras corretas, brasa constante e paciência — o segredo do caldo encorpado.",
+    "wood.p2":
+      "Nossa cozinha honra esse saber, unindo tradição e cuidado com o ingrediente.",
+    "gallery.title": "Galeria",
+
+    "loc.title": "Onde estamos",
+    "loc.subtitle": "Baraha Town — Doha, Qatar",
+
+    "support.title": "Suporte",
+    "support.p1": "Como podemos ajudar?",
+    "support.opt1": "Reservas (em breve)",
+    "support.opt2": "Eventos e grupos",
+    "support.opt3": "Parcerias",
+
+    "notfound": "Página não encontrada.",
+    "menu.title": "Menu",
+    "menu.tabs.all": "Todos",
+    "menu.tabs.mains": "Pratos",
+    "menu.tabs.seasonal": "Sazonais",
+    "menu.tabs.beverages": "Bebidas",
+    "menu.tabs.desserts": "Sobremesas",
+    "menu.modal.close": "Fechar",
+  },
+
+  en: {
+    "nav.about": "About",
+    "nav.menu": "Menu",
+    "nav.gallery": "Gallery",
+    "nav.woodfire": "Wood-Fired Stove",
+    "nav.location": "Location",
+    "nav.support": "Support",
+    "nav.back": "Back to home",
+
+    "hero.title": "Brazilian flavors, family warmth",
+    "hero.subtitle":
+      "Family restaurant in Qatar. 20+ years of hospitality, wood-fire and Brazilian roots.",
+    "hero.soon": "Opening in November — online reservations soon.",
+    "hero.cta": "View Menu",
+
+    "about.title": "About",
+    "about.p1":
+      "Panela de Barro celebrates Brazilian roots: farm cooking, fresh ingredients and wood-fire. Our family brings decades of kitchen memories to Doha.",
+    "about.h1": "Why “Panela de Barro”?",
+    "about.p2":
+      "Clay pots tell our story — from indigenous peoples to Afro-Brazilian kitchens. Slow cooking lets flavors mingle and creates a unique earthy taste.",
+    "about.p3":
+      "That’s what we chase in every dish: tradition, patience and affection at the table.",
+    "about.cap.panela": "Handmade clay pots",
+    "about.cap.artesanal": "Crafted by hand",
+    "about.team": "Our family",
+    "about.owner": "Owner",
+    "about.headchef": "Head Chef",
+    "about.mom": "Mother & Keeper of Recipes",
+    "about.quessi":
+      "Quessi leads the house and keeps the purpose alive: soulful food, warm hospitality.",
+    "about.alex":
+      "Alex runs the kitchen with technique and memory — perfect doneness, steady fire.",
+    "about.cleusa":
+      "Dona Cleusa inspires our flavors: pots on the stove, stories and recipes passed down.",
+
+    "wood.title": "Wood-Fired Stove",
+    "wood.p1":
+      "From Brazil’s countryside to the world: proper wood, steady embers and patience — the secret to rich broths.",
+    "wood.p2":
+      "We honor this craft, uniting tradition with care for each ingredient.",
+    "gallery.title": "Gallery",
+
+    "loc.title": "Where we are",
+    "loc.subtitle": "Baraha Town — Doha, Qatar",
+
+    "support.title": "Support",
+    "support.p1": "How can we help?",
+    "support.opt1": "Reservations (soon)",
+    "support.opt2": "Events & groups",
+    "support.opt3": "Partnerships",
+
+    "notfound": "Page not found.",
+    "menu.title": "Menu",
+    "menu.tabs.all": "All",
+    "menu.tabs.mains": "Mains",
+    "menu.tabs.seasonal": "Seasonal",
+    "menu.tabs.beverages": "Beverages",
+    "menu.tabs.desserts": "Desserts",
+    "menu.modal.close": "Close",
+  },
+
+  ar: {
+    "nav.about": "نبذة",
+    "nav.menu": "القائمة",
+    "nav.gallery": "المعرض",
+    "nav.woodfire": "الطهي على الحطب",
+    "nav.location": "الموقع",
+    "nav.support": "الدعم",
+    "nav.back": "العودة للصفحة الرئيسية",
+
+    "hero.title": "نكهات برازيلية ودفء العائلة",
+    "hero.subtitle":
+      "مطعم عائلي في قطر. أكثر من 20 عامًا من الضيافة والطهي على الحطب وجذور برازيلية.",
+    "hero.soon": "الافتتاح في نوفمبر — الحجوزات عبر الإنترنت قريبًا.",
+    "hero.cta": "عرض القائمة",
+
+    "about.title": "نبذة",
+    "about.p1":
+      "بانِيلا دي بارّو يحتفي بالجذور البرازيلية: مطبخ ريفي ومكونات طازجة ونار الحطب. تحمل عائلتنا عقودًا من الذكريات إلى الدوحة.",
+    "about.h1": "لماذا «قدَر الطين»؟",
+    "about.p2":
+      "قدور الطين جزء من حكايتنا — من الشعوب الأصلية إلى مطابخ أفرو-برازيلية. طهي بطيء يمزج النكهات ويمنح طعمًا ترابيًا مميزًا.",
+    "about.p3":
+      "هذا ما نسعى إليه في كل طبق: تقليد وصبر ومودة على المائدة.",
+    "about.cap.panela": "قدور طينية يدوية",
+    "about.cap.artesanal": "مصنوعة يدويًا",
+    "about.team": "عائلتنا",
+    "about.owner": "المالكة",
+    "about.headchef": "الشيف الرئيسي",
+    "about.mom": "الأم وحافظة الوصفات",
+    "about.quessi":
+      "كِيسي تقود المكان بقلبها: طعام بروح وضيافة دافئة.",
+    "about.alex":
+      "أليكس يدير المطبخ بإتقان وذكريات — نضج مثالي ونار ثابتة.",
+    "about.cleusa":
+      "دونا كليوزا تُلهم نكهاتنا: قدور على النار وحكايات ووصفات متوارثة.",
+
+    "wood.title": "الطهي على الحطب",
+    "wood.p1":
+      "من ريف البرازيل إلى العالم: خشب مناسب وجمر ثابت وصبر — سرّ المرق الغني.",
+    "wood.p2":
+      "نُكرّم هذا الإرث ونعتني بكل مكوّن.",
+    "gallery.title": "المعرض",
+
+    "loc.title": "موقعنا",
+    "loc.subtitle": "باراحة تاون — الدوحة، قطر",
+
+    "support.title": "الدعم",
+    "support.p1": "كيف نساعدك؟",
+    "support.opt1": "الحجوزات (قريبًا)",
+    "support.opt2": "الفعاليات والمجموعات",
+    "support.opt3": "شراكات",
+
+    "notfound": "الصفحة غير موجودة.",
+    "menu.title": "القائمة",
+    "menu.tabs.all": "الكل",
+    "menu.tabs.mains": "الأطباق",
+    "menu.tabs.seasonal": "الموسمية",
+    "menu.tabs.beverages": "المشروبات",
+    "menu.tabs.desserts": "الحلويات",
+    "menu.modal.close": "إغلاق",
+  },
+};
+
+export function t(key, l = current) {
+  return dict[l]?.[key] ?? dict["pt"][key] ?? key;
 }
