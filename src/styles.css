@@ -114,3 +114,52 @@ body{
 
 /* ---------- footer -------- */
 .footer{padding:32px;text-align:center;color:#846f62}
+/* ====== SOBRE (capar tamanho) ====== */
+.about-figure { margin: 0; }
+.about-figure figcaption { margin-top: 8px; opacity: .85; }
+
+.about-photo {
+  width: 100%;
+  height: clamp(180px, 38vw, 340px); /* mobile menor, desktop maior */
+  object-fit: cover;                 /* corta com elegância sem distorcer */
+  display: block;
+  border-radius: 14px;
+}
+
+/* ====== NOSSA FAMÍLIA (cartões proporcionais) ====== */
+.card.person {
+  overflow: hidden;                 /* evita “vazar” bordas da foto */
+}
+
+.person-photo {
+  width: 100%;
+  aspect-ratio: 4 / 3;              /* mostra a foto inteira em proporção agradável */
+  object-fit: cover;                /* preenche o card mantendo a composição */
+  display: block;
+  border-radius: 16px 16px 0 0;
+}
+
+/* Deixa os textos mais legíveis em cards */
+.card.person h4 { margin: 12px 16px 4px; }
+.card.person p  { margin: 0 16px 16px; line-height: 1.5; }
+
+/* ====== Ajustes para telas maiores ====== */
+@media (min-width: 768px) {
+  .about-photo {
+    height: clamp(220px, 28vw, 420px);
+  }
+  .person-photo {
+    aspect-ratio: 16 / 9;
+  }
+}
+
+/* ====== Galeria: evita faixas brancas e mantém padrão ====== */
+.grid-3 .card img,
+.gallery img,
+figure.card img {
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  object-fit: cover;
+  display: block;
+  border-radius: 14px;
+}
