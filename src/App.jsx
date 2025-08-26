@@ -41,7 +41,16 @@ const dict = {
         desserts: "Sobremesas",
       },
       modal: { close: "Fechar" },
-      tags: { Halal: "Halal", Beef: "Carne", Dairy: "Laticínio", Gluten: "Glúten", Sea: "Peixe", Dessert: "Sobremesa", Beverage: "Bebida", Seasonal: "Sazonal" }
+      tags: {
+        Halal: "Halal",
+        Beef: "Carne",
+        Dairy: "Laticínio",
+        Gluten: "Glúten",
+        Sea: "Peixe",
+        Dessert: "Sobremesa",
+        Beverage: "Bebida",
+        Seasonal: "Sazonal",
+      },
     },
     about: {
       title: "Sobre",
@@ -51,7 +60,6 @@ const dict = {
       family: "Nossa família",
       people: {
         quessi: {
-          // gênero corrigido
           name: "Quessi Jones — Proprietário",
           text:
             "Quessi conduz a casa e preserva o propósito: cozinhar com alma, acolher com carinho.",
@@ -93,8 +101,8 @@ const dict = {
     },
     location: {
       title: "Localização",
-      addr: "Barwa Tower, Doha, Qatar",
-      map: "Ver no mapa"
+      addr: "Baraha Town — Doha, Qatar",
+      map: "Ver no mapa",
     },
     immersiveLabels: {
       amazonia: "Amazônia",
@@ -137,7 +145,16 @@ const dict = {
         desserts: "Desserts",
       },
       modal: { close: "Close" },
-      tags: { Halal: "Halal", Beef: "Beef", Dairy: "Dairy", Gluten: "Gluten", Sea: "Fish", Dessert: "Dessert", Beverage: "Beverage", Seasonal: "Seasonal" }
+      tags: {
+        Halal: "Halal",
+        Beef: "Beef",
+        Dairy: "Dairy",
+        Gluten: "Gluten",
+        Sea: "Fish",
+        Dessert: "Dessert",
+        Beverage: "Beverage",
+        Seasonal: "Seasonal",
+      },
     },
     about: {
       title: "About",
@@ -171,8 +188,8 @@ const dict = {
     },
     location: {
       title: "Location",
-      addr: "Barwa Tower, Doha, Qatar",
-      map: "Open map"
+      addr: "Baraha Town — Doha, Qatar",
+      map: "Open map",
     },
     immersiveLabels: {
       amazonia: "Amazon",
@@ -194,7 +211,8 @@ const dict = {
     },
     hero: {
       title: "نكهات برازيلية ودفء العائلة",
-      subtitle: "مطعم عائلي في قطر — أكثر من 20 عامًا من الضيافة ونار الحطب والجذور البرازيلية.",
+      subtitle:
+        "مطعم عائلي في قطر — أكثر من 20 عامًا من الضيافة ونار الحطب والجذور البرازيلية.",
       cta: "عرض القائمة",
       soon: "الافتتاح في نوفمبر — الحجوزات قريبًا.",
     },
@@ -214,7 +232,16 @@ const dict = {
         desserts: "الحلويات",
       },
       modal: { close: "إغلاق" },
-      tags: { Halal: "حلال", Beef: "لحم بقر", Dairy: "ألبان", Gluten: "غلوتين", Sea: "سمك", Dessert: "حلوى", Beverage: "مشروب", Seasonal: "موسمي" }
+      tags: {
+        Halal: "حلال",
+        Beef: "لحم بقر",
+        Dairy: "ألبان",
+        Gluten: "غلوتين",
+        Sea: "سمك",
+        Dessert: "حلوى",
+        Beverage: "مشروب",
+        Seasonal: "موسمي",
+      },
     },
     about: {
       title: "نبذة",
@@ -248,8 +275,8 @@ const dict = {
     },
     location: {
       title: "الموقع",
-      addr: "بروا تاور، الدوحة، قطر",
-      map: "افتح الخريطة"
+      addr: "باراها تاون — الدوحة، قطر",
+      map: "افتح الخريطة",
     },
     immersiveLabels: {
       amazonia: "الأمازون",
@@ -263,7 +290,9 @@ const dict = {
 
 // util de texto
 const t = (lang, key, fallback = "") => {
-  const value = key.split(".").reduce((o, k) => (o && o[k] !== undefined ? o[k] : undefined), dict[lang]);
+  const value = key
+    .split(".")
+    .reduce((o, k) => (o && o[k] !== undefined ? o[k] : undefined), dict[lang]);
   return typeof value === "string" ? value : fallback;
 };
 
@@ -367,7 +396,7 @@ const MENU_I18N = {
   },
   ar: {
     picanha: { name: "بيكانيا مشوية", desc: "بيكانيا على الفحم بدرجة نضج مثالية." },
-    fraldinha: { name: "فلاンク كامل", desc: "قطعة طرية للتقديم والمشاركة." },
+    fraldinha: { name: "فلانك كامل", desc: "قطعة طرية للتقديم والمشاركة." },
     "vaca-atolada": { name: "عظم الساق مع بولِنتا كريمية", desc: "نكهة غنية مع جرجير حمضي." },
     "feijoada-costela": { name: "فيجوادا ضلع بقر", desc: "فاصولياء سوداء مع ضلع وفاروفا بالموز." },
     moqueca: { name: "موكيكا باهية", desc: "سمك مع حليب جوز الهند وزيت الدندِه." },
@@ -412,10 +441,13 @@ const menuT = (lang, id, field, fallback) => {
    ============================= */
 const useHashRoute = () => {
   const [route, setRoute] = useState(
-    typeof window !== "undefined" ? window.location.hash.replace("#/", "") || "home" : "home"
+    typeof window !== "undefined"
+      ? window.location.hash.replace("#/", "") || "home"
+      : "home"
   );
   useEffect(() => {
-    const onChange = () => setRoute(window.location.hash.replace("#/", "") || "home");
+    const onChange = () =>
+      setRoute(window.location.hash.replace("#/", "") || "home");
     window.addEventListener("hashchange", onChange);
     return () => window.removeEventListener("hashchange", onChange);
   }, []);
@@ -428,7 +460,9 @@ const useHashRoute = () => {
 const SectionTitle = ({ children }) => <h2 className="title">{children}</h2>;
 
 const Card = ({ children, style }) => (
-  <div className="card" style={style}>{children}</div>
+  <div className="card" style={style}>
+    {children}
+  </div>
 );
 
 const Img = ({ src, alt, ratio = "16/9", round = true }) => (
@@ -441,7 +475,11 @@ const Carousel = ({ items, renderItem, auto = 5000 }) => {
   const [i, setI] = useState(0);
   const next = () => setI((v) => (v + 1) % items.length);
   const prev = () => setI((v) => (v - 1 + items.length) % items.length);
-  useEffect(() => { if (!auto) return; const id = setInterval(next, auto); return () => clearInterval(id); }, [auto, items.length]);
+  useEffect(() => {
+    if (!auto) return;
+    const id = setInterval(next, auto);
+    return () => clearInterval(id);
+  }, [auto, items.length]);
   return (
     <div className="carousel">
       <button className="cbtn left" onClick={prev} aria-label="prev">‹</button>
@@ -476,15 +514,25 @@ const Home = ({ lang }) => (
       <Img src={heroImage} alt="Picanha" ratio="21/9" />
       <div className="herooverlay" />
       <div className="heroinfo">
-        <h1>{t(lang,"hero.title","Sabores brasileiros, calor de família")}</h1>
-        <p className="sub">{t(lang,"hero.subtitle","Restaurante familiar no Qatar. 20+ anos de hospitalidade, fogão a lenha e raízes brasileiras.")}</p>
-        <p className="soon">{t(lang,"hero.soon","Inauguração em Novembro — reservas online em breve.")}</p>
-        <a className="btn" href="#/menu">{t(lang,"hero.cta","Ver Menu")}</a>
+        <h1>{t(lang, "hero.title", "Sabores brasileiros, calor de família")}</h1>
+        <p className="sub">
+          {t(
+            lang,
+            "hero.subtitle",
+            "Restaurante familiar no Qatar. 20+ anos de hospitalidade, fogão a lenha e raízes brasileiras."
+          )}
+        </p>
+        <p className="soon">
+          {t(lang, "hero.soon", "Inauguração em Novembro — reservas online em breve.")}
+        </p>
+        <a className="btn" href="#/menu">
+          {t(lang, "hero.cta", "Ver Menu")}
+        </a>
       </div>
     </div>
 
-    {/* Destaques do Menu (carrossel) */}
-    <SectionTitle>{t(lang,"sections.menuHighlights","Destaques do Menu")}</SectionTitle>
+    {/* Destaques do Menu */}
+    <SectionTitle>{t(lang, "sections.menuHighlights", "Destaques do Menu")}</SectionTitle>
     <Carousel
       items={highlights}
       renderItem={(item) => (
@@ -496,14 +544,16 @@ const Home = ({ lang }) => (
       auto={4500}
     />
 
-    {/* Imersões do Brasil (carrossel) */}
-    <SectionTitle>{t(lang,"sections.immersive","Imersões do Brasil")}</SectionTitle>
+    {/* Imersões */}
+    <SectionTitle>{t(lang, "sections.immersive", "Imersões do Brasil")}</SectionTitle>
     <Carousel
       items={immersions}
       renderItem={(item) => (
         <Card>
           <Img src={item.src} alt={item.key} ratio="16/9" />
-          <div className="caption">{t(lang,`immersiveLabels.${item.key}`, item.key)}</div>
+          <div className="caption">
+            {t(lang, `immersiveLabels.${item.key}`, item.key)}
+          </div>
         </Card>
       )}
       auto={5200}
@@ -512,14 +562,17 @@ const Home = ({ lang }) => (
 );
 
 const Menu = ({ lang }) => {
-  const tabs = useMemo(() => ([
-    { key: "all", label: t(lang,"menu.tabs.all","Todos") },
-    { key: "mains", label: t(lang,"menu.tabs.mains","Pratos") },
-    { key: "appetizers", label: t(lang,"menu.tabs.appetizers","Entradas") },
-    { key: "seasonal", label: t(lang,"menu.tabs.seasonal","Sazonais") },
-    { key: "beverages", label: t(lang,"menu.tabs.beverages","Bebidas") },
-    { key: "desserts", label: t(lang,"menu.tabs.desserts","Sobremesas") },
-  ]), [lang]);
+  const tabs = useMemo(
+    () => [
+      { key: "all", label: t(lang, "menu.tabs.all", "Todos") },
+      { key: "mains", label: t(lang, "menu.tabs.mains", "Pratos") },
+      { key: "appetizers", label: t(lang, "menu.tabs.appetizers", "Entradas") },
+      { key: "seasonal", label: t(lang, "menu.tabs.seasonal", "Sazonais") },
+      { key: "beverages", label: t(lang, "menu.tabs.beverages", "Bebidas") },
+      { key: "desserts", label: t(lang, "menu.tabs.desserts", "Sobremesas") },
+    ],
+    [lang]
+  );
 
   const [tab, setTab] = useState("all");
   const [open, setOpen] = useState(null);
@@ -528,11 +581,15 @@ const Menu = ({ lang }) => {
 
   return (
     <>
-      <SectionTitle>{t(lang,"menu.title","Menu")}</SectionTitle>
+      <SectionTitle>{t(lang, "menu.title", "Menu")}</SectionTitle>
 
       <div className="tabs">
-        {tabs.map(tb => (
-          <button key={tb.key} className={`chip ${tab===tb.key?"active":""}`} onClick={() => setTab(tb.key)}>
+        {tabs.map((tb) => (
+          <button
+            key={tb.key}
+            className={`chip ${tab === tb.key ? "active" : ""}`}
+            onClick={() => setTab(tb.key)}
+          >
             {tb.label}
           </button>
         ))}
@@ -550,7 +607,9 @@ const Menu = ({ lang }) => {
                 <div className="carddesc">{desc}</div>
                 <div className="tags">
                   {item.tags.map((tg) => (
-                    <span className="tag" key={tg}>{t(lang,`menu.tags.${tg}`,tg)}</span>
+                    <span className="tag" key={tg}>
+                      {t(lang, `menu.tags.${tg}`, tg)}
+                    </span>
                   ))}
                 </div>
               </button>
@@ -559,18 +618,16 @@ const Menu = ({ lang }) => {
         })}
       </div>
 
-      <Modal
-        open={!!open}
-        onClose={() => setOpen(null)}
-        title={open ? open.name : ""}
-      >
+      <Modal open={!!open} onClose={() => setOpen(null)} title={open ? open.name : ""}>
         {open && (
           <>
             <Img src={open.img} alt={open.name} ratio="16/9" />
             <p className="mdesc">{open.desc}</p>
-            <div className="tags" style={{marginTop:8}}>
+            <div className="tags" style={{ marginTop: 8 }}>
               {open.tags.map((tg) => (
-                <span className="tag" key={tg}>{t(lang,`menu.tags.${tg}`,tg)}</span>
+                <span className="tag" key={tg}>
+                  {t(lang, `menu.tags.${tg}`, tg)}
+                </span>
               ))}
             </div>
           </>
@@ -623,23 +680,29 @@ const WoodFire = ({ lang }) => {
       <p className="p">{d.p2}</p>
       <div className="grid3">
         {d.imgs.map((src, i) => (
-          <Card key={i}><Img src={src} alt={`wood-${i}`} ratio="1/1" /></Card>
+          <Card key={i}>
+            <Img src={src} alt={`wood-${i}`} ratio="1/1" />
+          </Card>
         ))}
       </div>
-      <a className="back" href="#/home">{t(lang,"sections.back","Voltar ao início")}</a>
+      <a className="back" href="#/home">
+        {t(lang, "sections.back", "Voltar ao início")}
+      </a>
     </>
   );
 };
 
 const Gallery = ({ lang }) => {
   // apenas fotos de pratos/bebidas (pega do MENU)
-  const photos = MENU_ITEMS.map(i => ({ src: i.img, alt: i.name }));
+  const photos = MENU_ITEMS.map((i) => ({ src: i.img, alt: i.name }));
   return (
     <>
-      <SectionTitle>{t(lang,"gallery.title","Galeria")}</SectionTitle>
+      <SectionTitle>{t(lang, "gallery.title", "Galeria")}</SectionTitle>
       <div className="gallery">
         {photos.map((p, i) => (
-          <Card key={i}><Img src={p.src} alt={p.alt} ratio="1/1" /></Card>
+          <Card key={i}>
+            <Img src={p.src} alt={p.alt} ratio="1/1" />
+          </Card>
         ))}
       </div>
     </>
@@ -654,11 +717,18 @@ const Location = ({ lang }) => {
       <SectionTitle>{d.title}</SectionTitle>
       <p className="p">
         {d.addr} —{" "}
-        <a className="link" href={`https://maps.google.com/?q=${mapsQ}`} target="_blank" rel="noreferrer">
+        <a
+          className="link"
+          href={`https://maps.google.com/?q=${mapsQ}`}
+          target="_blank"
+          rel="noreferrer"
+        >
           {d.map}
         </a>
       </p>
-      <a className="back" href="#/home">{t(lang,"sections.back","Voltar ao início")}</a>
+      <a className="back" href="#/home">
+        {t(lang, "sections.back", "Voltar ao início")}
+      </a>
     </>
   );
 };
@@ -669,12 +739,26 @@ const Support = ({ lang }) => {
     <>
       <SectionTitle>{d.title}</SectionTitle>
       <ul className="list">
-        {d.items.map((it, i) => (<li key={i}>{it}</li>))}
+        {d.items.map((it, i) => (
+          <li key={i}>{it}</li>
+        ))}
       </ul>
       <h3 className="subtitle">{d.contactTitle}</h3>
-      <p className="p">WhatsApp: <a className="link" href="https://wa.me/97430475279">+{d.phone}</a></p>
-      <p className="p">Email: <a className="link" href="mailto:restaurant@paneladebarroqatar.com">{d.email}</a></p>
-      <a className="back" href="#/home">{t(lang,"sections.back","Voltar ao início")}</a>
+      <p className="p">
+        WhatsApp:{" "}
+        <a className="link" href="https://wa.me/97430475279">
+          +{d.phone}
+        </a>
+      </p>
+      <p className="p">
+        Email:{" "}
+        <a className="link" href="mailto:restaurant@paneladebarroqatar.com">
+          {d.email}
+        </a>
+      </p>
+      <a className="back" href="#/home">
+        {t(lang, "sections.back", "Voltar ao início")}
+      </a>
     </>
   );
 };
@@ -683,9 +767,10 @@ const Support = ({ lang }) => {
    App (nav, splash, rotas)
    ============================= */
 const App = () => {
-  const [route, go] = useHashRoute();
+  const [route] = useHashRoute();
   const [lang, setLang] = useState(() => {
-    const saved = typeof localStorage !== "undefined" && localStorage.getItem("lang");
+    const saved =
+      typeof localStorage !== "undefined" && localStorage.getItem("lang");
     return LANGS.includes(saved) ? saved : DEFAULT_LANG;
   });
   const [splash, setSplash] = useState(true);
@@ -695,10 +780,12 @@ const App = () => {
     return () => clearTimeout(t);
   }, []);
 
-  useEffect(() => { localStorage.setItem("lang", lang); }, [lang]);
+  useEffect(() => {
+    localStorage.setItem("lang", lang);
+  }, [lang]);
 
   return (
-    <div className="app">
+    <div className="app" dir={lang === "ar" ? "rtl" : "ltr"}>
       <Styles />
       {splash && (
         <div className="splash">
@@ -709,19 +796,25 @@ const App = () => {
       <header className="nav">
         <a className="brand" href="#/home">
           <img src="/logo.png" alt="logo" />
-          <span>{t(lang,"brand","Panela de Barro")}</span>
+          <span>{t(lang, "brand", "Panela de Barro")}</span>
         </a>
         <nav className="links">
-          <a href="#/about">{t(lang,"nav.about","Sobre")}</a>
-          <a href="#/menu">{t(lang,"nav.menu","Menu")}</a>
-          <a href="#/gallery">{t(lang,"nav.gallery","Galeria")}</a>
-          <a href="#/wood">{t(lang,"nav.woodfire","Fogão a Lenha")}</a>
-          <a href="#/location">{t(lang,"nav.location","Localização")}</a>
-          <a href="#/support">{t(lang,"nav.support","Suporte")}</a>
+          <a href="#/about">{t(lang, "nav.about", "Sobre")}</a>
+          <a href="#/menu">{t(lang, "nav.menu", "Menu")}</a>
+          <a href="#/gallery">{t(lang, "nav.gallery", "Galeria")}</a>
+          <a href="#/wood">{t(lang, "nav.woodfire", "Fogão a Lenha")}</a>
+          <a href="#/location">{t(lang, "nav.location", "Localização")}</a>
+          <a href="#/support">{t(lang, "nav.support", "Suporte")}</a>
         </nav>
         <div className="langs">
           {LANGS.map((l) => (
-            <button key={l} onClick={() => setLang(l)} className={`chip ${l===lang?"active":""}`}>{l.toUpperCase()}</button>
+            <button
+              key={l}
+              onClick={() => setLang(l)}
+              className={`chip ${l === lang ? "active" : ""}`}
+            >
+              {l.toUpperCase()}
+            </button>
           ))}
         </div>
       </header>
@@ -833,6 +926,30 @@ const Styles = () => (
   /* Splash (logo ao abrir) */
   .splash{position:fixed;inset:0;background:var(--bg);display:flex;align-items:center;justify-content:center;z-index:100}
   .splash img{width:72px;height:72px;filter:drop-shadow(0 6px 18px rgba(0,0,0,.18))}
+
+  /* ===== HERO no MOBILE – legibilidade ===== */
+  @media (max-width: 480px) {
+    .hero .imgwrap { height: 58vh !important; aspect-ratio: auto !important; }
+    .hero img { object-fit: cover; object-position: center; }
+    .herooverlay {
+      background: linear-gradient(180deg,
+        rgba(0,0,0,0.05) 12%,
+        rgba(0,0,0,0.40) 55%,
+        rgba(0,0,0,0.62) 100%);
+    }
+    .heroinfo {
+      left: 16px; right: 16px; bottom: 18px; top: auto; transform: none;
+      gap: 8px; padding: 0; max-width: 100%;
+    }
+    .heroinfo h1 { font-size: clamp(20px, 6vw, 26px); line-height: 1.2; margin: 0; }
+    .heroinfo .sub { font-size: clamp(13px, 3.8vw, 15px); line-height: 1.35; margin: 0; }
+    .heroinfo .soon { font-size: clamp(12px, 3.5vw, 14px); line-height: 1.35; }
+    .heroinfo .btn { padding: 10px 16px; font-size: 14px; border-radius: 14px; }
+  }
+  @media (min-width: 481px) and (max-width: 768px) {
+    .heroinfo h1 { font-size: clamp(24px, 4.5vw, 32px); }
+    .heroinfo .sub { font-size: clamp(14px, 2.6vw, 18px); }
+  }
   `}</style>
 );
 
@@ -840,66 +957,3 @@ const Styles = () => (
    export
    ============================= */
 export default App;
-/* ===== FIX HERO no MOBILE – legibilidade ===== */
-@media (max-width: 480px) {
-  /* Força o wrapper do HERO a ter altura maior e ignora o aspect-ratio inline */
-  .hero .imgwrap {
-    height: 58vh !important;
-    aspect-ratio: auto !important;
-  }
-  .hero img {
-    object-fit: cover;
-    object-position: center;
-  }
-
-  /* Gradiente mais forte para ler o texto com qualquer foto */
-  .herooverlay {
-    background: linear-gradient(
-      180deg,
-      rgba(0,0,0,0.05) 12%,
-      rgba(0,0,0,0.40) 55%,
-      rgba(0,0,0,0.62) 100%
-    );
-  }
-
-  /* Texto ancorado embaixo, dentro da área visível */
-  .heroinfo {
-    position: absolute;
-    left: 16px;
-    right: 16px;
-    bottom: 18px;
-    top: auto;
-    transform: none;
-    gap: 8px;
-    padding: 0;
-    max-width: 100%;
-  }
-
-  .heroinfo h1 {
-    font-size: clamp(20px, 6vw, 26px);
-    line-height: 1.2;
-    margin: 0;
-  }
-  .heroinfo .sub {
-    font-size: clamp(13px, 3.8vw, 15px);
-    line-height: 1.35;
-    margin: 0;
-  }
-  .heroinfo .soon {
-    font-size: clamp(12px, 3.5vw, 14px);
-    line-height: 1.35;
-  }
-
-  /* Botão um pouco mais compacto */
-  .heroinfo .btn {
-    padding: 10px 16px;
-    font-size: 14px;
-    border-radius: 14px;
-  }
-}
-
-/* Leve ajuste também para telas médias */
-@media (min-width: 481px) and (max-width: 768px) {
-  .heroinfo h1 { font-size: clamp(24px, 4.5vw, 32px); }
-  .heroinfo .sub { font-size: clamp(14px, 2.6vw, 18px); }
-}
