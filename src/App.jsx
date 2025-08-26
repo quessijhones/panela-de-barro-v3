@@ -1,368 +1,306 @@
 // src/App.jsx
 import React, { useEffect, useMemo, useState } from "react";
+import { LOCALES, getLang, setLang, t } from "./i18n";
+import { MENU } from "./menuData";
 import "./styles.css";
-import { LOCALES, getLang, setLang, onLangChange, t } from "./i18n";
-import { MENU } from "./menuData"; // <— IMPORT NOMEADO: corrige o erro do build
 
-// imagens para a seção imersiva (já estão em public/immersive)
+// imagens imersivas (public/immersive/*.jpg)
 const IMMS = ["amazonia", "cerrado", "lencois", "litoral", "serra"].map(
   (n) => `/immersive/${n}.jpg`
 );
 
-function useLang() {
-  const [lang, set] = useState(getLang());
-  useEffect(() => onLangChange(set), []);
-  return lang;
-}
-
 function useRoute() {
-  const [route, setRoute] = useState(location.hash.replace("#/", "") || "home");
+  const read = () => (location.hash.replace("#", "") || "/home");
+  const [route, setRoute] = useState(read());
   useEffect(() => {
-    const on = () => setRoute(location.hash.replace("#/", "") || "home");
-    window.addEventListener("hashchange", on);
-    return () => window.removeEventListener("hashchange", on);
+    const onHash = () => setRoute(read());
+    window.addEventListener("hashchange", onHash);
+    return () => window.removeEventListener("hashchange", onHash);
   }, []);
-  return route;
+  return [route, setRoute];
 }
 
-/* ========== UI PRIMITIVES ========== */
-
-function LangPills() {
-  const lang = useLang();
+function LangPills({ lang, onChange }) {
   return (
     <div className="lang-pills">
-      {Object.keys(LOCALES).map((code) => (
+      {LOCALES.map((lc) => (
         <button
-          key={code}
-          className={`pill ${lang === code ? "active" : ""}`}
-          onClick={() => setLang(code)}
-          aria-label={`Switch to ${code}`}
+          key={lc}
+          aria-label={lc}
+          className={`pill ${lang === lc ? "active" : ""}`}
+          onClick={() => onChange(lc)}
         >
-          {code.toUpperCase()}
+          {lc.toUpperCase()}
         </button>
       ))}
     </div>
   );
 }
 
-function Nav() {
-  const lang = useLang();
-  const Item = ({ href, children }) => (
-    <a className="nav-link" href={href + `?lang=${lang}`}>
-      {children}
-    </a>
-  );
+function Navbar({ lang }) {
+  const links = [
+    { href: "#/about", label: t(lang, "nav.about") },
+    { href: "#/menu", label: t(lang, "nav.menu") },
+    { href: "#/gallery", label: t(lang, "nav.gallery") },
+    { href: "#/location", label: t(lang, "nav.location") },
+    { href: "#/contact", label: t(lang, "nav.contact") },
+    { href: "#/firewood", label: t(lang, "nav.firewood") }
+  ];
   return (
     <header className="nav">
-      <a className="brand" href={`#/?lang=${lang}`}>
-        <img src="/logo.png" alt="" className="brand-logo" />
-        {t("brand")}
-      </a>
+      <div className="brand">
+        <img src="/logo.png" alt="" width="26" height="26" />
+        <span>{t(lang, "brand")}</span>
+      </div>
       <nav>
-        <Item href="#/about">{t("nav.about")}</Item>
-        <Item href="#/menu">{t("nav.menu")}</Item>
-        <Item href="#/gallery">{t("nav.gallery")}</Item>
-        <Item href="#/woodfire">{t("nav.woodfire")}</Item>
-        <Item href="#/location">{t("nav.location")}</Item>
-        <Item href="#/contact">{t("nav.contact")}</Item>
+        {links.map((l) => (
+          <a key={l.href} href={l.href}>
+            {l.label}
+          </a>
+        ))}
       </nav>
-      <LangPills />
     </header>
   );
 }
 
-function LogoSplash() {
-  const [show, setShow] = useState(true);
-  useEffect(() => {
-    const id = setTimeout(() => setShow(false), 1200);
-    return () => clearTimeout(id);
-  }, []);
-  if (!show) return null;
-  return (
-    <div className="splash">
-      <img src="/logo.png" alt="Panela de Barro" />
-    </div>
-  );
-}
-
-function SmokeOverlay() {
-  return (
-    <div className="smoke">
-      <div className="smoke__c1" />
-      <div className="smoke__c2" />
-      <div className="smoke__c3" />
-    </div>
-  );
-}
-
-/* ========== PÁGINAS ========== */
-
-function Hero() {
-  const lang = useLang();
-  const openNewTab = () => window.open(`#/menu?lang=${lang}`, "_blank");
+function Hero({ lang }) {
   return (
     <section className="hero">
-      <img className="hero-bg" src="/images/vaca-atolada.jpg" alt="" />
-      <SmokeOverlay />
-      <div className="hero-content">
-        <h1>{t("hero.title")}</h1>
-        <p className="muted">{t("hero.subtitle")}</p>
-        <p className="coming-soon">{t("hero.comingSoon")}</p>
-        <button className="btn" onClick={openNewTab}>{t("hero.cta")}</button>
+      <div className="smoke" aria-hidden />
+      <div className="hero-inner">
+        <h1>{t(lang, "hero.title")}</h1>
+        <p>{t(lang, "hero.subtitle")}</p>
+        <p className="soon">{t(lang, "hero.soon")}</p>
+        <a className="cta" href="#/menu">
+          {t(lang, "hero.cta")}
+        </a>
       </div>
+      <div className="hero-bg" />
     </section>
   );
 }
 
-function ImmersiveStrips() {
+function ImmersiveStripes() {
   useEffect(() => {
-    const els = document.querySelectorAll(".imm-item");
-    const obs = new IntersectionObserver(
+    const io = new IntersectionObserver(
       (entries) => {
         entries.forEach((e) => {
-          if (e.isIntersecting) e.target.classList.add("visible");
+          if (e.isIntersecting) e.target.classList.add("reveal");
         });
       },
-      { threshold: 0.15 }
+      { threshold: 0.25 }
     );
-    els.forEach((el) => obs.observe(el));
-    return () => obs.disconnect();
+    document.querySelectorAll(".stripe").forEach((el) => io.observe(el));
+    return () => io.disconnect();
   }, []);
   return (
     <section className="immersive">
       {IMMS.map((src, i) => (
-        <div className="imm-item" key={i} style={{ backgroundImage: `url(${src})` }} />
+        <div key={src} className="stripe" style={{ backgroundImage: `url(${src})` }}>
+          <div className="veil" />
+        </div>
       ))}
     </section>
   );
 }
 
-function Home() {
-  return (
-    <>
-      <Hero />
-      <ImmersiveStrips />
-      <HomePreview />
-    </>
-  );
-}
+function MenuGrid({ lang }) {
+  const [cat, setCat] = useState("all");
+  const cats = [
+    { id: "all", label: "All" },
+    { id: "mains", label: t(lang, "tags.mains") },
+    { id: "sides", label: t(lang, "tags.sides") },
+    { id: "desserts", label: t(lang, "tags.desserts") },
+    { id: "beverages", label: t(lang, "tags.beverages") },
+    { id: "seasonal", label: t(lang, "tags.seasonal") },
+    { id: "chef", label: t(lang, "tags.chef") }
+  ];
 
-function badgeLabel(code) {
-  return t(`menu.badges.${code}`) || code;
-}
-
-function HomePreview() {
-  const lang = useLang();
-  const items = useMemo(() => MENU.slice(0, 6), []);
-  return (
-    <section className="section">
-      <h2>{t("menu.preview")}</h2>
-      <div className="grid">
-        {items.map((it) => (
-          <Card key={it.id} item={it} lang={lang} />
-        ))}
-      </div>
-      <div style={{ textAlign:"center", marginTop:24 }}>
-        <a className="btn ghost" href={`#/menu?lang=${lang}`} target="_blank" rel="noreferrer">
-          {t("hero.cta")}
-        </a>
-      </div>
-    </section>
-  );
-}
-
-function Card({ item, lang, onOpen }) {
-  const L = item.i18n[lang];
-  return (
-    <article className="card" onClick={() => onOpen?.(item)}>
-      <img src={item.img} alt={L.name} loading="lazy"/>
-      <div className="card-bdy">
-        <h4>{L.name}</h4>
-        <p className="muted">{L.desc}</p>
-        <div className="badges">
-          {item.tags.map((b) => (
-            <span key={b} className="bdg">{badgeLabel(b)}</span>
-          ))}
-        </div>
-      </div>
-    </article>
-  );
-}
-
-function MenuPage() {
-  const lang = useLang();
-  const [filter, setFilter] = useState("all");
-  const [open, setOpen] = useState(null);
-
-  const list = MENU.filter((m) => (filter==="all" ? true : m.cat===filter || m.flags.includes(filter)));
+  const list = useMemo(() => {
+    return MENU.filter((m) => (cat === "all" ? true : m.category === cat));
+  }, [cat]);
 
   return (
-    <section className="section">
-      <h2>{t("menu.title")}</h2>
+    <section className="container">
+      <h2>{t(lang, "preview")}</h2>
       <div className="filters">
-        {["all","mains","sides","desserts","beverages","seasonal","chef"].map((f)=>(
-          <button key={f} className={`pill ${filter===f?"active":""}`} onClick={()=>setFilter(f)}>
-            {t(`menu.filters.${f}`)}
+        {cats.map((c) => (
+          <button
+            key={c.id}
+            className={`pill ${cat === c.id ? "active" : ""}`}
+            onClick={() => setCat(c.id)}
+          >
+            {c.label}
           </button>
         ))}
-        <a className="pill" href="#/?lang="+lang style={{marginLeft:'auto'}}>{t("nav.back")}</a>
       </div>
 
       <div className="grid">
-        {list.map((it)=>(
-          <Card key={it.id} item={it} lang={lang} onOpen={setOpen}/>
-        ))}
-      </div>
-
-      {open && <Modal item={open} lang={lang} onClose={()=>setOpen(null)} />}
-    </section>
-  );
-}
-
-function Modal({ item, lang, onClose }) {
-  const I = item.i18n[lang];
-  const N = item.nutrition;
-  return (
-    <div className="modal" role="dialog" aria-modal="true">
-      <div className="modal-box">
-        <button className="modal-close" onClick={onClose}>×</button>
-        <img className="modal-img" src={item.img} alt={I.name}/>
-        <h3>{I.name}</h3>
-        <p className="muted">{I.long || I.desc}</p>
-        <h5>{t("menu.modal.nutrition")}</h5>
-        <ul className="nutri">
-          <li>{N.kcal} {t("menu.modal.kcals")}</li>
-          <li>{t("menu.modal.carbs")}: {N.carbs}g</li>
-          <li>{t("menu.modal.protein")}: {N.protein}g</li>
-          <li>{t("menu.modal.fat")}: {N.fat}g</li>
-          <li>{t("menu.modal.sodium")}: {N.sodium}mg</li>
-        </ul>
-      </div>
-    </div>
-  );
-}
-
-function GalleryPage() {
-  const imgs = MENU.slice(0, 12).map(m => m.img);
-  return (
-    <section className="section">
-      <h2>{t("gallery.title")}</h2>
-      <div className="grid gallery">
-        {imgs.map((src, i)=>(
-          <img key={i} src={src} alt="" loading="lazy" className="fade-in"/>
+        {list.map((item) => (
+          <article key={item.id} className="card">
+            <img src={item.image} alt={item.title[lang]} loading="lazy" />
+            <div className="card-body">
+              <div className="title-row">
+                <h3>{item.title[lang]}</h3>
+                {item.badge && <span className="badge">{t(lang, `tags.${item.badge}`)}</span>}
+              </div>
+              <p>{item.brief[lang]}</p>
+              <div className="chips">
+                {item.diet?.map((d) => (
+                  <span key={d} className="chip">
+                    {t(lang, `diet.${d}`)}
+                  </span>
+                ))}
+              </div>
+              <a className="more" href={`#/menu/${item.id}`}>
+                •••
+              </a>
+            </div>
+          </article>
         ))}
       </div>
     </section>
   );
 }
 
-function AboutPage() {
-  const lang = useLang();
-  const B = t("about.blocks");
+function Gallery({ lang }) {
+  // usa as mesmas imagens do menu para a galeria
+  const pics = MENU.slice(0, 12).map((m) => m.image);
   return (
-    <section className="section">
-      <a className="pill" href={`#/?lang=${lang}`}>{t("nav.back")}</a>
-      <h2>{t("about.title")}</h2>
-      {B.map((p, i)=>(<p key={i} className="lead">{p}</p>))}
-      <div className="about-photos">
-        <img src="/images/panelas.jpg" alt="panelas de barro" onError={(e)=>e.target.style.display='none'}/>
-        <img src="/images/panela-artesanal.jpg" alt="artesanato do barro" onError={(e)=>e.target.style.display='none'}/>
-      </div>
-
-      <h3 style={{marginTop:24}}>{t("about.teamTitle")}</h3>
-      <div className="team">
-        <div className="person">
-          <img src="/images/chef-quessi.jpg" alt="" onError={(e)=>e.target.style.display='none'}/>
-          <h4>{t("about.team.quessi.name")}</h4>
-          <p className="muted">{t("about.team.quessi.blurb")}</p>
-        </div>
-        <div className="person">
-          <img src="/images/chef-alex.jpg" alt="" onError={(e)=>e.target.style.display='none'}/>
-          <h4>{t("about.team.alex.name")}</h4>
-          <p className="muted">{t("about.team.alex.blurb")}</p>
-        </div>
-        <div className="person">
-          <img src="/images/dona-cleusa.jpg" alt="" onError={(e)=>e.target.style.display='none'}/>
-          <h4>{t("about.team.cleusa.name")}</h4>
-          <p className="muted">{t("about.team.cleusa.blurb")}</p>
-        </div>
-      </div>
-    </section>
-  );
-}
-
-function WoodfirePage() {
-  const lang = useLang();
-  const T = t("woodfire.text");
-  return (
-    <section className="section">
-      <a className="pill" href={`#/?lang=${lang}`}>{t("nav.back")}</a>
-      <h2>{t("woodfire.title")}</h2>
-      {T.map((p,i)=>(<p key={i} className="lead">{p}</p>))}
-      <div className="grid gallery">
-        {["fogao1.jpg","fogao2.jpg","fogao3.jpg"].map((n,i)=>(
-          <img key={i} src={`/woodfire/${n}`} alt="" onError={(e)=>e.target.style.display='none'} loading="lazy"/>
+    <section className="container">
+      <h2>{t(lang, "gallery.title")}</h2>
+      <div className="masonry">
+        {pics.map((src, i) => (
+          <img key={i} src={src} alt="" loading="lazy" />
         ))}
       </div>
     </section>
   );
 }
 
-function LocationPage() {
-  const lang = useLang();
-  const q = encodeURIComponent(t("location.address"));
+function Location({ lang }) {
+  const q = encodeURIComponent("Baraha Town, Doha, Qatar");
+  const src = `https://www.google.com/maps?q=${q}&output=embed`;
   return (
-    <section className="section">
-      <a className="pill" href={`#/?lang=${lang}`}>{t("nav.back")}</a>
-      <h2>{t("location.title")}</h2>
-      <p className="lead">{t("location.address")} (Baraha Town)</p>
-      <div className="map-box">
-        <iframe
-          title="map"
-          src={`https://www.google.com/maps?q=${q}&output=embed`}
-          loading="lazy"
-          referrerPolicy="no-referrer-when-downgrade"
-        />
+    <section className="container">
+      <h2>{t(lang, "location.title")}</h2>
+      <p className="lead">{t(lang, "location.addr")}</p>
+      <div className="map-wrap">
+        <iframe title="Map" src={src} width="100%" height="380" style={{ border: 0 }} loading="lazy" />
       </div>
+      <a className="pill back" href="#/home">
+        {t(lang, "nav.back")}
+      </a>
     </section>
   );
 }
 
-function ContactPage() {
-  const lang = useLang();
+function Contact({ lang }) {
   return (
-    <section className="section">
-      <a className="pill" href={`#/?lang=${lang}`}>{t("nav.back")}</a>
-      <h2>{t("contact.title")}</h2>
-      <div className="grid contact">
-        <a className="card link" href="mailto:restaurant@paneladebarroqatar.com">✉ {t("contact.email")}</a>
-        <a className="card link" href="tel:+97430475279">📞 {t("contact.phone")}: +974 3047 5279</a>
-        <a className="card link primary" href="https://wa.me/97430475279" target="_blank" rel="noreferrer">💬 {t("contact.supportCta")}</a>
-      </div>
+    <section className="container">
+      <h2>{t(lang, "contact.title")}</h2>
+      <p>
+        <strong>{t(lang, "contact.phone")}:</strong> +974 3047 5279
+      </p>
+      <p>
+        <strong>{t(lang, "contact.email")}:</strong> restaurant@paneladebarroqatar.com
+      </p>
+      <a className="pill back" href="#/home">
+        {t(lang, "contact.backHome")}
+      </a>
     </section>
   );
 }
 
-/* ========== APP SHELL / ROUTER ========== */
+function About({ lang }) {
+  return (
+    <section className="container prose">
+      <h2>{t(lang, "about.title")}</h2>
+      <p><em>{t(lang, "about.owner")}</em></p>
+      <p>{t(lang, "about.section1")}</p>
+      <h3>{t(lang, "about.why")}</h3>
+      <p>{t(lang, "about.section2")}</p>
+      <div className="two-col">
+        <img src="/images/moqueca-baiana.jpg" alt="" />
+        <img src="/immersive/amazonia.jpg" alt="" />
+      </div>
+      <h3>{t(lang, "about.teamTitle")}</h3>
+      <p>{t(lang, "about.team")}</p>
+      <h3>{t(lang, "about.cultureTitle")}</h3>
+      <p>{t(lang, "about.culture")}</p>
+      <a className="pill back" href="#/home">
+        {t(lang, "nav.back")}
+      </a>
+    </section>
+  );
+}
+
+function Firewood({ lang }) {
+  return (
+    <section className="container prose">
+      <h2>{t(lang, "firewood.title")}</h2>
+      <p>{t(lang, "firewood.text")}</p>
+      <div className="two-col">
+        <img src="/immersive/serra.jpg" alt="" />
+        <img src="/immersive/lencois.jpg" alt="" />
+      </div>
+      <a className="pill back" href="#/home">
+        {t(lang, "nav.back")}
+      </a>
+    </section>
+  );
+}
 
 export default function App() {
-  const route = useRoute();
-  useEffect(() => window.scrollTo({ top: 0, behavior: "smooth" }), [route]);
+  const [route] = useRoute();
+  const [lang, setLangState] = useState(getLang());
+
+  // reage a mudança de idioma sem F5
+  useEffect(() => {
+    const onL = () => setLangState(getLang());
+    window.addEventListener("langchange", onL);
+    return () => window.removeEventListener("langchange", onL);
+  }, []);
+
+  const changeLang = (lc) => {
+    setLang(lc);         // atualiza URL ?lang=lc
+    setLangState(lc);    // re-render imediato
+  };
+
+  // splash do logo
+  useEffect(() => {
+    const splash = document.getElementById("logo-splash");
+    if (!splash) return;
+    splash.classList.add("show");
+    const to = setTimeout(() => splash.classList.add("hide"), 1400);
+    return () => clearTimeout(to);
+  }, []);
 
   return (
     <>
-      <LogoSplash />
-      <Nav />
-      <main>
-        {route === "home" && <Home />}
-        {route === "menu" && <MenuPage />}
-        {route === "gallery" && <GalleryPage />}
-        {route === "about" && <AboutPage />}
-        {route === "woodfire" && <WoodfirePage />}
-        {route === "location" && <LocationPage />}
-        {route === "contact" && <ContactPage />}
-      </main>
-      <footer className="footer">{/* removido texto do domínio */}</footer>
+      <Navbar lang={lang} />
+      <LangPills lang={lang} onChange={changeLang} />
+
+      {route === "/home" && (
+        <>
+          <Hero lang={lang} />
+          <ImmersiveStripes />
+          <MenuGrid lang={lang} />
+        </>
+      )}
+
+      {route === "/menu" && <MenuGrid lang={lang} />}
+      {route.startsWith("/menu/") && <MenuGrid lang={lang} />} {/* detalhe futuro */}
+
+      {route === "/gallery" && <Gallery lang={lang} />}
+      {route === "/location" && <Location lang={lang} />}
+      {route === "/contact" && <Contact lang={lang} />}
+      {route === "/about" && <About lang={lang} />}
+      {route === "/firewood" && <Firewood lang={lang} />}
+
+      <footer className="foot">
+        <a href="#/home" className="pill">{t(lang,"nav.back")}</a>
+      </footer>
     </>
   );
 }
