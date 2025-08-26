@@ -1,139 +1,103 @@
-// src/i18n.js
-export const LOCALES = ["pt", "en", "ar"];
+export const LOCALES = { pt: "PT", en: "EN", ar: "AR" };
 
-// util: normaliza lang
-export function getLang() {
-  const url = new URL(window.location.href);
-  const q = url.searchParams.get("lang");
-  if (LOCALES.includes(q)) return q;
-  return "pt";
-}
-export function setLang(lang) {
-  const url = new URL(window.location.href);
-  url.searchParams.set("lang", lang);
-  window.history.replaceState({}, "", url.toString());
-  // disparamos um evento para a App reagir sem F5
-  window.dispatchEvent(new CustomEvent("langchange"));
-}
-
-// dicionário
-export const STRINGS = {
-  pt: {
-    brand: "Panela de Barro",
-    nav: { about: "Sobre", menu: "Menu", gallery: "Galeria", location: "Localização", contact: "Contato", firewood: "Fogão a Lenha", back: "Voltar" },
-    hero: {
-      title: "Sabores brasileiros, calor de família",
-      subtitle: "Restaurante familiar no Qatar. 20+ anos de hospitalidade, fogão a lenha e raízes brasileiras.",
-      cta: "Ver Menu",
-      soon: "Inauguração em Novembro — reservas online em breve."
-    },
-    preview: "Menu (prévia)",
-    tags: { mains: "Pratos Principais", sides: "Acompanhamentos", desserts: "Sobremesas", beverages: "Bebidas", seasonal: "Sazonal", chef: "Do Chef" },
-    diet: { halal: "Halal", beef: "Bovino", dairy: "Lácteo", gluten: "Glúten", sea: "Mar", veg: "Veg" },
-    gallery: { title: "Galeria" },
-    location: { title: "Localização", addr: "Baraha Town, Doha, Qatar (Baraha Town)", soon: "Mapa interativo em breve." },
-    contact: { title: "Contato", phone: "Telefone", email: "E-mail", backHome: "Voltar ao início" },
-    about: {
-      title: "Panela de Barro: o sabor que veio da terra",
-      owner: "Proprietário & Chef: Quessi Jhones",
-      section1:
-        "Mais do que um restaurante, o Panela de Barro é uma viagem sensorial às raízes da culinária brasileira. Cada garfada homenageia tradições passadas de geração em geração, no calor do fogão a lenha e na cerâmica que dá nome à casa.",
-      why: "Por que “Panela de Barro”?",
-      section2:
-        "A panela de barro é símbolo ancestral de mistura, resistência e criatividade. Dos povos indígenas moldando o barro à mão, às cozinhas afro-brasileiras que transformaram o simples em extraordinário, ela preserva calor e imprime um sabor terroso único. É o coração de moquecas, caldos e ensopados cozidos lentamente.",
-      teamTitle: "Nossa equipe",
-      team:
-        "Quessi Jhones comanda a cozinha ao lado do irmão Alex (Head Chef, 10+ anos de cozinha brasileira e italiana) e de sua mãe, Cleusa Gonçalves, cozinheira há mais de 25 anos. A família nasceu e cresceu na roça, entre café, milho, mandioca e gado — aprendendo a essência dos ingredientes e o respeito ao tempo do fogo.",
-      cultureTitle: "Cultura & pratos",
-      culture:
-        "Do Brasil profundo vêm histórias como a da Feijoada, que uniu cortes simples a saberes africanos; da Moqueca, símbolo da costa com dendê e leite de coco; da Vaca Atolada, que é roça em forma de prato; da Farofa, parceira de todas as mesas; e dos frutos nativos como o cupuaçu. Em cada receita, celebramos a terra e quem a cultiva."
-    },
-    firewood: {
-      title: "Fogão a Lenha",
-      text:
-        "O fogão a lenha conta a história das cozinhas brasileiras: ferro, barro e brasa. Ele aquece devagar, concentra sabores e reúne a família em volta do cheiro que sai da chaminé. No Panela de Barro, adotamos o fogo vivo — com tempo e respeito — para entregar comida com alma."
-    },
-    ui: { comingSoon: "Em breve", loading: "Carregando..." }
-  },
-  en: {
-    brand: "Panela de Barro",
-    nav: { about: "About", menu: "Menu", gallery: "Gallery", location: "Location", contact: "Contact", firewood: "Wood-Fire", back: "Back" },
-    hero: {
-      title: "Brazilian flavors, family warmth",
-      subtitle: "Family-run restaurant in Qatar. 20+ years in hospitality, wood-fire cooking and Brazilian roots.",
-      cta: "View Menu",
-      soon: "Opening in November — online reservations soon."
-    },
-    preview: "Menu (preview)",
-    tags: { mains: "Mains", sides: "Sides", desserts: "Desserts", beverages: "Beverages", seasonal: "Seasonal", chef: "Chef’s" },
-    diet: { halal: "Halal", beef: "Beef", dairy: "Dairy", gluten: "Gluten", sea: "Sea", veg: "Veg" },
-    gallery: { title: "Gallery" },
-    location: { title: "Location", addr: "Baraha Town, Doha, Qatar (Baraha Town)", soon: "Interactive map coming soon." },
-    contact: { title: "Contact", phone: "Phone", email: "Email", backHome: "Back to home" },
-    about: {
-      title: "Panela de Barro: flavor born from the earth",
-      owner: "Owner & Chef: Quessi Jhones",
-      section1:
-        "More than a restaurant, Panela de Barro is a sensory journey to Brazil’s roots. Each bite honors traditions passed down by families, cooked slowly over wood-fire and in clay cookware.",
-      why: "Why “Panela de Barro”?",
-      section2:
-        "Clay pots symbolize mixture, resilience and creativity. From indigenous techniques to Afro-Brazilian kitchens, clay preserves heat and adds an earthy signature — the soul of moquecas, stews and broths.",
-      teamTitle: "Our team",
-      team:
-        "Chef-owner Quessi Jhones leads with his brother Alex (Head Chef, 10+ years in Brazilian & Italian cuisine) and their mother, Cleusa Gonçalves, a cook for 25+ years. Raised on a farm, they learned respect for ingredients, seasons and time.",
-      cultureTitle: "Culture & dishes",
-      culture:
-        "Feijoada’s story blends humble cuts with African knowledge; Moqueca brings the coast with dendê and coconut milk; Vaca Atolada tastes like the countryside; Farofa pairs with everything; and Amazon fruits like cupuaçu tell where we come from."
-    },
-    firewood: {
-      title: "Wood-Fire Cooking",
-      text:
-        "Cast iron, clay and embers: the Brazilian wood-stove concentrates flavor and gathers people around the aroma. At Panela de Barro we embrace live fire — time and care — to serve food with soul."
-    },
-    ui: { comingSoon: "Coming soon", loading: "Loading..." }
-  },
-  ar: {
-    brand: "بانِلا دي بارّو",
-    nav: { about: "نبذة", menu: "القائمة", gallery: "المعرض", location: "الموقع", contact: "اتصال", firewood: "موقد الحطب", back: "رجوع" },
-    hero: {
-      title: "نكهات برازيلية ودفء العائلة",
-      subtitle: "مطعم عائلي في قطر بخبرة تتجاوز 20 عاماً في الضيافة وطبخ الحطب وجذور برازيلية.",
-      cta: "عرض القائمة",
-      soon: "الافتتاح في نوفمبر — الحجوزات عبر الإنترنت قريباً."
-    },
-    preview: "القائمة (مقتطف)",
-    tags: { mains: "الأطباق الرئيسية", sides: "المقبلات", desserts: "الحلويات", beverages: "المشروبات", seasonal: "موسمي", chef: "طبق الشيف" },
-    diet: { halal: "حلال", beef: "لحم بقري", dairy: "ألبان", gluten: "غلوتين", sea: "بحري", veg: "نباتي" },
-    gallery: { title: "المعرض" },
-    location: { title: "الموقع", addr: "باراهـا تاون، الدوحة، قطر", soon: "الخريطة التفاعلية قريباً." },
-    contact: { title: "اتصال", phone: "هاتف", email: "بريد إلكتروني", backHome: "العودة للرئيسية" },
-    about: {
-      title: "بانِلا دي بارّو: نكهة من الأرض",
-      owner: "المالك والشيف: Quessi Jhones",
-      section1:
-        "أكثر من مطعم — رحلة حسّية لجذور المطبخ البرازيلي. كل لقمة تحيي التقاليد المطهية ببطء على نار الحطب وفي أواني الفخار.",
-      why: "لماذا «بانِلا دي بارّو»؟",
-      section2:
-        "قدر الفخار رمزٌ للمزج والصمود والإبداع. يحفظ الحرارة ويمنح الطعام بصمة ترابية تُميّز اليخنات والموكيكا.",
-      teamTitle: "فريقنا",
-      team:
-        "يقود الشيف Quessi مع أخيه Alex (شيف تنفيذي) ووالدتهما Cleusa ذات خبرة تتجاوز 25 عاماً. نشأوا في المزارع وتعلموا احترام المكونات والزمن.",
-      cultureTitle: "الثقافة والأطباق",
-      culture:
-        "تحكي الفيجوادا والموكيكا وفاكا أتولادا والـ«فاروْفا» وقصص فواكه الأمازون مثل الكوبواسو حكاية البرازيل."
-    },
-    firewood: {
-      title: "موقد الحطب",
-      text:
-        "حديد، فخار وجمر — موقد الحطب يركّز النكهة ويجمع العائلة. في بانِلا دي بارّو نعانق لهباً حيّاً لنقدّم طعاماً بروح."
-    },
-    ui: { comingSoon: "قريباً", loading: "جارٍ التحميل…" }
+const getSearch = () => new URLSearchParams(window.location.search);
+export const getLang = () => {
+  const q = getSearch();
+  const urlLang = q.get("lang");
+  const saved = localStorage.getItem("lang");
+  const lang = urlLang || saved || "pt";
+  // normaliza e repõe na URL uma vez
+  if (!urlLang) {
+    const hash = window.location.hash || "";
+    const sp = new URLSearchParams(window.location.search);
+    sp.set("lang", lang);
+    history.replaceState(null, "", `/?${sp.toString()}${hash}`);
   }
+  return ["pt", "en", "ar"].includes(lang) ? lang : "pt";
 };
 
-export function t(lang, path) {
-  const parts = path.split(".");
-  let obj = STRINGS[lang] || STRINGS.pt;
-  for (const p of parts) obj = obj?.[p];
-  return obj ?? path;
-}
+export const setLang = (next) => {
+  const hash = window.location.hash || "";
+  const sp = new URLSearchParams(window.location.search);
+  sp.set("lang", next);
+  history.replaceState(null, "", `/?${sp.toString()}${hash}`);
+  localStorage.setItem("lang", next);
+  window.dispatchEvent(new CustomEvent("langchange", { detail: { lang: next } }));
+};
+
+export const STRINGS = {
+  pt: {
+    nav: { about: "Sobre", menu: "Menu", gallery: "Galeria", location: "Localização", contact: "Contato", support: "Apoie", back: "Voltar" },
+    home: {
+      headline: "Sabores brasileiros, calor de família",
+      sub: "Restaurante familiar no Qatar. 20+ anos de hospitalidade, fogão a lenha e raízes brasileiras.",
+      coming: "Inauguração em Novembro — reservas online em breve.",
+      cta: "Ver Menu"
+    },
+    menu: { title: "Menu", preview: "Menu (prévia)", all: "Todos", mains: "Pratos Principais", sides: "Acompanhamentos", desserts: "Sobremesas", beverages: "Bebidas", seasonal: "Sazonal", chefs: "Do Chef" },
+    tags: { halal: "Halal", beef: "Bovino", sea: "Mar", veg: "Veg", dairy: "Lácteo", gluten: "Glúten" },
+    location: { title: "Localização", address: "Baraha Town, Doha, Qatar (Baraha Town)", mapsSoon: "Mapa interativo em breve." },
+    gallery: { title: "Galeria" },
+    contact: { title: "Contato", email: "Email", phone: "Telefone" },
+    support: { title: "Apoie o Panela de Barro", blurb: "Ajude compartilhando, seguindo e deixando sua avaliação." },
+    about: {
+      title: "Panela de Barro: o sabor que veio da terra",
+      long: `
+Mais do que um restaurante, o Panela de Barro é uma viagem sensorial às raízes da culinária brasileira. 
+A panela de barro — usada por povos indígenas e perpetuada por influências africanas e mineiras — é símbolo de paciência, mistura e resistência. 
+No calor suave do fogão a lenha, os ingredientes conversam e ganham profundidade: feijoada, moqueca, vaca atolada, farofa e tantos clássicos.
+Nossos fundadores cresceram na roça, entre café, feijão, milho e mandioca. Cleusa (mãe), cozinheira há 25+ anos, e Alex (Head Chef), com 10+ anos de cozinha brasileira e italiana, conduzem a casa com o Chef-owner Quessi Jhones, que traz 6+ anos de experiência como chef em Abu Dhabi e no Qatar. 
+O Panela de Barro nasce para homenagear essa herança — e servi-la, quente, com afeto.
+`
+    },
+  },
+  en: {
+    nav: { about: "About", menu: "Menu", gallery: "Gallery", location: "Location", contact: "Contact", support: "Support", back: "Back" },
+    home: {
+      headline: "Brazilian flavors, family warmth",
+      sub: "Family-run restaurant in Qatar. 20+ years in hospitality, wood-fire cooking and Brazilian roots.",
+      coming: "Opening in November — online reservations soon.",
+      cta: "View Menu"
+    },
+    menu: { title: "Menu", preview: "Menu (preview)", all: "All", mains: "Mains", sides: "Sides", desserts: "Desserts", beverages: "Beverages", seasonal: "Seasonal", chefs: "Chef’s" },
+    tags: { halal: "Halal", beef: "Beef", sea: "Sea", veg: "Veg", dairy: "Dairy", gluten: "Gluten" },
+    location: { title: "Location", address: "Baraha Town, Doha, Qatar (Baraha Town)", mapsSoon: "Interactive map coming soon." },
+    gallery: { title: "Gallery" },
+    contact: { title: "Contact", email: "Email", phone: "Phone" },
+    support: { title: "Support Panela de Barro", blurb: "Help by sharing, following and leaving a review." },
+    about: {
+      title: "Panela de Barro: flavor born from the earth",
+      long: `
+More than a restaurant, Panela de Barro is a sensory trip to Brazil’s culinary roots.
+Clay pots — crafted by Indigenous peoples and enriched by African and mineiro traditions — symbolize patience, fusion and resilience.
+Over wood-fire, ingredients slowly mingle into depth: feijoada, moqueca, vaca atolada, farofa and more.
+Raised on a farm among coffee, beans, corn and cassava, our family cooks what we lived. Cleusa (mother) has cooked for 25+ years; Alex (Head Chef) brings 10+ years in Brazilian/Italian kitchens; Chef-owner Quessi Jhones has 6+ years as a chef in Abu Dhabi and Qatar.
+Panela de Barro honors this heritage — served hot, with affection.
+`
+    },
+  },
+  ar: {
+    nav: { about: "نبذة", menu: "القائمة", gallery: "المعرض", location: "الموقع", contact: "تواصل", support: "الدعم", back: "رجوع" },
+    home: {
+      headline: "نكهات برازيلية ودفء العائلة",
+      sub: "مطعم عائلي في قطر. أكثر من 20 عامًا في الضيافة وطهي الحطب وجذور برازيلية.",
+      coming: "الافتتاح في نوفمبر — الحجوزات عبر الإنترنت قريبًا.",
+      cta: "عرض القائمة"
+    },
+    menu: { title: "القائمة", preview: "القائمة (نظرة سريعة)", all: "الكل", mains: "الأطباق الرئيسية", sides: "المقبلات", desserts: "الحلويات", beverages: "المشروبات", seasonal: "موسمي", chefs: "طبق الشيف" },
+    tags: { halal: "حلال", beef: "لحم بقر", sea: "بحري", veg: "نباتي", dairy: "ألبان", gluten: "غلوتين" },
+    location: { title: "الموقع", address: "باراها تاون، الدوحة، قطر", mapsSoon: "خريطة تفاعلية قريبًا." },
+    gallery: { title: "المعرض" },
+    contact: { title: "تواصل", email: "البريد", phone: "الهاتف" },
+    support: { title: "ادعم Panela de Barro", blurb: "ادعمنا بالمشاركة والمتابعة وترك تقييم." },
+    about: {
+      title: "قدر الطين: نكهة من الأرض",
+      long: `
+أكثر من مطعم؛ إنها رحلة إلى جذور المطبخ البرازيلي. 
+قدر الطين يرمز للصبر والامتزاج والصمود. على نار الحطب تمتزج المكونات ببطء فتولد العمق: الفيجوادا، الموكّيكا، وفاكا أتولادا… 
+عائلتنا نشأت في المزارع؛ كليوزا بطهي يتجاوز 25 عامًا، وأليكس (الشيف التنفيذي) خبرة 10+ سنوات، وكيسي (المالك الشيف) 6+ سنوات في أبوظبي وقطر. 
+Panela de Barro يكرّم هذا الإرث — ويقدّمه بمحبة.
+`
+    },
+  },
+};
