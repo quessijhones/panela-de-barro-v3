@@ -1,170 +1,139 @@
 // src/i18n.js
-// Pequeno i18n reativo (sem libs). Atualiza a UI sem precisar dar F5.
+export const LOCALES = ["pt", "en", "ar"];
 
-export const LOCALES = { pt: "pt", en: "en", ar: "ar" };
-
-const listeners = new Set();
-const qs = new URLSearchParams(location.search);
-const initial = (qs.get("lang") || localStorage.getItem("lang") || "pt").toLowerCase();
-let current = LOCALES[initial] ? initial : "pt";
-
-function notify() { listeners.forEach((fn) => fn(current)); }
-
-export function getLang() { return current; }
-
+// util: normaliza lang
+export function getLang() {
+  const url = new URL(window.location.href);
+  const q = url.searchParams.get("lang");
+  if (LOCALES.includes(q)) return q;
+  return "pt";
+}
 export function setLang(lang) {
-  const next = LOCALES[lang] ? lang : "pt";
-  if (next === current) return;
-  current = next;
-  const sp = new URLSearchParams(location.search);
-  sp.set("lang", next);
-  history.replaceState(null, "", `${location.pathname}?${sp.toString()}${location.hash}`);
-  localStorage.setItem("lang", next);
-  notify();
+  const url = new URL(window.location.href);
+  url.searchParams.set("lang", lang);
+  window.history.replaceState({}, "", url.toString());
+  // disparamos um evento para a App reagir sem F5
+  window.dispatchEvent(new CustomEvent("langchange"));
 }
 
-// assina mudanças de idioma (usado no App.jsx)
-export function onLangChange(fn) {
-  listeners.add(fn);
-  return () => listeners.delete(fn);
-}
-
-// helper: t('a.b.c')
-export function t(path) {
-  const parts = path.split(".");
-  let node = STRINGS[current];
-  for (const p of parts) node = node?.[p];
-  return node ?? path;
-}
-
-/* ===================== TEXTOS ===================== */
+// dicionário
 export const STRINGS = {
   pt: {
     brand: "Panela de Barro",
-    nav: { about:"Sobre", menu:"Menu", gallery:"Galeria", woodfire:"Fogão a Lenha", location:"Localização", contact:"Contato", home:"Início", back:"Voltar ao início" },
+    nav: { about: "Sobre", menu: "Menu", gallery: "Galeria", location: "Localização", contact: "Contato", firewood: "Fogão a Lenha", back: "Voltar" },
     hero: {
       title: "Sabores brasileiros, calor de família",
       subtitle: "Restaurante familiar no Qatar. 20+ anos de hospitalidade, fogão a lenha e raízes brasileiras.",
       cta: "Ver Menu",
-      comingSoon: "Inauguração em Novembro — reservas online em breve."
+      soon: "Inauguração em Novembro — reservas online em breve."
     },
-    menu: {
-      title: "Menu",
-      preview: "Menu (prévia)",
-      filters: { all:"Todos", mains:"Pratos Principais", sides:"Acompanhamentos", desserts:"Sobremesas", beverages:"Bebidas", seasonal:"Sazonal", chef:"Do Chef" },
-      badges: { halal:"Halal", beef:"Bovino", sea:"Mar", dairy:"Lácteo", gluten:"Glúten", veg:"Veg" },
-      modal: { nutrition:"Ficha técnica (exemplo)", kcals:"kcal", carbs:"Carbs", protein:"Proteína", fat:"Gorduras", sodium:"Sódio", close:"Fechar" }
-    },
-    gallery: { title:"Galeria" },
-    location: { title:"Localização", address:"Baraha Town, Doha, Qatar", mapSoon:"Mapa interativo em breve." },
-    contact: { title:"Contato", email:"E-mail", phone:"Telefone", support:"Apoie & Avaliações", supportCta:"Fale no WhatsApp" },
+    preview: "Menu (prévia)",
+    tags: { mains: "Pratos Principais", sides: "Acompanhamentos", desserts: "Sobremesas", beverages: "Bebidas", seasonal: "Sazonal", chef: "Do Chef" },
+    diet: { halal: "Halal", beef: "Bovino", dairy: "Lácteo", gluten: "Glúten", sea: "Mar", veg: "Veg" },
+    gallery: { title: "Galeria" },
+    location: { title: "Localização", addr: "Baraha Town, Doha, Qatar (Baraha Town)", soon: "Mapa interativo em breve." },
+    contact: { title: "Contato", phone: "Telefone", email: "E-mail", backHome: "Voltar ao início" },
     about: {
-      title: "Panela de Barro: O Sabor que Veio da Terra",
-      blocks: [
-        "Mais do que um restaurante, o Panela de Barro é uma viagem às raízes da culinária brasileira. Cada garfada homenageia tradições cozidas lentamente no fogão a lenha e no aconchego da cerâmica que dá nome à nossa casa.",
-        "A panela de barro é símbolo de mistura, resistência e criatividade. Dos povos indígenas aos saberes africanos, dela nasceram moquecas, feijoadas e caldos profundos — sabores que respeitam o tempo.",
-        "O Chef-proprietário Quessi Jhones, nascido em Rondônia, cresceu na roça, plantando e colhendo. Ao lado da mãe, Dona Cleusa, e do irmão Alex (Head Chef, mais de 10 anos de cozinha brasileira e italiana), comandou um restaurante caipira em Foz do Iguaçu. Hoje, trazemos essa memória afetiva ao Qatar: ingredientes honestos, fogo de lenha e hospitalidade brasileira."
-      ],
-      teamTitle: "Equipe",
-      team: {
-        quessi: { name:"Quessi Jhones — Chef & Proprietário", blurb:"10+ anos de cozinha brasileira entre Abu Dhabi e Qatar." },
-        alex: { name:"Alex — Head Chef", blurb:"Mais de 10 anos na cozinha brasileira e italiana; comando de praça e grelha." },
-        cleusa: { name:"Dona Cleusa — Cozinheira", blurb:"25+ anos de fogão; aprendizados com a mãe (nossa nonna mineira de raízes italianas)." }
-      }
+      title: "Panela de Barro: o sabor que veio da terra",
+      owner: "Proprietário & Chef: Quessi Jhones",
+      section1:
+        "Mais do que um restaurante, o Panela de Barro é uma viagem sensorial às raízes da culinária brasileira. Cada garfada homenageia tradições passadas de geração em geração, no calor do fogão a lenha e na cerâmica que dá nome à casa.",
+      why: "Por que “Panela de Barro”?",
+      section2:
+        "A panela de barro é símbolo ancestral de mistura, resistência e criatividade. Dos povos indígenas moldando o barro à mão, às cozinhas afro-brasileiras que transformaram o simples em extraordinário, ela preserva calor e imprime um sabor terroso único. É o coração de moquecas, caldos e ensopados cozidos lentamente.",
+      teamTitle: "Nossa equipe",
+      team:
+        "Quessi Jhones comanda a cozinha ao lado do irmão Alex (Head Chef, 10+ anos de cozinha brasileira e italiana) e de sua mãe, Cleusa Gonçalves, cozinheira há mais de 25 anos. A família nasceu e cresceu na roça, entre café, milho, mandioca e gado — aprendendo a essência dos ingredientes e o respeito ao tempo do fogo.",
+      cultureTitle: "Cultura & pratos",
+      culture:
+        "Do Brasil profundo vêm histórias como a da Feijoada, que uniu cortes simples a saberes africanos; da Moqueca, símbolo da costa com dendê e leite de coco; da Vaca Atolada, que é roça em forma de prato; da Farofa, parceira de todas as mesas; e dos frutos nativos como o cupuaçu. Em cada receita, celebramos a terra e quem a cultiva."
     },
-    woodfire: {
-      title:"Fogão a Lenha",
-      text:[
-        "O fogão a lenha moldou o paladar do Brasil. Do café coado ao feijão de panela, o fogo baixo destaca aromas e texturas que o gás não replica.",
-        "No Panela de Barro usamos panelas de barro e ferro, e lenha selecionada, para extrair do alimento sua doçura natural e camadas de sabor."
-      ]
+    firewood: {
+      title: "Fogão a Lenha",
+      text:
+        "O fogão a lenha conta a história das cozinhas brasileiras: ferro, barro e brasa. Ele aquece devagar, concentra sabores e reúne a família em volta do cheiro que sai da chaminé. No Panela de Barro, adotamos o fogo vivo — com tempo e respeito — para entregar comida com alma."
     },
-    footer: { rights:"" }
+    ui: { comingSoon: "Em breve", loading: "Carregando..." }
   },
-
   en: {
     brand: "Panela de Barro",
-    nav: { about:"About", menu:"Menu", gallery:"Gallery", woodfire:"Wood-Fire", location:"Location", contact:"Contact", home:"Home", back:"Back to Home" },
+    nav: { about: "About", menu: "Menu", gallery: "Gallery", location: "Location", contact: "Contact", firewood: "Wood-Fire", back: "Back" },
     hero: {
       title: "Brazilian flavors, family warmth",
       subtitle: "Family-run restaurant in Qatar. 20+ years in hospitality, wood-fire cooking and Brazilian roots.",
       cta: "View Menu",
-      comingSoon: "Opening in November — online booking soon."
+      soon: "Opening in November — online reservations soon."
     },
-    menu: {
-      title: "Menu",
-      preview: "Menu (preview)",
-      filters: { all:"All", mains:"Mains", sides:"Sides", desserts:"Desserts", beverages:"Beverages", seasonal:"Seasonal", chef:"Chef’s" },
-      badges: { halal:"Halal", beef:"Beef", sea:"Sea", dairy:"Dairy", gluten:"Gluten", veg:"Veg" },
-      modal: { nutrition:"Tech sheet (sample)", kcals:"kcal", carbs:"Carbs", protein:"Protein", fat:"Fat", sodium:"Sodium", close:"Close" }
-    },
-    gallery: { title:"Gallery" },
-    location: { title:"Location", address:"Baraha Town, Doha, Qatar", mapSoon:"Interactive map coming soon." },
-    contact: { title:"Contact", email:"Email", phone:"Phone", support:"Support & Reviews", supportCta:"WhatsApp us" },
+    preview: "Menu (preview)",
+    tags: { mains: "Mains", sides: "Sides", desserts: "Desserts", beverages: "Beverages", seasonal: "Seasonal", chef: "Chef’s" },
+    diet: { halal: "Halal", beef: "Beef", dairy: "Dairy", gluten: "Gluten", sea: "Sea", veg: "Veg" },
+    gallery: { title: "Gallery" },
+    location: { title: "Location", addr: "Baraha Town, Doha, Qatar (Baraha Town)", soon: "Interactive map coming soon." },
+    contact: { title: "Contact", phone: "Phone", email: "Email", backHome: "Back to home" },
     about: {
-      title:"Panela de Barro: Flavor Born from Earth",
-      blocks:[
-        "More than a restaurant, Panela de Barro is a journey to Brazil’s culinary roots — slow-cooked over wood-fire in clay pots.",
-        "The clay pot symbolizes mixture, resilience and creativity — where moquecas and feijoadas were born.",
-        "Chef-owner Quessi Jhones grew up on a farm in Rondônia. With his mother Dona Cleusa and his brother Alex (Head Chef, 10+ years in Brazilian & Italian kitchens), he ran a caipira restaurant in Foz do Iguaçu. Now we bring that memory to Qatar."
-      ],
-      teamTitle:"Team",
-      team: {
-        quessi:{ name:"Quessi Jhones — Chef & Owner", blurb:"10+ years in Brazilian cuisine across Abu Dhabi and Qatar." },
-        alex:{ name:"Alex — Head Chef", blurb:"Over a decade in Brazilian & Italian kitchens." },
-        cleusa:{ name:"Dona Cleusa — Cook", blurb:"25+ years at the stove; wood-fire traditions from Minas and Italian roots." }
-      }
+      title: "Panela de Barro: flavor born from the earth",
+      owner: "Owner & Chef: Quessi Jhones",
+      section1:
+        "More than a restaurant, Panela de Barro is a sensory journey to Brazil’s roots. Each bite honors traditions passed down by families, cooked slowly over wood-fire and in clay cookware.",
+      why: "Why “Panela de Barro”?",
+      section2:
+        "Clay pots symbolize mixture, resilience and creativity. From indigenous techniques to Afro-Brazilian kitchens, clay preserves heat and adds an earthy signature — the soul of moquecas, stews and broths.",
+      teamTitle: "Our team",
+      team:
+        "Chef-owner Quessi Jhones leads with his brother Alex (Head Chef, 10+ years in Brazilian & Italian cuisine) and their mother, Cleusa Gonçalves, a cook for 25+ years. Raised on a farm, they learned respect for ingredients, seasons and time.",
+      cultureTitle: "Culture & dishes",
+      culture:
+        "Feijoada’s story blends humble cuts with African knowledge; Moqueca brings the coast with dendê and coconut milk; Vaca Atolada tastes like the countryside; Farofa pairs with everything; and Amazon fruits like cupuaçu tell where we come from."
     },
-    woodfire: {
-      title:"Wood-Fire",
-      text:[
-        "Wood-fire shaped Brazil’s palate. Low heat unlocks aromas and textures gas can’t mimic.",
-        "We use clay & cast-iron with selected wood to bring out natural sweetness and depth."
-      ]
+    firewood: {
+      title: "Wood-Fire Cooking",
+      text:
+        "Cast iron, clay and embers: the Brazilian wood-stove concentrates flavor and gathers people around the aroma. At Panela de Barro we embrace live fire — time and care — to serve food with soul."
     },
-    footer: { rights:"" }
+    ui: { comingSoon: "Coming soon", loading: "Loading..." }
   },
-
   ar: {
-    brand: "بانيلّا دي بارّو",
-    nav: { about:"من نحن", menu:"القائمة", gallery:"المعرض", woodfire:"الطهي على الحطب", location:"الموقع", contact:"تواصل", home:"الرئيسية", back:"العودة إلى الرئيسية" },
+    brand: "بانِلا دي بارّو",
+    nav: { about: "نبذة", menu: "القائمة", gallery: "المعرض", location: "الموقع", contact: "اتصال", firewood: "موقد الحطب", back: "رجوع" },
     hero: {
-      title:"نكهات برازيلية ودفء عائلي",
-      subtitle:"مطعم عائلي في قطر، أكثر من 20 سنة في الضيافة والطهي على الحطب وجذور برازيلية.",
-      cta:"استعرض القائمة",
-      comingSoon:"الافتتاح في نوفمبر — الحجز عبر الإنترنت قريباً."
+      title: "نكهات برازيلية ودفء العائلة",
+      subtitle: "مطعم عائلي في قطر بخبرة تتجاوز 20 عاماً في الضيافة وطبخ الحطب وجذور برازيلية.",
+      cta: "عرض القائمة",
+      soon: "الافتتاح في نوفمبر — الحجوزات عبر الإنترنت قريباً."
     },
-    menu: {
-      title:"القائمة",
-      preview:"القائمة (نموذج)",
-      filters:{ all:"الكل", mains:"أطباق رئيسية", sides:"مقبلات", desserts:"حلويات", beverages:"مشروبات", seasonal:"موسمي", chef:"طبق الشيف" },
-      badges:{ halal:"حلال", beef:"لحم بقر", sea:"بحر", dairy:"ألبان", gluten:"غلوتين", veg:"نباتي" },
-      modal:{ nutrition:"المعلومات الغذائية (مثال)", kcals:"سعرة", carbs:"كربوهيدرات", protein:"بروتين", fat:"دهون", sodium:"صوديوم", close:"إغلاق" }
+    preview: "القائمة (مقتطف)",
+    tags: { mains: "الأطباق الرئيسية", sides: "المقبلات", desserts: "الحلويات", beverages: "المشروبات", seasonal: "موسمي", chef: "طبق الشيف" },
+    diet: { halal: "حلال", beef: "لحم بقري", dairy: "ألبان", gluten: "غلوتين", sea: "بحري", veg: "نباتي" },
+    gallery: { title: "المعرض" },
+    location: { title: "الموقع", addr: "باراهـا تاون، الدوحة، قطر", soon: "الخريطة التفاعلية قريباً." },
+    contact: { title: "اتصال", phone: "هاتف", email: "بريد إلكتروني", backHome: "العودة للرئيسية" },
+    about: {
+      title: "بانِلا دي بارّو: نكهة من الأرض",
+      owner: "المالك والشيف: Quessi Jhones",
+      section1:
+        "أكثر من مطعم — رحلة حسّية لجذور المطبخ البرازيلي. كل لقمة تحيي التقاليد المطهية ببطء على نار الحطب وفي أواني الفخار.",
+      why: "لماذا «بانِلا دي بارّو»؟",
+      section2:
+        "قدر الفخار رمزٌ للمزج والصمود والإبداع. يحفظ الحرارة ويمنح الطعام بصمة ترابية تُميّز اليخنات والموكيكا.",
+      teamTitle: "فريقنا",
+      team:
+        "يقود الشيف Quessi مع أخيه Alex (شيف تنفيذي) ووالدتهما Cleusa ذات خبرة تتجاوز 25 عاماً. نشأوا في المزارع وتعلموا احترام المكونات والزمن.",
+      cultureTitle: "الثقافة والأطباق",
+      culture:
+        "تحكي الفيجوادا والموكيكا وفاكا أتولادا والـ«فاروْفا» وقصص فواكه الأمازون مثل الكوبواسو حكاية البرازيل."
     },
-    gallery:{ title:"المعرض" },
-    location:{ title:"الموقع", address:"باراحا تاون، الدوحة، قطر", mapSoon:"خريطة تفاعلية قريباً." },
-    contact:{ title:"تواصل", email:"البريد الإلكتروني", phone:"الهاتف", support:"الدعم والتقييمات", supportCta:"واتساب" },
-    about:{
-      title:"بانيلّا دي بارّو: نكهة من الأرض",
-      blocks:[
-        "أكثر من مطعم — رحلة إلى جذور المطبخ البرازيلي بطهو بطيء في أواني الطين على الحطب.",
-        "قدر الطين رمزٌ للمزج والصمود والإبداع — منه ولدت الموكّيكا والفَيجوادا.",
-        "الطاهي والمالك كويِسّي جونس نشأ في مزرعة بروندونيا. مع والدته دونا كليوسا وأخيه أليكس (شيف تنفيذي)، أدار مطعماً ريفياً في فوز دو إيغواسو. اليوم ننقل تلك الذاكرة إلى قطر."
-      ],
-      teamTitle:"الفريق",
-      team:{
-        quessi:{ name:"كويِسّي جونس — الشيف والمالك", blurb:"أكثر من 10 سنوات في المطبخ البرازيلي." },
-        alex:{ name:"أليكس — الشيف التنفيذي", blurb:"خبرة واسعة في المطبخين البرازيلي والإيطالي." },
-        cleusa:{ name:"دونا كليوسا — طاهية", blurb:"أكثر من 25 سنة على الموقد." }
-      }
+    firewood: {
+      title: "موقد الحطب",
+      text:
+        "حديد، فخار وجمر — موقد الحطب يركّز النكهة ويجمع العائلة. في بانِلا دي بارّو نعانق لهباً حيّاً لنقدّم طعاماً بروح."
     },
-    woodfire:{
-      title:"الطهي على الحطب",
-      text:[
-        "النار الهادئة تصنع نكهات لا يحققها الغاز.",
-        "نستخدم قدور الطين والحديد مع حطب مختار لنُبرز طعم المكونات."
-      ]
-    },
-    footer:{ rights:"" }
+    ui: { comingSoon: "قريباً", loading: "جارٍ التحميل…" }
   }
 };
+
+export function t(lang, path) {
+  const parts = path.split(".");
+  let obj = STRINGS[lang] || STRINGS.pt;
+  for (const p of parts) obj = obj?.[p];
+  return obj ?? path;
+}
