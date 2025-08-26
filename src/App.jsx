@@ -3,7 +3,9 @@ import "./styles.css";
 import { LOCALES, getLang, setLang, t } from "./i18n";
 import { MENU } from "./menuData";
 
-/* --------- hooks simples --------- */
+/**********************
+ *  Roteamento pelo hash
+ **********************/
 const useHashRoute = () => {
   const parse = () => {
     const h = window.location.hash || "#/home";
@@ -33,28 +35,49 @@ const Img = ({ src, alt = "", className = "", ...rest }) => (
   <img loading="lazy" decoding="async" src={src} alt={alt} className={className} {...rest} />
 );
 
-/* --------- Error boundary --------- */
+/**********************
+ *  Error Boundary
+ **********************/
 class ErrorBoundary extends React.Component {
-  constructor(p){ super(p); this.state = { hasError:false, msg:"" }; }
-  static getDerivedStateFromError(e){ return { hasError:true, msg: e?.message || String(e) }; }
-  componentDidCatch(e,i){ console.error("App error:", e, i); }
-  render(){
-    if(!this.state.hasError) return this.props.children;
+  constructor(p) {
+    super(p);
+    this.state = { hasError: false, msg: "" };
+  }
+  static getDerivedStateFromError(e) {
+    return { hasError: true, msg: e?.message || String(e) };
+  }
+  componentDidCatch(e, info) {
+    console.error("App error:", e, info);
+  }
+  render() {
+    if (!this.state.hasError) return this.props.children;
     return (
-      <div className="container">
-        <h2>Ops… algo quebrou aqui.</h2>
-        <p className="muted">{this.state.msg || "Erro desconhecido."}</p>
-        <a href="#/home" className="backlink">{t("nav.back", getLang())}</a>
+      <div style={{ padding: "24px" }}>
+        <h2 style={{ marginTop: 0 }}>Ops… algo quebrou aqui.</h2>
+        <p style={{ opacity: 0.85, maxWidth: 680 }}>
+          {this.state.msg || "Erro desconhecido."}
+        </p>
+        <a href="#/home" style={{ color: "#8b3e2f", fontWeight: 700 }}>
+          Voltar ao início
+        </a>
       </div>
     );
   }
 }
 
-/* --------- layout --------- */
+/**********************
+ *  Navbar / Idioma
+ **********************/
 const LangSwitch = ({ lang }) => (
   <div className="lang-switch">
     {Object.keys(LOCALES).map((k) => (
-      <button key={k} onClick={() => setLang(k)} aria-pressed={lang === k} className={lang === k ? "on" : ""}>
+      <button
+        key={k}
+        onClick={() => setLang(k)}
+        aria-pressed={lang === k}
+        className={lang === k ? "on" : ""}
+        title={LOCALES[k].label}
+      >
         {LOCALES[k].short}
       </button>
     ))}
@@ -79,7 +102,9 @@ const Nav = ({ lang }) => (
   </header>
 );
 
-/* --------- pages --------- */
+/**********************
+ *  Seções
+ **********************/
 const Home = ({ lang }) => {
   useEffect(() => { if (window.__hideSplash) window.__hideSplash(); }, []);
   return (
@@ -92,96 +117,83 @@ const Home = ({ lang }) => {
           <a href="#/menu" className="btn">{t("hero.cta", lang)}</a>
         </div>
       </section>
+
       <section className="immersive">
-        <Img src="/immersive/amazonia.jpg" alt="Amazônia" />
+        <Img src="/immersive/amazonia.jpg" alt="" />
       </section>
     </main>
   );
 };
-
-const About = ({ lang }) => (
-  <main className="container readable">
-    <h1>{t("about.title", lang)}</h1>
-    <p>{t("about.p1", lang)}</p>
-    <h3>{t("about.h1", lang)}</h3>
-    <p>{t("about.p2", lang)}</p>
-    <p>{t("about.p3", lang)}</p>
-
-    <div className="grid-2">
-      <figure className="card"><Img src="/heritage/panela-1.jpg" alt="" /><figcaption className="p16">{t("about.cap.panela", lang)}</figcaption></figure>
-      <figure className="card"><Img src="/heritage/panela-mao.jpg" alt="" /><figcaption className="p16">{t("about.cap.artesanal", lang)}</figcaption></figure>
-    </div>
-
-    <h3>{t("about.team", lang)}</h3>
-    <div className="cards">
-      <article className="card person">
-        <Img src="/heritage/chef-quessi.jpg" alt="" />
-        <div className="p16">
-          <h4>Quessi Jones — {t("about.owner", lang)}</h4>
-          <p className="muted">{t("about.quessi", lang)}</p>
-        </div>
-      </article>
-      <article className="card person">
-        <Img src="/heritage/chef-alex.jpg" alt="" />
-        <div className="p16">
-          <h4>Alex — {t("about.headchef", lang)}</h4>
-          <p className="muted">{t("about.alex", lang)}</p>
-        </div>
-      </article>
-      <article className="card person">
-        <Img src="/heritage/cleusa.jpg" alt="" />
-        <div className="p16">
-          <h4>Cleusa Gonçalves — {t("about.mom", lang)}</h4>
-          <p className="muted">{t("about.cleusa", lang)}</p>
-        </div>
-      </article>
-    </div>
-
-    <a href="#/home" className="backlink">{t("nav.back", lang)}</a>
-  </main>
-);
-
-const Woodfire = ({ lang }) => (
-  <main className="container readable">
-    <h1>{t("wood.title", lang)}</h1>
-    <p>{t("wood.p1", lang)}</p>
-    <p>{t("wood.p2", lang)}</p>
-
-    <div className="grid-3">
-      <figure className="card"><Img src="/heritage/fogao-1.jpg" alt="" /></figure>
-      <figure className="card"><Img src="/heritage/fogao-2.jpg" alt="" /></figure>
-      <figure className="card"><Img src="/heritage/fogao-3.jpg" alt="" /></figure>
-    </div>
-
-    <a href="#/home" className="backlink">{t("nav.back", lang)}</a>
-  </main>
-);
 
 const Gallery = ({ lang }) => (
   <main className="container">
     <h1>{t("gallery.title", lang)}</h1>
     <div className="grid-3">
       {[
-        "picanha-grelhada.jpg","moqueca-baiana.jpg","feijoada-costela.jpg",
-        "galinhada-caipira.jpg","rubacao.jpg","pamonha.jpg",
-        "pasteis-brasileiros.jpg","pao-de-queijo.jpg","mandioca-frita.jpg",
+        "picanha-grelhada.jpg", "moqueca-baiana.jpg", "feijoada-costela.jpg",
+        "galinhada-caipira.jpg", "rubacao.jpg", "pamonha.jpg",
+        "pasteis-brasileiros.jpg", "pao-de-queijo.jpg", "mandioca-frita.jpg",
       ].map((n) => (
-        <figure key={n} className="card"><Img src={`/images/${n}`} alt="" /></figure>
+        <figure key={n} className="card">
+          <Img src={`/images/${n}`} alt="" />
+        </figure>
       ))}
     </div>
     <a href="#/home" className="backlink">{t("nav.back", lang)}</a>
   </main>
 );
 
+/**********************
+ *  Modal de prato
+ **********************/
+const DishModal = ({ item, lang, onClose }) => {
+  useEffect(() => {
+    if (!item) return;
+    document.body.classList.add("modal-open");
+    const onKey = (e) => e.key === "Escape" && onClose();
+    window.addEventListener("keydown", onKey);
+    return () => {
+      document.body.classList.remove("modal-open");
+      window.removeEventListener("keydown", onKey);
+    };
+  }, [item, onClose]);
+
+  if (!item) return null;
+  return (
+    <div className="modal-backdrop" role="dialog" aria-modal="true" onClick={onClose}>
+      <div className="modal" onClick={(e) => e.stopPropagation()}>
+        <header>
+          <h3>{item.name}</h3>
+          <button className="close" onClick={onClose} aria-label={t("menu.modal.close", lang)}>
+            ✕ {t("menu.modal.close", lang)}
+          </button>
+        </header>
+        <Img className="cover" src={item.image} alt={item.name} />
+        <div className="body">
+          <p>{item.long?.[lang] || item.desc?.[lang] || ""}</p>
+          {item.tags?.length ? (
+            <div className="tags" style={{ marginTop: 10 }}>
+              {item.tags.map((tg) => <span key={tg} className="tag">{tg}</span>)}
+            </div>
+          ) : null}
+        </div>
+      </div>
+    </div>
+  );
+};
+
+/**********************
+ *  Página de Menu
+ **********************/
 const Tag = ({ children }) => <span className="tag">{children}</span>;
 
 const MenuPage = ({ lang }) => {
   const [tab, setTab] = useState("all");
+  const [openItem, setOpenItem] = useState(null);
 
   const items = useMemo(() => {
-    const arr = Array.isArray(MENU) ? MENU : [];
-    if (tab === "all") return arr;
-    return arr.filter((i) => i.category === tab);
+    if (tab === "all") return MENU;
+    return MENU.filter((i) => i.category === tab);
   }, [tab]);
 
   const tabs = [
@@ -189,6 +201,7 @@ const MenuPage = ({ lang }) => {
     ["mains", t("menu.tabs.mains", lang)],
     ["seasonal", t("menu.tabs.seasonal", lang)],
     ["beverages", t("menu.tabs.beverages", lang)],
+    ["desserts", t("menu.tabs.desserts", lang)],
   ];
 
   return (
@@ -201,32 +214,55 @@ const MenuPage = ({ lang }) => {
             {label}
           </button>
         ))}
-        <a href="#/home" className="backlink" style={{ marginLeft: "auto" }}>{t("nav.back", lang)}</a>
+        <a href="#/home" className="backlink" style={{ marginLeft: "auto" }}>
+          {t("nav.back", lang)}
+        </a>
       </div>
 
       <div className="grid-3">
-        {items.map((it) => {
-          const title = lang === "ar" && it.nameAr ? it.nameAr : it.name;
-          const desc = (it.desc && (it.desc[lang] || it.desc.pt)) || "";
-          const tags = Array.isArray(it.tags) ? it.tags : [];
-          return (
-            <article key={it.id} className="card dish">
-              <Img src={it.image} alt={title} />
-              <div className="p16">
-                <h4>{title}</h4>
-                <p className="muted">{desc}</p>
-                <div className="tags">{tags.map((tg) => <Tag key={String(tg)}>{tg}</Tag>)}</div>
+        {items.map((it) => (
+          <article key={it.id} className="card dish" onClick={() => setOpenItem(it)} style={{ cursor: "pointer" }}>
+            <Img src={it.image} alt={it.name} />
+            <div className="p16">
+              <h4>{it.name}</h4>
+              <p className="muted">{it.desc?.[lang] || it.desc?.pt}</p>
+              <div className="tags">
+                {it.tags?.map((tg) => <Tag key={tg}>{tg}</Tag>)}
               </div>
-            </article>
-          );
-        })}
+            </div>
+          </article>
+        ))}
       </div>
+
+      <DishModal item={openItem} lang={lang} onClose={() => setOpenItem(null)} />
     </main>
   );
 };
 
+/**********************
+ *  Outras páginas simples
+ **********************/
+const About = ({ lang }) => (
+  <main className="container readable">
+    <h1>{t("nav.about", lang)}</h1>
+    <p>
+      Panela de Barro é um tributo às raízes brasileiras: cozinha de fazenda, ingredientes
+      frescos e fogo de lenha. Nossa família acumula décadas de cozinha — e traz essa
+      memória para Doha.
+    </p>
+    <a href="#/home" className="backlink">{t("nav.back", lang)}</a>
+  </main>
+);
+
+const Woodfire = ({ lang }) => (
+  <main className="container readable">
+    <h1>{t("nav.woodfire", lang)}</h1>
+    <p>Histórias e técnicas do fogão a lenha — em breve.</p>
+    <a href="#/home" className="backlink">{t("nav.back", lang)}</a>
+  </main>
+);
+
 const Location = ({ lang }) => {
-  // Embed estável — Baraha Town
   const q = encodeURIComponent("Baraha Town, Doha, Qatar");
   const src = `https://www.google.com/maps?q=${q}&output=embed`;
   return (
@@ -262,15 +298,17 @@ const NotFound = ({ lang }) => (
   </main>
 );
 
-/* --------- App --------- */
-export default function App(){
+/**********************
+ *  App
+ **********************/
+export default function App() {
   const [route] = useHashRoute();
   const [lang] = useLang();
 
   useEffect(() => { if (window.__hideSplash) window.__hideSplash(); }, []);
 
   const Page = (() => {
-    switch(route){
+    switch (route) {
       case "home": return <Home lang={lang} />;
       case "about": return <About lang={lang} />;
       case "menu": return <MenuPage lang={lang} />;
