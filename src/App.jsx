@@ -1,273 +1,427 @@
 import React, { useEffect, useMemo, useState } from "react";
-import { LOCALES, STRINGS, getLang, setLang } from "./i18n.js";
-import { MENU } from "./menuData.js";
+import { LOCALES, getLang, setLang, t } from "./i18n";
+import MENU from "./menuData";
+import "./styles.css";
 
-/* ===== imagens imersivas (use o que já tem em /public/immersive) ===== */
+/* ===== imagens imersivas (já na pasta public/immersive) ===== */
 const IMMS = ["amazonia","cerrado","lencois","litoral","serra"].map(n=>`/immersive/${n}.jpg`);
 
-/* ===== helpers ===== */
-const useRoute = () => {
-  const parse = () => (window.location.hash.replace("#/","") || "home");
-  const [route, setRoute] = useState(parse());
+function useHashRoute() {
+  const read = () => (window.location.hash.replace("#/", "") || "home");
+  const [route, setRoute] = useState(read());
   useEffect(() => {
-    const fn = () => setRoute(parse());
-    window.addEventListener("hashchange", fn);
-    return () => window.removeEventListener("hashchange", fn);
+    const on = () => setRoute(read());
+    window.addEventListener("hashchange", on);
+    return () => window.removeEventListener("hashchange", on);
   }, []);
   return [route, (r)=>{ window.location.hash = `/${r}`; }];
-};
-const useLang = () => {
-  const [lang, set] = useState(getLang());
-  useEffect(() => {
-    const h = (e)=> set(e.detail.lang);
-    window.addEventListener("langchange", h);
-    return () => window.removeEventListener("langchange", h);
-  }, []);
-  return [lang, (l)=>{ setLang(l); /* atualiza URL sem recarregar */ }];
-};
-const t = (lang, path) => {
-  const parts = path.split(".");
-  return parts.reduce((acc,k)=> (acc && acc[k] != null ? acc[k] : ""), STRINGS[lang]);
-};
-const Tag = ({children}) => <span className="tag">{children}</span>;
+}
 
-/* ===== Splash do logo ===== */
-const Splash = () => {
-  const [hide, setHide] = useState(false);
-  useEffect(()=>{ const id=setTimeout(()=>setHide(true), 1200); return ()=>clearTimeout(id); },[]);
-  return <div id="splash" className={hide?"hide":""}><div className="logo"></div></div>;
-};
-
-/* ===== Header ===== */
-const Header = ({lang, onLang}) => {
-  const pill = (code) => (
-    <a href={`/?lang=${code}${window.location.hash || "#/home"}`}
-       onClick={(e)=>{e.preventDefault(); onLang(code);}}
-       className={`pill ${lang===code?"active":""}`}>{LOCALES[code]}</a>
-  );
+function LanguagePills({ lang, onChange }) {
   return (
-    <header className="header">
-      <div className="container nav">
-        <a href="/?lang=pt#/" onClick={(e)=>{e.preventDefault(); onLang(lang); window.location.hash="/home";}}>
-          <img src="/logo.png" alt="logo" style={{width:28,verticalAlign:"middle",marginRight:8}}/>
-          <strong>Panela de Barro</strong>
-        </a>
-        <a href={`/?lang=${lang}#/about`}>{t(lang,"nav.about")}</a>
-        <a href={`/?lang=${lang}#/menu`}>{t(lang,"nav.menu")}</a>
-        <a href={`/?lang=${lang}#/gallery`}>{t(lang,"nav.gallery")}</a>
-        <a href={`/?lang=${lang}#/location`}>{t(lang,"nav.location")}</a>
-        <a href={`/?lang=${lang}#/contact`}>{t(lang,"nav.contact")}</a>
-        <a href={`/?lang=${lang}#/support`}>{t(lang,"nav.support")}</a>
-        <div className="spacer"></div>
-        <div className="pills">
-          {pill("pt")}{pill("en")}{pill("ar")}
-        </div>
-      </div>
-    </header>
-  );
-};
-
-/* ===== Seções ===== */
-const Hero = ({lang}) => (
-  <section className="container">
-    <div className="hero">
-      <img src="/images/vaca-atolada.jpg" alt="" />
-      <div className="smoke"></div>
-      <div className="content">
-        <h1>{t(lang,"home.headline")}</h1>
-        <div>{t(lang,"home.sub")}</div>
-        <div className="small" style={{opacity:.9, marginTop:6}}>{t(lang,"home.coming")}</div>
-        <a className="btn" href={`/?lang=${lang}#/menu`}>{t(lang,"home.cta")}</a>
-      </div>
-    </div>
-  </section>
-);
-
-const ImmersiveStrip = () => {
-  useEffect(()=>{
-    const io = new IntersectionObserver((entries)=>{
-      entries.forEach(e=>{ if(e.isIntersecting){ e.target.classList.add("show"); }});
-    },{threshold:.2});
-    document.querySelectorAll(".immersive").forEach(el=>io.observe(el));
-    return ()=>io.disconnect();
-  },[]);
-  return (
-    <section className="container">
-      {IMMS.map((src, i)=>(
-        <div className="immersive" key={i}>
-          <img src={src} alt="" />
-          <div className="shade"></div>
-          <div className="caption">Brasil • {["Amazônia","Cerrado","Lençóis","Litoral","Serra"][i]}</div>
-        </div>
+    <div className="lang">
+      {LOCALES.map(l => (
+        <button
+          key={l}
+          className={`pill ${lang===l ? "active":""}`}
+          onClick={()=>onChange(l)}
+          aria-pressed={lang===l}
+        >
+          {l.toUpperCase()}
+        </button>
       ))}
+    </div>
+  );
+}
+
+function Nav({ lang }) {
+  return (
+    <nav className="nav">
+      <div className="brand" onClick={()=>{window.location.hash="/home";}}>
+        <img src="/logo.png" alt="" />
+        <span>Panela de Barro</span>
+      </div>
+      <div className="links">
+        <a href={`/#/about?lang=${lang}`}>{t("nav.about", lang)}</a>
+        <a href={`/#/menu?lang=${lang}`}>{t("nav.menu", lang)}</a>
+        <a href={`/#/gallery?lang=${lang}`}>{t("nav.gallery", lang)}</a>
+        <a href={`/#/woodfire?lang=${lang}`}>{t("nav.woodfire", lang)}</a>
+        <a href={`/#/location?lang=${lang}`}>{t("nav.location", lang)}</a>
+        <a href={`/#/support?lang=${lang}`}>{t("nav.support", lang)}</a>
+      </div>
+    </nav>
+  );
+}
+
+/* ====== Cards de Menu ====== */
+function Badge({ children }) { return <span className="badge">{children}</span>; }
+
+function MenuCard({ item, lang }) {
+  const tags = {
+    halal: t("menu.tags.halal", lang),
+    beef: t("menu.tags.beef", lang),
+    sea: t("menu.tags.sea", lang),
+    gluten: t("menu.tags.gluten", lang),
+    dairy: t("menu.tags.dairy", lang),
+    veg: t("menu.tags.veg", lang)
+  };
+  const [open, setOpen] = useState(false);
+  return (
+    <>
+      <div className="card" onClick={()=>setOpen(true)} role="button" tabIndex={0}>
+        <img src={item.img} alt="" />
+        <div className="card-body">
+          <h4>{item.name[lang] ?? item.name.pt}</h4>
+          <p>{item.short[lang] ?? item.short.pt}</p>
+          <div className="chips">
+            {item.tags.map(tag => <Badge key={tag}>{tags[tag]}</Badge>)}
+          </div>
+        </div>
+      </div>
+
+      {open && (
+        <div className="modal" onClick={()=>setOpen(false)}>
+          <div className="modal-card" onClick={(e)=>e.stopPropagation()}>
+            <img src={item.img} alt="" />
+            <div className="modal-body">
+              <h3>{item.name[lang] ?? item.name.pt}</h3>
+              <p className="muted">{item.short[lang] ?? item.short.pt}</p>
+              <p>{item.full[lang] ?? item.full.pt}</p>
+              <div className="chips">
+                {item.tags.map(tag => <Badge key={tag}>{tags[tag]}</Badge>)}
+              </div>
+              <div className="nutrition">
+                <span>{item.nutrition.kcal} {t("menu.nutrition.kcal", lang)}</span>
+                <span>{item.nutrition.carbs} {t("menu.nutrition.carbs", lang)}</span>
+                <span>{item.nutrition.protein} {t("menu.nutrition.protein", lang)}</span>
+              </div>
+              <button className="btn" onClick={()=>setOpen(false)}>
+                {t("menu.details.close", lang)}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+    </>
+  );
+}
+
+/* ====== PÁGINAS ====== */
+
+function Hero({ lang }) {
+  return (
+    <section className="hero">
+      <img src="/images/vaca-atolada.jpg" alt="" />
+      <div className="hero-txt">
+        <h1>{t("home.h1", lang)}</h1>
+        <p>{t("home.sub", lang)}</p>
+        <p className="soon">{t("home.soon", lang)}</p>
+        <a
+          className="btn"
+          href={`/#/menu?lang=${lang}`}
+          target="_blank"
+          rel="noopener"
+        >
+          {t("home.viewMenu", lang)}
+        </a>
+      </div>
     </section>
   );
-};
+}
 
-const MenuPage = ({lang}) => {
-  const [filter, setFilter] = useState("all");
-  const labels = { all:"menu.all", mains:"menu.mains", sides:"menu.sides", desserts:"menu.desserts", beverages:"menu.beverages", seasonal:"menu.seasonal", chefs:"menu.chefs" };
-  const cats = Object.keys(labels);
-  const items = useMemo(()=> (filter==="all" ? MENU : MENU.filter(m=>m.cat===filter)), [filter]);
-
-  const toTag = (k) => t(lang, `tags.${k}`) || k;
-
+function HomePreview({ lang }) {
+  const sample = MENU.slice(0, 6);
   return (
-    <div className="container">
-      <h2 className="section-title">{t(lang,"menu.title")}</h2>
-      <div style={{display:"flex",gap:10,flexWrap:"wrap",marginBottom:16}}>
-        {cats.map(c=>(
-          <button key={c} className={`pill ${filter===c?"active":""}`} onClick={()=>setFilter(c)}>{t(lang,labels[c])}</button>
-        ))}
-      </div>
+    <section className="container">
+      <h2>{t("home.preview", lang)}</h2>
       <div className="grid">
-        {items.map(m=>(
-          <div className="card" key={m.id}>
-            <img src={m.img} alt={m.name[lang] || m.name.pt} loading="lazy"/>
-            <div className="body">
-              <div className="h6"><strong>{m.name[lang] || m.name.pt}</strong></div>
-              <div className="small">{m.short[lang] || m.short.pt}</div>
-              <div className="tags">
-                {m.tags?.map((g,i)=><Tag key={i}>{toTag(g)}</Tag>)}
-              </div>
-            </div>
-          </div>
-        ))}
+        {sample.map(it => <MenuCard key={it.id} item={it} lang={lang} />)}
       </div>
-    </div>
+    </section>
   );
-};
+}
 
-const Gallery = ({lang}) => (
-  <div className="container">
-    <h2 className="section-title">{t(lang,"gallery.title")}</h2>
-    <div className="grid">
-      {MENU.slice(0,9).map(m=>(
-        <div className="card" key={m.id}>
-          <img src={m.img} alt="" loading="lazy"/>
-          <div className="body"><div className="small">{m.name[lang] || m.name.pt}</div></div>
+function ImmersiveStrip() {
+  // entra com fade + parallax
+  useEffect(() => {
+    const els = document.querySelectorAll(".immersive");
+    const io = new IntersectionObserver((entries)=>{
+      entries.forEach(e=>{
+        if (e.isIntersecting) e.target.classList.add("show");
+      });
+    }, { threshold: 0.25 });
+    els.forEach(el=>io.observe(el));
+    return ()=>io.disconnect();
+  }, []);
+  return (
+    <>
+      {IMMS.map((src, i)=>(
+        <div className="immersive" key={i} style={{backgroundImage:`url(${src})`}}>
+          <div className="veil"></div>
         </div>
       ))}
-    </div>
-  </div>
-);
+    </>
+  );
+}
 
-const Location = ({lang}) => (
-  <div className="container">
-    <h2 className="section-title">{t(lang,"location.title")}</h2>
-    <p><strong>{t(lang,"location.address")}</strong></p>
-    <div className="card" style={{overflow:"hidden"}}>
-      <div className="body">
-        <div className="small" style={{marginBottom:8}}>{t(lang,"location.mapsSoon")}</div>
-        <div style="display:none"></div>
-      </div>
-      <iframe
-        title="map"
-        src="https://www.google.com/maps?q=Baraha+Town,+Doha,+Qatar&hl=en&z=14&output=embed"
-        width="100%" height="360" style={{border:0}} loading="lazy" allowFullScreen></iframe>
-    </div>
-    <a className="pill" href={`/?lang=${lang}#/home`} style={{marginLeft:"auto",display:"inline-block",marginTop:16}}>
-      {t(lang,"nav.back")}
-    </a>
-  </div>
-);
+function MenuPage({ lang }) {
+  const [filter, setFilter] = useState("all");
+  const tabs = [
+    ["all", t("menu.filters.all",lang)],
+    ["mains", t("menu.filters.mains",lang)],
+    ["sides", t("menu.filters.sides",lang)],
+    ["beverages", t("menu.filters.beverages",lang)],
+    ["seasonal", t("menu.filters.seasonal",lang)],
+    ["chef", t("menu.filters.chef",lang)]
+  ];
+  const list = useMemo(()=> filter==="all" ? MENU : MENU.filter(m=>m.cat===filter), [filter]);
 
-const Contact = ({lang}) => (
-  <div className="container">
-    <h2 className="section-title">{t(lang,"contact.title")}</h2>
-    <div className="card"><div className="body">
-      <p><strong>{t(lang,"contact.email")}:</strong> restaurant@paneladebarroqatar.com</p>
-      <p><strong>{t(lang,"contact.phone")}:</strong> +974 3047 5279</p>
-    </div></div>
-    <a className="pill" href={`/?lang=${lang}#/home`} style={{marginLeft:"auto",display:"inline-block",marginTop:16}}>
-      {t(lang,"nav.back")}
-    </a>
-  </div>
-);
-
-const Support = ({lang}) => (
-  <div className="container">
-    <h2 className="section-title">{t(lang,"support.title")}</h2>
-    <p className="small">{t(lang,"support.blurb")}</p>
-    <div className="grid">
-      <div className="card"><div className="body">
-        <div className="h6"><strong>Google Maps</strong></div>
-        <p className="small">Deixe sua avaliação.</p>
-        <a className="btn" href="https://www.google.com/maps/search/?api=1&query=Baraha+Town+Doha+Qatar" target="_blank">Open</a>
-      </div></div>
-      <div className="card"><div className="body">
-        <div className="h6"><strong>Instagram</strong></div>
-        <p className="small">Siga e compartilhe.</p>
-        <a className="btn" href="#" onClick={(e)=>e.preventDefault()}>@paneladebarro</a>
-      </div></div>
-      <div className="card"><div className="body">
-        <div className="h6"><strong>WhatsApp</strong></div>
-        <p className="small">Dúvidas e reservas (em breve).</p>
-        <a className="btn" href="https://wa.me/97430475279" target="_blank">Abrir</a>
-      </div></div>
-    </div>
-    <a className="pill" href={`/?lang=${lang}#/home`} style={{marginLeft:"auto",display:"inline-block",marginTop:16}}>
-      {t(lang,"nav.back")}
-    </a>
-  </div>
-);
-
-const About = ({lang}) => (
-  <div className="container">
-    <h2 className="section-title">{t(lang,"about.title")}</h2>
-    <div className="grid">
-      <div className="card"><img src="/heritage/panela.jpg" alt="" /><div className="body"><div className="small">Panela de barro • artesanal</div></div></div>
-      <div className="card"><img src="/heritage/panela-artesao.jpg" alt="" /><div className="body"><div className="small">Feita à mão</div></div></div>
-      <div className="card"><img src="/images/moqueca-baiana.jpg" alt="" /><div className="body"><div className="small">Moqueca</div></div></div>
-    </div>
-    <div style={{whiteSpace:"pre-wrap", marginTop:16}} className="small">{t(lang,"about.long")}</div>
-    <a className="pill" href={`/?lang=${lang}#/home`} style={{marginLeft:"auto",display:"inline-block",marginTop:16}}>
-      {t(lang,"nav.back")}
-    </a>
-  </div>
-);
-
-/* ===== Home (com fumaça e strip imersivo) ===== */
-const Home = ({lang}) => (
-  <>
-    <Hero lang={lang}/>
-    <ImmersiveStrip/>
-    <div className="container">
-      <h2 className="section-title">{t(lang,"menu.preview")}</h2>
-      <div className="grid">
-        {MENU.slice(0,6).map(m=>(
-          <div className="card" key={m.id}>
-            <img src={m.img} alt="" />
-            <div className="body">
-              <div className="h6"><strong>{m.name[lang]||m.name.pt}</strong></div>
-              <div className="small">{m.short[lang]||m.short.pt}</div>
-              <div className="tags">{m.tags?.slice(0,3).map((g,i)=><Tag key={i}>{t(lang,`tags.${g}`)}</Tag>)}</div>
-            </div>
-          </div>
+  return (
+    <section className="container">
+      <a className="back" href={`/?lang=${lang}`}>{t("nav.back",lang)}</a>
+      <div className="tabs">
+        {tabs.map(([val,label])=>(
+          <button key={val} className={`pill ${filter===val?"active":""}`} onClick={()=>setFilter(val)}>{label}</button>
         ))}
       </div>
-    </div>
-  </>
-);
+      <div className="grid">
+        {list.map(it => <MenuCard key={it.id} item={it} lang={lang} />)}
+      </div>
+    </section>
+  );
+}
 
-/* ===== App ===== */
-export default function App(){
-  const [route, go] = useRoute();
-  const [lang, setLangState] = useLang();
+function GalleryPage({ lang }) {
+  // usa as imagens do próprio MENU como galeria
+  return (
+    <section className="container">
+      <a className="back" href={`/?lang=${lang}`}>{t("nav.back",lang)}</a>
+      <h2>{t("gallery.title", lang)}</h2>
+      <div className="masonry">
+        {MENU.map(m=>(
+          <figure key={m.id}>
+            <img src={m.img} alt="" />
+            <figcaption>{m.name[lang] ?? m.name.pt}</figcaption>
+          </figure>
+        ))}
+      </div>
+    </section>
+  );
+}
+
+function AboutPage({ lang }) {
+  return (
+    <section className="container">
+      <a className="back" href={`/?lang=${lang}`}>{t("nav.back",lang)}</a>
+      <h2>{t("about.title", lang)}</h2>
+
+      <div className="split">
+        <div>
+          <p>
+            {t("about.backToRoots", lang)} {lang==="pt" && (
+              <> Um lugar onde cada garfada é homenagem às tradições transmitidas no
+              calor do fogão a lenha e no aconchego da cerâmica.</>
+            )}
+            {lang==="en" && (<> A place where every bite honors traditions forged over wood-fire and clay.</>)}
+            {lang==="ar" && (<> مكان يحتفي بكل لقمة بتقاليد الطهي على الحطب والفخار.</>)}
+          </p>
+
+          <h3>{t("about.whyClay",lang)}</h3>
+          <p>
+            {lang==="pt" ? (
+              <>A panela de barro atravessa nossa história: dos povos indígenas que moldavam o barro,
+              às cozinhas afro-brasileiras onde a criatividade transformou feijão em feijoada e peixe em moqueca.
+              O barro não apressa: ele dá tempo para que os sabores se encontrem e o caldo ganhe corpo.</>
+            ) : lang==="en" ? (
+              <>Clay pots run through Brazil’s story — from Indigenous craft to Afro-Brazilian kitchens where creativity
+              turned beans into feijoada and fish into moqueca. Clay doesn’t rush; it lets flavors marry and broths thicken.</>
+            ) : (
+              <>يمتد قدر الفخار عبر تاريخ البرازيل: من حرف السكان الأصليين إلى مطابخ الأفرو-برازيليين
+              حيث تحوّلت الفاصوليا إلى فيجوادا والسمك إلى موكيكا. الفخار لا يستعجل الطعام؛
+              يسمح للنكهات بالالتئام وللمرق بالامتلاء.</>
+            )}
+          </p>
+        </div>
+        <div className="stack">
+          <img src="/heritage/panela-artesanal.jpg" alt="" />
+          <img src="/heritage/panela-mao.jpg" alt="" />
+        </div>
+      </div>
+
+      <h3>{t("about.woodfire",lang)}</h3>
+      <div className="split">
+        <div>
+          <p>
+            {lang==="pt" ? (
+              <>O fogão a lenha é memória viva do interior: chama mansa, fumaça aromática e panela de ferro.
+              No <strong>Panela de Barro</strong>, ele inspira nossos assados e caldos, mantendo o espírito da roça com técnica contemporânea.</>
+            ) : lang==="en" ? (
+              <>Wood-fire is living memory: gentle flame, aromatic smoke and cast-iron pots. At <strong>Panela de Barro</strong>,
+              it guides our roasts and broths — countryside soul with modern craft.</>
+            ) : (
+              <>الطبخ على الحطب هو ذاكرة ريفية حيّة: لهب هادئ ودخان عطِر وقدور من حديد. في <strong>قدر الفخار</strong>،
+              يلهم مشاوينا ومرقنا بمزج روح الريف مع تقنية معاصرة.</>
+            )}
+          </p>
+        </div>
+        <div className="stack">
+          <img src="/heritage/fogao-1.jpg" alt="" />
+          <img src="/heritage/fogao-2.jpg" alt="" />
+          <img src="/heritage/fogao-3.jpg" alt="" />
+        </div>
+      </div>
+
+      <h3>{t("about.team",lang)}</h3>
+      <div className="team">
+        <article>
+          <img src="/heritage/chef-quessi.jpg" alt="Chef Quessi" onError={(e)=>e.currentTarget.src="/logo.png"} />
+          <h4>Quessi — Proprietário</h4>
+          <p>
+            {lang==="pt" ? (
+              <>10+ anos de cozinha, 6 focados em culinária brasileira entre Abu Dhabi e Qatar. Cresceu em Rondônia, na fazenda,
+              plantando feijão, café, milho e mandioca. Aprendeu com a mãe Dona Cleusa e com o irmão Alex a essência do ingrediente e o fogão a lenha.</>
+            ) : lang==="en" ? (
+              <>10+ years cooking, 6 dedicated to Brazilian cuisine in Abu Dhabi and Qatar. Raised on a farm in Rondônia,
+              learning from his mother Dona Cleusa and his brother Alex — ingredients first and wood-fire technique.</>
+            ) : (
+              <>أكثر من 10 سنوات في الطهي، 6 سنوات في المطبخ البرازيلي بين أبوظبي وقطر. نشأ في روندونيا على مزرعة،
+              وتعلّم من والدته دونا كليوزا وأخيه أليكس جوهر المكوّنات والطبخ على الحطب.</>
+            )}
+          </p>
+        </article>
+        <article>
+          <img src="/heritage/chef-alex.jpg" alt="Chef Alex" onError={(e)=>e.currentTarget.src="/logo.png"} />
+          <h4>Alex — Head Chef</h4>
+          <p>
+            {lang==="pt" ? (
+              <>Mais de 10 anos entre culinária brasileira e italiana. Técnica precisa, memória afetiva caipira.</>
+            ) : lang==="en" ? (
+              <>10+ years across Brazilian and Italian kitchens. Technical precision with rustic soul.</>
+            ) : (
+              <>أكثر من 10 سنوات بين المطبخين البرازيلي والإيطالي — دقة تقنية وروح ريفية.</>
+            )}
+          </p>
+        </article>
+        <article>
+          <img src="/heritage/panela-mao.jpg" alt="Dona Cleusa" />
+          <h4>Dona Cleusa — Matriarca</h4>
+          <p>
+            {lang==="pt" ? (
+              <>25+ anos de cozinha (na verdade desde os 12 no fogão a lenha com a avó). Mineira com raízes italianas —
+              farinhas, caldos e afeto.</>
+            ) : lang==="en" ? (
+              <>25+ years cooking (since age 12 on wood-fire with her mother). Minas Gerais heritage with Italian roots —
+              flours, broths and warmth.</>
+            ) : (
+              <>أكثر من 25 عاماً في المطبخ (منذ سن 12 على الحطب مع والدتها). أصول من ميناس جيرايس مع جذور إيطالية —
+              دقيق ومرق ودفء.</>
+            )}
+          </p>
+        </article>
+      </div>
+    </section>
+  );
+}
+
+function WoodfirePage({ lang }) {
+  return (
+    <section className="container">
+      <a className="back" href={`/?lang=${lang}`}>{t("nav.back",lang)}</a>
+      <h2>{t("about.woodfire",lang)}</h2>
+      <p>
+        {lang==="pt" ? (
+          <>Do tacho de cobre aos grandes fornos de barro, a história do fogão a lenha no Brasil mistura indígenas,
+          tropeiros e imigrações. Chama calma, fumaça perfumada e tempo: três ingredientes que transformam comida simples em memória.</>
+        ) : lang==="en" ? (
+          <>From copper kettles to clay ovens, Brazil’s wood-fire story blends Indigenous craft, muleteers and migrations.
+          Gentle flame, scented smoke and time turn simple food into memory.</>
+        ) : (
+          <>من قدور النحاس إلى أفران الطين، تمتزج قصة الطهي بالحطب في البرازيل بحِرَف السكان الأصليين والقوافل والهجرات.
+          لهب هادئ ودخان معطّر والزمن يحوّلون الطعام البسيط إلى ذكرى.</>
+        )}
+      </p>
+      <div className="stack">
+        <img src="/heritage/fogao-1.jpg" alt="" />
+        <img src="/heritage/fogao-2.jpg" alt="" />
+      </div>
+    </section>
+  );
+}
+
+function LocationPage({ lang }) {
+  const embed = "https://www.google.com/maps?q=Baraha%20Town%20Doha%20Qatar&output=embed";
+  const open = "https://www.google.com/maps/search/?api=1&query=Baraha%20Town%20Doha%20Qatar";
+  return (
+    <section className="container">
+      <a className="back" href={`/?lang=${lang}`}>{t("nav.back",lang)}</a>
+      <h2>{t("location.title", lang)}</h2>
+      <p className="muted">{t("location.address", lang)}</p>
+      <div className="mapwrap">
+        <iframe
+          title="Baraha Town"
+          src={embed}
+          loading="lazy"
+          referrerPolicy="no-referrer-when-downgrade"
+          allowFullScreen
+        ></iframe>
+      </div>
+      <a className="btn ghost" href={open} target="_blank" rel="noopener">
+        {t("location.openMaps", lang)}
+      </a>
+    </section>
+  );
+}
+
+function SupportPage({ lang }) {
+  return (
+    <section className="container">
+      <a className="back" href={`/?lang=${lang}`}>{t("nav.back",lang)}</a>
+      <h2>{t("support.title", lang)}</h2>
+      <p>{t("support.body", lang)}</p>
+      <ul className="bullets">
+        <li><a href="https://g.page/r" target="_blank" rel="noopener">Google Reviews</a></li>
+        <li><a href="https://wa.me/" target="_blank" rel="noopener">WhatsApp</a></li>
+      </ul>
+    </section>
+  );
+}
+
+/* ====== APP ====== */
+export default function App() {
+  const [route] = useHashRoute();
+  const [lang, setLangState] = useState(getLang());
+
+  useEffect(() => {
+    const on = (e) => setLangState(e.detail || getLang());
+    window.addEventListener("langchange", on);
+    return () => window.removeEventListener("langchange", on);
+  }, []);
+
+  useEffect(() => {
+    // splash some 1.2s
+    const s = document.getElementById("splash");
+    s?.classList.add("hide");
+  }, []);
+
+  const changeLang = (l) => setLang(l); // atualiza URL + dispara evento
 
   return (
     <>
-      <Splash/>
-      <Header lang={lang} onLang={setLangState}/>
-      {route==="home" && <Home lang={lang}/>}
-      {route==="menu" && <MenuPage lang={lang}/>}
-      {route==="gallery" && <Gallery lang={lang}/>}
-      {route==="location" && <Location lang={lang}/>}
-      {route==="contact" && <Contact lang={lang}/>}
-      {route==="support" && <Support lang={lang}/>}
-      {route==="about" && <About lang={lang}/>}
+      <Nav lang={lang} />
+      <LanguagePills lang={lang} onChange={changeLang} />
 
-      <footer className="footer">© {new Date().getFullYear()} Panela de Barro</footer>
+      {route === "home" && <>
+        <Hero lang={lang} />
+        <ImmersiveStrip />
+        <HomePreview lang={lang} />
+      </>}
+
+      {route === "menu" && <MenuPage lang={lang} />}
+      {route === "gallery" && <GalleryPage lang={lang} />}
+      {route === "about" && <AboutPage lang={lang} />}
+      {route === "woodfire" && <WoodfirePage lang={lang} />}
+      {route === "location" && <LocationPage lang={lang} />}
+      {route === "support" && <SupportPage lang={lang} />}
     </>
   );
 }
