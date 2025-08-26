@@ -1,210 +1,148 @@
-import React, { useEffect, useMemo, useState } from "react";
-import { LOCALES, STRINGS, getLang, setLang } from "./i18n.js";
-import { MENU } from "./menuData.js";
-
-/* ===== imagens imersivas (use o que já tem em /public/immersive) ===== */
-const IMMS = ["amazonia","cerrado","lencois","litoral","serra"].map(n=>`/immersive/${n}.jpg`);
-
-/* ===== helpers ===== */
-const useRoute = () => {
-  const parse = () => (window.location.hash.replace("#/","") || "home");
-  const [route, setRoute] = useState(parse());
-  useEffect(() => {
-    const fn = () => setRoute(parse());
-    window.addEventListener("hashchange", fn);
-    return () => window.removeEventListener("hashchange", fn);
-  }, []);
-  return [route, (r)=>{ window.location.hash = `/${r}`; }];
-};
-const useLang = () => {
-  const [lang, set] = useState(getLang());
-  useEffect(() => {
-    const h = (e)=> set(e.detail.lang);
-    window.addEventListener("langchange", h);
-    return () => window.removeEventListener("langchange", h);
-  }, []);
-  return [lang, (l)=>{ setLang(l); /* atualiza URL sem recarregar */ }];
-};
-const t = (lang, path) => {
-  const parts = path.split(".");
-  return parts.reduce((acc,k)=> (acc && acc[k] != null ? acc[k] : ""), STRINGS[lang]);
-};
-const Tag = ({children}) => <span className="tag">{children}</span>;
-
-/* ===== Splash do logo ===== */
-const Splash = () => {
-  const [hide, setHide] = useState(false);
-  useEffect(()=>{ const id=setTimeout(()=>setHide(true), 1200); return ()=>clearTimeout(id); },[]);
-  return <div id="splash" className={hide?"hide":""}><div className="logo"></div></div>;
-};
-
-/* ===== Header ===== */
-const Header = ({lang, onLang}) => {
-  const pill = (code) => (
-    <a href={`/?lang=${code}${window.location.hash || "#/home"}`}
-       onClick={(e)=>{e.preventDefault(); onLang(code);}}
-       className={`pill ${lang===code?"active":""}`}>{LOCALES[code]}</a>
-  );
-  return (
-    <header className="header">
-      <div className="container nav">
-        <a href="/?lang=pt#/" onClick={(e)=>{e.preventDefault(); onLang(lang); window.location.hash="/home";}}>
-          <img src="/logo.png" alt="logo" style={{width:28,verticalAlign:"middle",marginRight:8}}/>
-          <strong>Panela de Barro</strong>
-        </a>
-        <a href={`/?lang=${lang}#/about`}>{t(lang,"nav.about")}</a>
-        <a href={`/?lang=${lang}#/menu`}>{t(lang,"nav.menu")}</a>
-        <a href={`/?lang=${lang}#/gallery`}>{t(lang,"nav.gallery")}</a>
-        <a href={`/?lang=${lang}#/location`}>{t(lang,"nav.location")}</a>
-        <a href={`/?lang=${lang}#/contact`}>{t(lang,"nav.contact")}</a>
-        <a href={`/?lang=${lang}#/support`}>{t(lang,"nav.support")}</a>
-        <div className="spacer"></div>
-        <div className="pills">
-          {pill("pt")}{pill("en")}{pill("ar")}
-        </div>
-      </div>
-    </header>
-  );
-};
-
-/* ===== Seções ===== */
-const Hero = ({lang}) => (
-  <section className="container">
-    <div className="hero">
-      <img src="/images/vaca-atolada.jpg" alt="" />
-      <div className="smoke"></div>
-      <div className="content">
-        <h1>{t(lang,"home.headline")}</h1>
-        <div>{t(lang,"home.sub")}</div>
-        <div className="small" style={{opacity:.9, marginTop:6}}>{t(lang,"home.coming")}</div>
-        <a className="btn" href={`/?lang=${lang}#/menu`}>{t(lang,"home.cta")}</a>
-      </div>
-    </div>
-  </section>
-);
-
-const ImmersiveStrip = () => {
-  useEffect(()=>{
-    const io = new IntersectionObserver((entries)=>{
-      entries.forEach(e=>{ if(e.isIntersecting){ e.target.classList.add("show"); }});
-    },{threshold:.2});
-    document.querySelectorAll(".immersive").forEach(el=>io.observe(el));
-    return ()=>io.disconnect();
-  },[]);
-  return (
-    <section className="container">
-      {IMMS.map((src, i)=>(
-        <div className="immersive" key={i}>
-          <img src={src} alt="" />
-          <div className="shade"></div>
-          <div className="caption">Brasil • {["Amazônia","Cerrado","Lençóis","Litoral","Serra"][i]}</div>
-        </div>
-      ))}
-    </section>
-  );
-};
-
-const MenuPage = ({lang}) => {
-  const [filter, setFilter] = useState("all");
-  const labels = { all:"menu.all", mains:"menu.mains", sides:"menu.sides", desserts:"menu.desserts", beverages:"menu.beverages", seasonal:"menu.seasonal", chefs:"menu.chefs" };
-  const cats = Object.keys(labels);
-  const items = useMemo(()=> (filter==="all" ? MENU : MENU.filter(m=>m.cat===filter)), [filter]);
-
-  const toTag = (k) => t(lang, `tags.${k}`) || k;
-
-  return (
-    <div className="container">
-      <h2 className="section-title">{t(lang,"menu.title")}</h2>
-      <div style={{display:"flex",gap:10,flexWrap:"wrap",marginBottom:16}}>
-        {cats.map(c=>(
-          <button key={c} className={`pill ${filter===c?"active":""}`} onClick={()=>setFilter(c)}>{t(lang,labels[c])}</button>
-        ))}
-      </div>
-      <div className="grid">
-        {items.map(m=>(
-          <div className="card" key={m.id}>
-            <img src={m.img} alt={m.name[lang] || m.name.pt} loading="lazy"/>
-            <div className="body">
-              <div className="h6"><strong>{m.name[lang] || m.name.pt}</strong></div>
-              <div className="small">{m.short[lang] || m.short.pt}</div>
-              <div className="tags">
-                {m.tags?.map((g,i)=><Tag key={i}>{toTag(g)}</Tag>)}
-              </div>
-            </div>
-          </div>
-        ))}
-      </div>
-    </div>
-  );
-};
-
-const Gallery = ({lang}) => (
-  <div className="container">
-    <h2 className="section-title">{t(lang,"gallery.title")}</h2>
-    <div className="grid">
-      {MENU.slice(0,9).map(m=>(
-        <div className="card" key={m.id}>
-          <img src={m.img} alt="" loading="lazy"/>
-          <div className="body"><div className="small">{m.name[lang] || m.name.pt}</div></div>
-        </div>
-      ))}
-    </div>
-  </div>
-);
-
-const Location = ({lang}) => (
-  <div className="container">
-    <h2 className="section-title">{t(lang,"location.title")}</h2>
-    <p><strong>{t(lang,"location.address")}</strong></p>
-    <div className="card" style={{overflow:"hidden"}}>
-      <div className="body">
-        <div className="small" style={{marginBottom:8}}>{t(lang,"location.mapsSoon")}</div>
-        <div style="display:none"></div>
-      </div>
-      <iframe
-        title="map"
-        src="https://www.google.com/maps?q=Baraha+Town,+Doha,+Qatar&hl=en&z=14&output=embed"
-        width="100%" height="360" style={{border:0}} loading="lazy" allowFullScreen></iframe>
-    </div>
-    <a className="pill" href={`/?lang=${lang}#/home`} style={{marginLeft:"auto",display:"inline-block",marginTop:16}}>
-      {t(lang,"nav.back")}
-    </a>
-  </div>
-);
-
-const Contact = ({lang}) => (
-  <div className="container">
-    <h2 className="section-title">{t(lang,"contact.title")}</h2>
-    <div className="card"><div className="body">
-      <p><strong>{t(lang,"contact.email")}:</strong> restaurant@paneladebarroqatar.com</p>
-      <p><strong>{t(lang,"contact.phone")}:</strong> +974 3047 5279</p>
-    </div></div>
-    <a className="pill" href={`/?lang=${lang}#/home`} style={{marginLeft:"auto",display:"inline-block",marginTop:16}}>
-      {t(lang,"nav.back")}
-    </a>
-  </div>
-);
-
-const Support = ({lang}) => (
-  <div className="container">
-    <h2 className="section-title">{t(lang,"support.title")}</h2>
-    <p className="small">{t(lang,"support.blurb")}</p>
-    <div className="grid">
-      <div className="card"><div className="body">
-        <div className="h6"><strong>Google Maps</strong></div>
-        <p className="small">Deixe sua avaliação.</p>
-        <a className="btn" href="https://www.google.com/maps/search/?api=1&query=Baraha+Town+Doha+Qatar" target="_blank">Open</a>
-      </div></div>
-      <div className="card"><div className="body">
-        <div className="h6"><strong>Instagram</strong></div>
-        <p className="small">Siga e compartilhe.</p>
-        <a className="btn" href="#" onClick={(e)=>e.preventDefault()}>@paneladebarro</a>
-      </div></div>
-      <div className="card"><div className="body">
-        <div className="h6"><strong>WhatsApp</strong></div>
-        <p className="small">Dúvidas e reservas (em breve).</p>
-        <a className="btn" href="https://wa.me/97430475279" target="_blank">Abrir</a>
-      </div></div>
-    </div>
-    <a className="pill" href={`/?lang=${lang}#/home`} style={{marginLeft:"auto",display:"inline-block",marginTop:16}}>
-      {t(lang,"
+// categoria: mains, sides, desserts, beverages, seasonal, chefs
+export const MENU = [
+  {
+    id: "vaca-atolada",
+    img: "/images/vaca-atolada.jpg",
+    cat: "mains",
+    tags: ["halal","beef","gluten","dairy"],
+    name: { pt: "Vaca Atolada (Ossobuco)", en: "Vaca Atolada (Ossobuco)", ar: "فاكا أتولادا (عظم الساق)" },
+    short: {
+      pt: "Ossobuco com polenta cremosa e rúcula cítrica.",
+      en: "Ossobuco with creamy polenta and citrus arugula.",
+      ar: "عظم الساق مع بولينتا كريمية وجرجير بنكهة حمضية."
+    }
+  },
+  {
+    id: "feijoada-costela",
+    img: "/images/feijoada-costela.jpg",
+    cat: "mains",
+    tags: ["halal","beef","gluten"],
+    name: { pt: "Feijoada de Costela", en: "Beef Rib Feijoada", ar: "فيجوادا بالضلوع" },
+    short: {
+      pt: "Feijão preto com costela, farofa de banana e vinagrete.",
+      en: "Black beans with beef ribs, banana farofa and vinaigrette.",
+      ar: "فاصوليا سوداء مع ضلوع البقر وفاروڤا الموز وصلصة فيناغريت."
+    }
+  },
+  {
+    id: "picanha-grelhada",
+    img: "/images/picanha-grelhada.jpg",
+    cat: "chefs",
+    tags: ["halal","beef","dairy","gluten"],
+    name: { pt: "Picanha Grelhada", en: "Grilled Picanha", ar: "بيكانيا مشوية" },
+    short: {
+      pt: "Com risoto de cogumelos, polenta verde e molho de pimenta do reino.",
+      en: "With mushroom risotto, green polenta and black-pepper sauce.",
+      ar: "مع ريزوتو الفطر وبولينتا خضراء وصلصة الفلفل الأسود."
+    }
+  },
+  {
+    id: "moqueca-baiana",
+    img: "/images/moqueca-baiana.jpg",
+    cat: "mains",
+    tags: ["halal","sea","gluten","dairy"],
+    name: { pt: "Moqueca Baiana", en: "Bahian Moqueca", ar: "موكيكا باهيا" },
+    short: {
+      pt: "Peixe no leite de coco, urucum/dendê e coentro.",
+      en: "Fish in coconut milk, annatto/dendê and cilantro.",
+      ar: "سمك بحليب جوز الهند مع الأناناتو/الدنديه والكزبرة."
+    }
+  },
+  {
+    id: "pamonha",
+    img: "/images/pamonha.jpg",
+    cat: "seasonal",
+    tags: ["veg","gluten","dairy"],
+    name: { pt: "Pamonha (Sazonal)", en: "Pamonha (Seasonal)", ar: "بامونيا (موسمي)" },
+    short: {
+      pt: "Clássico de milho verde — doce ou salgado.",
+      en: "Green-corn classic — sweet or savory.",
+      ar: "طبق الذرة الخضراء الكلاسيكي — حلو أو مالح."
+    }
+  },
+  {
+    id: "sol-do-cerrado",
+    img: "/images/sol-do-cerrado.jpg",
+    cat: "beverages",
+    tags: ["veg"],
+    name: { pt: "Sol do Cerrado", en: "Cerrado Sun", ar: "شمس السيرادو" },
+    short: {
+      pt: "Manga, maracujá, hortelã e toque cítrico.",
+      en: "Mango, passion fruit, mint and citrus.",
+      ar: "مانجو وماراكوجا ونعناع ولمسة حمضية."
+    }
+  },
+  {
+    id: "uva-limao-gelo",
+    img: "/images/uva-limao-gelo.jpg",
+    cat: "beverages",
+    tags: ["veg"],
+    name: { pt: "Uva & Limão Gelo", en: "Grape & Lime Ice", ar: "عنب وليمون مثلّج" },
+    short: {
+      pt: "Suco de uva integral com limão e hortelã.",
+      en: "Whole grape juice with lime and mint.",
+      ar: "عصير عنب كامل مع ليمون ونعناع."
+    }
+  },
+  {
+    id: "pao-de-queijo",
+    img: "/images/pao-de-queijo.jpg",
+    cat: "sides",
+    tags: ["veg","gluten","dairy"],
+    name: { pt: "Pão de Queijo", en: "Cheese Bread", ar: "خبز الجبن" },
+    short: {
+      pt: "Tradicional, macio e quentinho.",
+      en: "Traditional, soft and warm.",
+      ar: "تقليدي، طري ودافئ."
+    }
+  },
+  {
+    id: "polenta-frita",
+    img: "/images/polenta-frita.jpg",
+    cat: "sides",
+    tags: ["veg","gluten","dairy"],
+    name: { pt: "Polenta Frita", en: "Fried Polenta", ar: "بولينتا مقلية" },
+    short: {
+      pt: "Crocante por fora, cremosa por dentro.",
+      en: "Crispy outside, creamy inside.",
+      ar: "مقرمشة من الخارج وكريمية من الداخل."
+    }
+  },
+  {
+    id: "encanto-de-coco",
+    img: "/images/encanto-de-coco.jpg",
+    cat: "desserts",
+    tags: ["gluten","dairy","veg"],
+    name: { pt: "Encanto de Coco", en: "Coconut Delight", ar: "حلوى جوز الهند" },
+    short: {
+      pt: "Pudim de coco com caramelo claro.",
+      en: "Coconut pudding with light caramel.",
+      ar: "بودينغ جوز الهند مع كراميل خفيف."
+    }
+  },
+  {
+    id: "doce-da-roca-com-gelo",
+    img: "/images/doce-da-roca-com-gelo.jpg",
+    cat: "desserts",
+    tags: ["gluten","dairy","veg"],
+    name: { pt: "Doce da Roça com Gelo", en: "Farm Sweet with Ice", ar: "حلوى المزرعة بالثلج" },
+    short: {
+      pt: "Abóbora cremosa com especiarias e sorvete artesanal.",
+      en: "Creamy pumpkin with spices and artisan ice cream.",
+      ar: "قرع كريمي مع بهارات وآيس كريم حرفي."
+    }
+  },
+  {
+    id: "farofa-de-castanha",
+    img: "/images/farofa-de-castanha.jpg",
+    cat: "sides",
+    tags: ["veg","gluten"],
+    name: { pt: "Farofa de Castanha", en: "Brazil-nut Farofa", ar: "фарوفا بالجوز البرازيلي" },
+    short: {
+      pt: "Clássica, amanteigada e perfumada.",
+      en: "Classic, buttery and fragrant.",
+      ar: "كلاسيكية وزبدية وعطرة."
+    }
+  }
+];
+// Para adicionar mais: copie um bloco, ajuste id/img/cat/tags/name/short.
