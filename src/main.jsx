@@ -1,20 +1,12 @@
 // src/main.jsx
 import React from "react";
-import ReactDOM from "react-dom/client";
+import { createRoot } from "react-dom/client";
 import App from "./App.jsx";
 import "./styles.css";
+import { initLangFromURL, applyDocumentLang } from "./i18n.js";
 
-import { initLangFromURL, applyDocumentLang, getLang } from "./i18n";
-
-// 1) define o idioma logo no carregamento
+// idioma: lê ?lang=... e aplica no <html>
 initLangFromURL();
-applyDocumentLang(getLang());
+applyDocumentLang();
 
-// 2) mantém <html lang dir> atualizado quando o usuário troca de idioma
-window.addEventListener("langchange", () => applyDocumentLang(getLang()));
-
-ReactDOM.createRoot(document.getElementById("root")).render(
-  <React.StrictMode>
-    <App />
-  </React.StrictMode>
-);
+createRoot(document.getElementById("root")).render(<App />);
