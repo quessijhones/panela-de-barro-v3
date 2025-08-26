@@ -163,3 +163,119 @@ figure.card img {
   display: block;
   border-radius: 14px;
 }
+/* ---- Hero: texto legível sobre a imagem ---- */
+.readable-on-image .hero-img-wrap {
+  position: relative;
+  overflow: hidden;
+  border-radius: 28px;
+}
+.readable-on-image .hero-img-wrap img {
+  width: 100%;
+  height: clamp(220px, 40vw, 420px);
+  object-fit: cover;
+  object-position: center;
+  display: block;
+}
+.readable-on-image .hero-overlay {
+  position: absolute;
+  inset: 0;
+  /* overlay forte para leitura */
+  background: linear-gradient(
+      180deg,
+      rgba(0,0,0,.55) 0%,
+      rgba(0,0,0,.25) 35%,
+      rgba(0,0,0,.65) 100%
+  );
+}
+.readable-on-image .hero-inner {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  align-content: center;
+  gap: 8px;
+  padding: clamp(16px, 4vw, 32px);
+  color: #fff;
+  text-shadow: 0 1px 2px rgba(0,0,0,.4);
+}
+.readable-on-image .hero .btn,
+.readable-on-image .btn { box-shadow: 0 2px 8px rgba(0,0,0,.25); }
+
+/* ---- Carrossel ---- */
+.home-block { margin-top: 28px; }
+.carousel { margin-top: 12px; }
+.carousel-frame {
+  position: relative;
+  border-radius: 28px;
+  overflow: hidden;
+}
+.carousel-frame img {
+  width: 100%;
+  height: clamp(200px, 45vw, 420px);
+  object-fit: cover;
+  display: block;
+}
+.carousel-cap {
+  position: absolute;
+  left: 16px; bottom: 12px;
+  color: #fff;
+  font-weight: 600;
+  text-shadow: 0 1px 2px rgba(0,0,0,.5);
+}
+.carousel-arrow {
+  position: absolute;
+  top: 50%; transform: translateY(-50%);
+  padding: 0 10px;
+  height: 42px; min-width: 42px;
+  border-radius: 999px;
+  border: none; cursor: pointer;
+  background: rgba(0,0,0,.35);
+  color: #fff; font-size: 24px; line-height: 42px;
+}
+.carousel-arrow.left { left: 8px; }
+.carousel-arrow.right { right: 8px; }
+
+/* ---- Figuras em Sobre / Fogão a Lenha / Galeria ---- */
+.tile-figure {
+  border-radius: 20px;
+  overflow: hidden;
+  background: #f4efe9;
+}
+.tile-figure img {
+  width: 100%;
+  height: clamp(180px, 32vw, 260px);
+  object-fit: cover;
+  display: block;
+}
+
+/* ---- Cartões da família (foco no rosto) ---- */
+.person-media {
+  aspect-ratio: 16 / 9;
+  overflow: hidden;
+  border-radius: 20px 20px 0 0;
+}
+.person-media img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.person-media.focus-top img {
+  /* sobe um pouco pra não cortar o rosto */
+  object-position: center 20%;
+}
+
+/* ---- Modal do prato ---- */
+.modal { position: fixed; inset: 0; background: rgba(0,0,0,.5); display: grid; place-items: center; padding: 16px; z-index: 50; }
+.modal-card { width: min(980px, 100%); background: #fff; border-radius: 14px; overflow: hidden; }
+.modal-head { display: flex; align-items: center; justify-content: space-between; padding: 12px 16px; background: #f6efe7; }
+.modal-body { padding: 12px 16px 18px; }
+.modal-body img { width: 100%; height: auto; border-radius: 10px; display: block; }
+.mt12 { margin-top: 12px; }
+
+/* ---- Fogão a Lenha: manter proporção igual ---- */
+.wood-figs .tile-figure img { height: clamp(180px, 28vw, 220px); object-fit: cover; }
+
+/* ---- Pequenos ajustes de legibilidade no mobile ---- */
+@media (max-width: 480px) {
+  .readable-on-image .hero-inner h1 { font-size: 28px; line-height: 1.1; }
+  .readable-on-image .hero-inner p { font-size: 15px; }
+}
