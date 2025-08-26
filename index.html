@@ -2,20 +2,59 @@
 <html lang="pt">
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, viewport-fit=cover"
+    />
     <title>Panela de Barro</title>
-    <link rel="icon" href="/logo.png" />
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="/src/styles.css">
+    <link rel="icon" type="image/png" href="/logo.png" />
+    <style>
+      /* Splash/loader seguro */
+      :root { --bg:#f1dfc8; }
+      html,body { height:100%; }
+      body { margin:0; background:var(--bg); }
+      #splash {
+        position:fixed; inset:0; background:var(--bg);
+        display:flex; align-items:center; justify-content:center;
+        z-index: 9999; transition: opacity .6s ease;
+      }
+      #splash img { width:140px; max-width:45vw; filter: drop-shadow(0 6px 18px rgba(0,0,0,.15)); }
+      #splash.splash--hide { opacity:0; pointer-events:none; }
+      /* se algo quebrar, o usuário ainda consegue rolar o body */
+      #root { isolation:isolate; }
+    </style>
   </head>
   <body>
-    <!-- Splash do logo -->
-    <div id="splash">
+    <!-- Splash que some sozinho -->
+    <div id="splash" aria-hidden="true">
       <img src="/logo.png" alt="Panela de Barro" />
     </div>
+
+    <!-- App -->
     <div id="root"></div>
+
+    <!-- Fail-safe: esconde o splash sozinho e expõe uma função global -->
+    <script>
+      (function () {
+        var hidden = false;
+        function hideNow() {
+          if (hidden) return;
+          hidden = true;
+          var el = document.getElementById("splash");
+          if (!el) return;
+          el.classList.add("splash--hide");
+          setTimeout(function(){ try { el.remove(); } catch(e){} }, 700);
+        }
+        // disponível para o React chamar assim que montar
+        window.__hideSplash = hideNow;
+        // fallback: some sozinho mesmo se a app não chamar
+        window.addEventListener("load", function(){
+          setTimeout(hideNow, 3500);
+        });
+        // outro fallback para caches chatos
+        setTimeout(hideNow, 6000);
+      })();
+    </script>
     <script type="module" src="/src/main.jsx"></script>
   </body>
 </html>
