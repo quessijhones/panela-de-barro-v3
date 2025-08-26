@@ -1,98 +1,85 @@
-:root {
-  --bg: #efdcc3;
-  --card: #fff7f0;
-  --ink: #311b0b;
-  --pill: #c07a52;
+:root{
+  --bg:#efdcc2;
+  --card:#ffffff;
+  --ink:#2a2018;
+  --muted:#6e5b4f;
+  --pill:#e5c9b5;
+  --brand:#874f35;
 }
-* { box-sizing: border-box; }
-html, body { margin:0; padding:0; background:var(--bg); color:var(--ink); font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, "Noto Sans", "Helvetica Neue", Arial; }
-
-a { color: inherit; text-decoration: none; }
-img { display: block; width: 100%; height: auto; border-radius: 14px; }
-
-.nav {
-  position: sticky; top:0; z-index: 20;
-  display:flex; align-items:center; justify-content:space-between;
-  padding:12px 20px; backdrop-filter: blur(8px);
-  background: rgba(255,255,255,.45);
-  border-bottom: 1px solid rgba(0,0,0,.05);
+*{box-sizing:border-box}
+html,body,#root{height:100%}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:system-ui,-apple-system,Segoe UI,Roboto,Inter,Arial}
+a{color:inherit;text-decoration:none}
+.container{max-width:1060px;margin:0 auto;padding:32px}
+.header{
+  position:sticky;top:0;z-index:40;
+  backdrop-filter:saturate(120%) blur(6px);
+  background:rgba(239,220,194,.75); border-bottom:1px solid rgba(0,0,0,.05)
 }
-.nav .brand { display:flex; align-items:center; gap:8px; font-weight:700; }
-.nav nav { display:flex; gap:22px; }
-.nav nav a { opacity:.85; }
-.nav nav a:hover { opacity:1; }
+.nav{display:flex;align-items:center;gap:20px;padding:12px 0}
+.nav a{font-weight:600;opacity:.85}
+.nav .spacer{flex:1}
+.pills{display:flex;gap:10px}
+.pill{padding:6px 10px;background:var(--pill);border-radius:999px;font-weight:700;opacity:.9}
+.pill.active{background:var(--brand);color:#fff}
 
-.lang-pills { position: fixed; top: 12px; right: 12px; display:flex; gap:8px; z-index:21; }
-.pill {
-  background: #eee1d4; border:none; padding:6px 10px; border-radius:999px; cursor:pointer; font-weight:600;
+.hero{position:relative;overflow:hidden;border-radius:14px}
+.hero img{width:100%;height:480px;object-fit:cover;display:block;filter:brightness(.7)}
+.hero .content{
+  position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;color:#fff;text-align:center;padding:24px;gap:10px
 }
-.pill.active { background: var(--pill); color: white; }
-.pill.back { margin-top: 14px; display:inline-block; }
-
-.container { width:min(1100px, 92vw); margin:40px auto; }
-.container h2 { font-size: 28px; margin: 8px 0 18px; }
-
-.hero { position:relative; height: 56vh; border-radius: 16px; overflow:hidden; width:min(1100px,92vw); margin: 22px auto; }
-.hero-bg { position:absolute; inset:0; background:url(/images/vaca-atolada.jpg) center/cover no-repeat; filter: brightness(.7); transform: scale(1.08); }
-.hero-inner { position:relative; z-index:2; color:#fff; text-align:center; top: 50%; transform: translateY(-50%); padding:0 20px; }
-.hero h1 { font-size: clamp(28px, 4vw, 42px); margin: 0 0 8px; }
-.hero p { margin:6px auto; max-width: 800px; }
-.hero .soon { opacity:.9; font-style: italic; }
-.cta { display:inline-block; margin-top:16px; padding:12px 22px; background:var(--pill); color:#fff; border-radius: 999px; }
-
-.smoke { position:absolute; inset:0; pointer-events:none; }
-.smoke::before, .smoke::after {
-  content:""; position:absolute; left:0; right:0; height:60%;
-  background: radial-gradient(ellipse at 50% 100%, rgba(255,255,255,.22), transparent 60%);
-  animation: smoke 9s linear infinite;
+.hero h1{font-size:36px;margin:0}
+.btn{
+  background:var(--brand);color:#fff;border:none;border-radius:999px;
+  padding:12px 20px;font-weight:700;cursor:pointer
 }
-.smoke::after { animation-duration: 12s; opacity:.6; filter: blur(8px); }
-@keyframes smoke {
-  0% { transform: translateY(40%) scale(1) }
-  50% { transform: translateY(0) scale(1.08) }
-  100% { transform: translateY(-60%) scale(1.15) }
+.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:22px}
+@media(max-width:900px){.grid{grid-template-columns:1fr 1fr}}
+@media(max-width:640px){.grid{grid-template-columns:1fr}}
+
+.card{background:var(--card);border-radius:16px;box-shadow:0 8px 26px rgba(0,0,0,.12);overflow:hidden}
+.card img{width:100%;height:220px;object-fit:cover;display:block}
+.card .body{padding:14px}
+.h6{margin:0 0 4px;font-size:18px}
+.small{font-size:14px;color:var(--muted)}
+.tags{display:flex;gap:6px;flex-wrap:wrap;margin-top:8px}
+.tag{background:var(--pill);border-radius:999px;padding:3px 8px;font-size:12px}
+
+.section-title{font-size:28px;margin:24px 0 12px}
+
+.footer{padding:40px 0;color:var(--muted);text-align:center}
+
+.immersive{
+  position:relative;margin:60px 0;border-radius:18px;overflow:hidden;height:380px
+}
+.immersive img{
+  position:absolute;inset:0; width:100%;height:100%;object-fit:cover; transform:scale(1.08); opacity:0; transition:opacity .9s ease, transform 1.8s ease
+}
+.immersive.show img{opacity:1;transform:scale(1)}
+.immersive .shade{position:absolute;inset:0;background:linear-gradient(to top, rgba(0,0,0,.55), transparent 60%)}
+.immersive .caption{position:absolute;left:20px;bottom:20px;color:#fff;font-weight:700}
+
+.smoke{
+  pointer-events:none; position:absolute; inset:0; overflow:hidden
+}
+.smoke::before,.smoke::after{
+  content:""; position:absolute; left:50%; width:140%; height:60%;
+  background:radial-gradient(closest-side, rgba(255,255,255,.55), rgba(255,255,255,0) 60%);
+  filter:blur(18px); transform:translate(-50%,40%) scale(1); opacity:.22;
+  animation:smoke 12s linear infinite
+}
+.smoke::after{animation-delay:-6s; opacity:.18}
+@keyframes smoke{
+  0%{transform:translate(-50%,40%) scale(1)}
+  100%{transform:translate(-50%,-60%) scale(1.6)}
 }
 
-.immersive { width:min(1100px,92vw); margin: 26px auto 0; }
-.stripe { height: 180px; margin: 14px 0; border-radius: 16px; background-size: cover; background-position:center; transform: translateY(20px); opacity: 0; transition: .9s ease; position:relative; overflow:hidden; }
-.stripe .veil { position:absolute; inset:0; background: linear-gradient(90deg, rgba(255,255,255,.12), rgba(0,0,0,.12)); mix-blend-mode: soft-light; }
-.stripe.reveal { transform: translateY(0); opacity:1; }
-
-.filters { display:flex; gap:10px; flex-wrap: wrap; margin: 6px 0 16px; }
-.grid { display:grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 18px; }
-.card { background: var(--card); border-radius: 18px; box-shadow: 0 10px 24px rgba(0,0,0,.08); overflow:hidden; display:flex; flex-direction:column; }
-.card-body { padding: 14px; display:flex; flex-direction:column; gap: 8px; }
-.title-row { display:flex; align-items:center; justify-content:space-between; gap: 8px; }
-.badge { background:#edd9c7; padding:4px 10px; border-radius:999px; font-size:12px; }
-.chips { display:flex; flex-wrap:wrap; gap:8px; }
-.chip { background:#eee1d4; padding:4px 8px; border-radius:999px; font-size:12px; }
-.more { margin-left:auto; font-weight:700; opacity:.6; }
-
-.masonry { columns: 3 240px; column-gap: 16px; }
-.masonry img { margin-bottom: 16px; border-radius: 12px; }
-
-.lead { font-weight:600; margin-bottom: 10px; }
-.map-wrap { margin-top: 10px; border-radius: 16px; overflow:hidden; box-shadow: 0 12px 26px rgba(0,0,0,.08); background: linear-gradient(180deg,#e6e0d8,#d3cdc5); }
-
-.prose h3 { margin-top: 18px; }
-.two-col { display:grid; grid-template-columns: repeat(auto-fit,minmax(220px,1fr)); gap:16px; margin: 10px 0; }
-
-.foot { text-align:center; padding: 28px 0 40px; opacity:.8; }
-
-/* Splash do logo */
-#logo-splash {
-  position: fixed; inset:0; display:grid; place-items:center; background: var(--bg);
-  opacity:0; pointer-events:none; z-index: 50; transition: opacity .4s ease;
+#splash{
+  position:fixed;inset:0;background:var(--bg);display:flex;align-items:center;justify-content:center;z-index:1000;transition:opacity .6s ease;opacity:1
 }
-#logo-splash.show { opacity:1; pointer-events: all; }
-#logo-splash.hide { opacity:0; pointer-events:none; }
-#logo-splash .logo {
-  width: 120px; height: 120px; border-radius: 50%;
-  display:grid; place-items:center; background: #fff7f0; box-shadow: 0 10px 40px rgba(0,0,0,.15);
-  animation: pop .9s ease both;
-}
-#logo-splash img { width: 72px; height: 72px; }
-@keyframes pop {
-  0% { transform: scale(.86); opacity: .2 }
-  100% { transform: scale(1); opacity: 1 }
+#splash.hide{opacity:0;pointer-events:none}
+#splash .logo{
+  width:140px;height:140px;border-radius:50%;
+  background:#fff url("/logo.png") center/70% no-repeat; 
+  box-shadow:0 12px 40px rgba(0,0,0,.18)
 }
