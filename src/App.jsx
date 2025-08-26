@@ -1,270 +1,375 @@
 import React, { useEffect, useMemo, useState } from "react";
-import { LOCALES, STRINGS, getLangFromURL } from "./i18n";
-import { MENU } from "./menuData";
 import "./styles.css";
+import { LOCALES, getLang, setLang, t } from "./i18n";
+import { MENU } from "./menuData"; // <-- export nomeado
 
-const IMMERSIVE = ["/immersive/amazonia.jpg","/immersive/cerrado.jpg","/immersive/lencois.jpg","/immersive/litoral.jpg","/immersive/serra.jpg"];
-
-function useHashRoute() {
+/**********************
+ *  Utilitários
+ **********************/
+const useHashRoute = () => {
   const parse = () => {
-    const raw = window.location.hash || "#/home";
-    const path = raw.replace(/^#\//,"").split("?")[0];
-    return path || "home";
-    };
+    const h = window.location.hash || "#/home";
+    // padrão: #/rota
+    const path = h.replace(/^#\/?/, "").split("?")[0] || "home";
+    return path.toLowerCase();
+  };
   const [route, setRoute] = useState(parse);
   useEffect(() => {
     const onHash = () => setRoute(parse());
     window.addEventListener("hashchange", onHash);
     return () => window.removeEventListener("hashchange", onHash);
   }, []);
-  return [route, (r)=>{ window.location.hash = `/${r}`; }];
-}
+  return [route, (r) => (window.location.hash = `#/${r}`)];
+};
 
-function useLang() {
-  const [lang, setLang] = useState(getLangFromURL());
-  const t = useMemo(()=>STRINGS[lang], [lang]);
+const useLang = () => {
+  const [lang, set] = useState(getLang());
+  useEffect(() => {
+    const onLang = () => set(getLang());
+    window.addEventListener("langchange", onLang);
+    return () => window.removeEventListener("langchange", onLang);
+  }, []);
+  return [lang, setLang];
+};
 
-  const selectLang = (l) => {
-    const u = new URL(window.location.href);
-    u.searchParams.set("lang", l);
-    window.history.replaceState(null,"",u.toString());
-    setLang(l);
-  };
-  return { lang, t, selectLang };
-}
-
-/* ---------- UI BASICS ---------- */
-const Badge = ({children}) => <span className="badge">{children}</span>;
-const Section = ({title, children, t}) => (
-  <section className="container">
-    <div className="sectionHeader">
-      <h2>{title}</h2>
-      <a className="backLink" href={`/#/home`}>{t.nav.back}</a>
-    </div>
-    {children}
-  </section>
+const Img = ({ src, alt = "", className = "", ...rest }) => (
+  <img
+    loading="lazy"
+    decoding="async"
+    src={src}
+    alt={alt}
+    className={className}
+    {...rest}
+  />
 );
 
-/* ---------- NAV ---------- */
-function Nav({lang, t, onLang}) {
-  const item = (href, label) => <a href={`/#/${href}`}>{label}</a>;
-  return (
-    <nav className="nav">
-      <div className="brand"><img src="/logo.png" alt="" /> Panela de Barro</div>
-      <div className="links">
-        {item("about", t.nav.about)}
-        {item("menu", t.nav.menu)}
-        {item("gallery", t.nav.gallery)}
-        {item("woodfire", t.nav.woodfire)}
-        {item("location", t.nav.location)}
-        {item("support", t.nav.support)}
+/**********************
+ *  Error Boundary
+ **********************/
+class ErrorBoundary extends React.Component {
+  constructor(p) {
+    super(p);
+    this.state = { hasError: false, msg: "" };
+  }
+  static getDerivedStateFromError(e) {
+    return { hasError: true, msg: e?.message || String(e) };
+  }
+  componentDidCatch(e, info) {
+    console.error("App error:", e, info);
+  }
+  render() {
+    if (!this.state.hasError) return this.props.children;
+    return (
+      <div style={{ padding: "24px" }}>
+        <h2 style={{ marginTop: 0 }}>Ops… algo quebrou aqui.</h2>
+        <p style={{ opacity: 0.8, maxWidth: 680 }}>
+          {this.state.msg || "Erro desconhecido."}
+        </p>
+        <a href="#/home" style={{ color: "#8b3e2f", fontWeight: 600 }}>
+          Voltar ao início
+        </a>
       </div>
-      <div className="langs">
-        {Object.keys(LOCALES).map(l=>(
-          <button key={l} onClick={()=>onLang(l)} className={l===lang?"lang active":"lang"}>{LOCALES[l]}</button>
-        ))}
-      </div>
+    );
+  }
+}
+
+/**********************
+ *  Layout / Navbar
+ **********************/
+const LangSwitch = ({ lang }) => (
+  <div className="lang-switch">
+    {Object.keys(LOCALES).map((k) => (
+      <button
+        key={k}
+        onClick={() => setLang(k)}
+        aria-pressed={lang === k}
+        className={lang === k ? "on" : ""}
+        title={LOCALES[k].label}
+      >
+        {LOCALES[k].short}
+      </button>
+    ))}
+  </div>
+);
+
+const Nav = ({ lang }) => (
+  <header className="nav">
+    <a className="brand" href="#/home" aria-label="Panela de Barro">
+      <img src="/logo.png" alt="" />
+      <span>Panela de Barro</span>
+    </a>
+    <nav className="links">
+      <a href="#/about">{t("nav.about", lang)}</a>
+      <a href="#/menu">{t("nav.menu", lang)}</a>
+      <a href="#/gallery">{t("nav.gallery", lang)}</a>
+      <a href="#/woodfire">{t("nav.woodfire", lang)}</a>
+      <a href="#/location">{t("nav.location", lang)}</a>
+      <a href="#/support">{t("nav.support", lang)}</a>
     </nav>
-  );
-}
+    <LangSwitch lang={lang} />
+  </header>
+);
 
-/* ---------- HERO + SMOKE ---------- */
-function Hero({t}) {
-  // anima imagens de fundo imersivas conforme rolagem
-  useEffect(()=>{
-    const obs = new IntersectionObserver((entries)=>{
-      entries.forEach(e=>{
-        if(e.isIntersecting) e.target.classList.add("visible");
-      });
-    },{threshold:0.2});
-    document.querySelectorAll(".immersive").forEach(el=>obs.observe(el));
-    return ()=>obs.disconnect();
-  },[]);
+/**********************
+ *  Páginas
+ **********************/
+const Home = ({ lang }) => {
+  useEffect(() => {
+    if (window.__hideSplash) window.__hideSplash();
+  }, []);
   return (
-    <header className="hero">
-      <div className="smoke"></div>
-      <img className="heroBg" src="/images/vaca-atolada.jpg" alt="" />
-      <div className="heroCard">
-        <h1>{t.hero.title}</h1>
-        <p>{t.hero.subtitle}</p>
-        <p className="soon">{t.hero.soon}</p>
-        <a className="btn" href="/#/menu">{t.hero.cta}</a>
-      </div>
-    </header>
-  );
-}
-
-/* ---------- PAGES ---------- */
-
-function Home({t}) {
-  return (
-    <>
-      <Hero t={t} />
-      {/* faixa imersiva */}
-      {IMMERSIVE.map((src, i)=>(
-        <div key={i} className="immersive" style={{backgroundImage:`url(${src})`}} />
-      ))}
-
-      <section className="container">
-        <h2>{t.home.preview}</h2>
-        <div className="grid">
-          {MENU.map(m=>(
-            <article className="card" key={m.id}>
-              <img src={m.img} alt={m.name} />
-              <div className="cardBody">
-                <h3>{m.name}</h3>
-                <p>{m.short?.pt}</p>
-                <div className="tags">{m.badges?.map(b=><Badge key={b}>{b}</Badge>)}</div>
-              </div>
-            </article>
-          ))}
+    <main className="container">
+      <section className="hero">
+        <div className="hero-inner">
+          <h1>{t("hero.title", lang)}</h1>
+          <p className="muted">{t("hero.subtitle", lang)}</p>
+          <p className="soon">{t("hero.soon", lang)}</p>
+          <a href="#/menu" className="btn">
+            {t("hero.cta", lang)}
+          </a>
         </div>
       </section>
-    </>
-  );
-}
 
-function MenuPage({lang}) {
-  const label = (m) => (lang==="ar" ? (m.name_ar || m.name) : (lang==="en" ? (m.name_en||m.name) : m.name));
-  const desc  = (m) => m.short?.[lang] || m.short?.pt || "";
+      <section className="immersive">
+        <Img src="/immersive/amazonia.jpg" alt="" />
+      </section>
+    </main>
+  );
+};
+
+const About = ({ lang }) => (
+  <main className="container readable">
+    <h1>{t("about.title", lang)}</h1>
+
+    <p>{t("about.p1", lang)}</p>
+    <h3>{t("about.h1", lang)}</h3>
+    <p>{t("about.p2", lang)}</p>
+    <p>{t("about.p3", lang)}</p>
+
+    <div className="grid-2">
+      <figure>
+        <Img src="/heritage/panela-1.jpg" alt="" />
+        <figcaption>{t("about.cap.panela", lang)}</figcaption>
+      </figure>
+      <figure>
+        <Img src="/heritage/panela-mao.jpg" alt="" />
+        <figcaption>{t("about.cap.artesanal", lang)}</figcaption>
+      </figure>
+    </div>
+
+    <h3>{t("about.team", lang)}</h3>
+    <div className="cards">
+      <article className="card person">
+        <Img src="/heritage/chef-quessi.jpg" alt="" />
+        <h4>Quessi Jones — {t("about.owner", lang)}</h4>
+        <p>{t("about.quessi", lang)}</p>
+      </article>
+      <article className="card person">
+        <Img src="/heritage/chef-alex.jpg" alt="" />
+        <h4>Alex — {t("about.headchef", lang)}</h4>
+        <p>{t("about.alex", lang)}</p>
+      </article>
+      <article className="card person">
+        <Img src="/heritage/cleusa.jpg" alt="" />
+        <h4>Cleusa Gonçalves — {t("about.mom", lang)}</h4>
+        <p>{t("about.cleusa", lang)}</p>
+      </article>
+    </div>
+
+    <a href="#/home" className="backlink">
+      {t("nav.back", lang)}
+    </a>
+  </main>
+);
+
+const Woodfire = ({ lang }) => (
+  <main className="container readable">
+    <h1>{t("wood.title", lang)}</h1>
+    <p>{t("wood.p1", lang)}</p>
+    <p>{t("wood.p2", lang)}</p>
+
+    <div className="grid-3">
+      <Img src="/heritage/fogao-1.jpg" alt="" />
+      <Img src="/heritage/fogao-2.jpg" alt="" />
+      <Img src="/heritage/fogao-3.jpg" alt="" />
+    </div>
+
+    <a href="#/home" className="backlink">
+      {t("nav.back", lang)}
+    </a>
+  </main>
+);
+
+const Gallery = ({ lang }) => (
+  <main className="container">
+    <h1>{t("gallery.title", lang)}</h1>
+    <div className="grid-3">
+      {[
+        "picanha-grelhada.jpg",
+        "moqueca-baiana.jpg",
+        "feijoada-costela.jpg",
+        "galinhada-caipira.jpg",
+        "rubacao.jpg",
+        "pamonha.jpg",
+        "pasteis-brasileiros.jpg",
+        "pao-de-queijo.jpg",
+        "mandioca-frita.jpg",
+      ].map((n) => (
+        <figure key={n} className="card">
+          <Img src={`/images/${n}`} alt="" />
+        </figure>
+      ))}
+    </div>
+    <a href="#/home" className="backlink">
+      {t("nav.back", lang)}
+    </a>
+  </main>
+);
+
+const Tag = ({ children }) => <span className="tag">{children}</span>;
+
+const MenuPage = ({ lang }) => {
+  const [tab, setTab] = useState("all");
+
+  const items = useMemo(() => {
+    if (tab === "all") return MENU;
+    return MENU.filter((i) => i.category === tab);
+  }, [tab]);
+
+  const tabs = [
+    ["all", t("menu.tabs.all", lang)],
+    ["mains", t("menu.tabs.mains", lang)],
+    ["seasonal", t("menu.tabs.seasonal", lang)],
+    ["beverages", t("menu.tabs.beverages", lang)],
+  ];
+
   return (
-    <Section title="Menu" t={STRINGS[lang]}>
-      <div className="filters">
-        <a className="pill" href="#/menu">All</a>
-        <a className="pill" href="#/menu?f=mains">Mains</a>
-        <a className="pill" href="#/menu?f=seasonal">Seasonal</a>
-        <a className="pill" href="#/menu?f=beverages">Beverages</a>
+    <main className="container">
+      <h1>{t("menu.title", lang)}</h1>
+
+      <div className="tabs">
+        {tabs.map(([key, label]) => (
+          <button
+            key={key}
+            className={tab === key ? "on" : ""}
+            onClick={() => setTab(key)}
+          >
+            {label}
+          </button>
+        ))}
+        <a href="#/home" className="backlink" style={{ marginLeft: "auto" }}>
+          {t("nav.back", lang)}
+        </a>
       </div>
-      <div className="grid">
-        {MENU.map(m=>(
-          <article className="card" key={m.id}>
-            <img src={m.img} alt={label(m)} />
-            <div className="cardBody">
-              <h3>{label(m)}</h3>
-              <p>{desc(m)}</p>
-              <div className="tags">{m.badges?.map(b=><Badge key={b}>{b}</Badge>)}</div>
+
+      <div className="grid-3">
+        {items.map((it) => (
+          <article key={it.id} className="card dish">
+            <Img src={it.image} alt="" />
+            <div className="p16">
+              <h4>{it.name}</h4>
+              <p className="muted">{it.desc[lang] || it.desc.pt}</p>
+              <div className="tags">
+                {it.tags.map((tg) => (
+                  <Tag key={tg}>{tg}</Tag>
+                ))}
+              </div>
             </div>
           </article>
         ))}
       </div>
-    </Section>
+    </main>
   );
-}
+};
 
-function Gallery({t}) {
-  const pics = [
-    "/images/picanha-grelhada.jpg","/images/feijoada-costela.jpg","/images/moqueca-baiana.jpg",
-    "/images/pasteis-brasileiros.jpg","/images/pao-de-queijo.jpg","/images/mandioca-frita.jpg"
-  ];
+const Location = ({ lang }) => {
+  // iframe simples e estável (evita travar com link de share)
+  const q = encodeURIComponent("Baraha Town, Doha, Qatar");
+  const src = `https://www.google.com/maps?q=${q}&output=embed`;
   return (
-    <Section title={t.gallery.title} t={t}>
-      <div className="masonry">
-        {pics.map((src,i)=><img key={i} src={src} alt="" loading="lazy" />)}
-      </div>
-    </Section>
-  );
-}
-
-function About({t}) {
-  return (
-    <Section title={t.about.title} t={t}>
-      <div className="about">
-        <div className="aboutText">
-          <p>
-            Mais do que um restaurante, o Panela de Barro é uma viagem sensorial às raízes da culinária brasileira.
-            A panela de barro, usada por povos indígenas e depois aperfeiçoada nas casas brasileiras, cozinha devagar e
-            deixa os ingredientes conversarem — caldos encorpados, sabores profundos, aroma de terra e lenha.
-          </p>
-          <p>
-            Nossa história nasce no campo em Rondônia. A família plantava feijão, café, milho e mandioca — e cozinhava
-            no fogão a lenha. Em Foz do Iguaçu, o restaurante familiar liderado por <strong>Cleusa</strong> e
-            <strong> Alex</strong> guardou o saber da roça. Hoje, no Qatar, trazemos essa essência: moquecas, feijoadas,
-            farofas, vaca atolada e pamonha — pratos que contam a história do Brasil.
-          </p>
-          <ul className="team">
-            <li><img src="/heritage/chef-quessi.jpg" alt="" /><span>{t.about.owner}</span></li>
-            <li><img src="/heritage/chef-alex.jpg" alt="" /><span>{t.about.headchef}</span></li>
-            <li><img src="/heritage/panela-artesanal.jpg" alt="" /><span>{t.about.mother}</span></li>
-          </ul>
-        </div>
-        <div className="aboutPics">
-          <img src="/heritage/panela-1.jpg" alt="Panela de barro" />
-          <img src="/heritage/panela-mao.jpg" alt="Artesanato da panela" />
-        </div>
-      </div>
-    </Section>
-  );
-}
-
-function Woodfire({t}) {
-  return (
-    <Section title={t.woodfire.title} t={t}>
-      <div className="twoCols">
-        <div>
-          <p>
-            O fogão a lenha moldou o paladar do Brasil. Do café passado ao tropeiro, das panelas de barro ao tacho de
-            cobre, o fogo baixo extrai tempo e memória. A lenha dá tostado, defumado e doçura lenta — transformando
-            caldos, carnes e raízes.
-          </p>
-          <p>
-            No Panela de Barro, vamos manter essa chama viva: caldos que reduzem horas, feijoadas que descansam e
-            moquecas que perfumam a sala. Com respeito à segurança local e às normas do Qatar, reproduzimos o resultado
-            do fogão a lenha com controle de calor e técnica.
-          </p>
-        </div>
-        <div className="aboutPics">
-          <img src="/heritage/fogao-1.jpg" alt="Fogão a lenha" />
-          <img src="/heritage/fogao-2.jpg" alt="Brasa" />
-        </div>
-      </div>
-    </Section>
-  );
-}
-
-function LocationPage({t}) {
-  return (
-    <Section title={t.location.title} t={t}>
-      <p><strong>{t.location.area}</strong></p>
-      <div className="mapWrap">
+    <main className="container">
+      <h1>{t("loc.title", lang)}</h1>
+      <p className="muted">{t("loc.subtitle", lang)}</p>
+      <div className="mapwrap">
         <iframe
-          title="Baraha Town"
-          loading="lazy"
+          title="Map"
+          src={src}
+          allowFullScreen
           referrerPolicy="no-referrer-when-downgrade"
-          src="https://www.google.com/maps?q=Baraha%20Town%2C%20Doha%2C%20Qatar&output=embed">
-        </iframe>
+        />
       </div>
-    </Section>
+      <a href="#/home" className="backlink">
+        {t("nav.back", lang)}
+      </a>
+    </main>
   );
-}
+};
 
-const Support = ({t}) => (
-  <Section title={t.support.title} t={t}>
-    <p>{t.support.text}</p>
-  </Section>
+const Support = ({ lang }) => (
+  <main className="container readable">
+    <h1>{t("support.title", lang)}</h1>
+    <p>{t("support.p1", lang)}</p>
+    <ul>
+      <li>{t("support.opt1", lang)}</li>
+      <li>{t("support.opt2", lang)}</li>
+      <li>{t("support.opt3", lang)}</li>
+    </ul>
+    <a href="#/home" className="backlink">
+      {t("nav.back", lang)}
+    </a>
+  </main>
 );
 
-/* ---------- ROOT ---------- */
-export default function App(){
-  const { lang, t, selectLang } = useLang();
-  const [route, go] = useHashRoute();
+const NotFound = ({ lang }) => (
+  <main className="container">
+    <h1>404</h1>
+    <p className="muted">{t("notfound", lang)}</p>
+    <a href="#/home" className="backlink">
+      {t("nav.back", lang)}
+    </a>
+  </main>
+);
 
-  // Splash do logo
-  useEffect(()=>{
-    const s = document.getElementById("splash");
-    if(s){ setTimeout(()=>s.classList.add("hide"), 900); }
-  },[]);
+/**********************
+ *  App
+ **********************/
+export default function App() {
+  const [route] = useHashRoute();
+  const [lang] = useLang();
+
+  useEffect(() => {
+    // garante que o splash suma
+    if (window.__hideSplash) window.__hideSplash();
+  }, []);
+
+  const Page = (() => {
+    switch (route) {
+      case "home":
+        return <Home lang={lang} />;
+      case "about":
+        return <About lang={lang} />;
+      case "menu":
+        return <MenuPage lang={lang} />;
+      case "gallery":
+        return <Gallery lang={lang} />;
+      case "woodfire":
+        return <Woodfire lang={lang} />;
+      case "location":
+        return <Location lang={lang} />;
+      case "support":
+        return <Support lang={lang} />;
+      default:
+        return <NotFound lang={lang} />;
+    }
+  })();
 
   return (
-    <>
-      <Nav lang={lang} t={t} onLang={selectLang} />
-      {route==="home" && <Home t={t} />}
-      {route==="menu" && <MenuPage lang={lang} />}
-      {route==="gallery" && <Gallery t={t} />}
-      {route==="about" && <About t={t} />}
-      {route==="woodfire" && <Woodfire t={t} />}
-      {route==="location" && <LocationPage t={t} />}
-      {route==="support" && <Support t={t} />}
-      <footer className="footer">&copy; {new Date().getFullYear()} Panela de Barro • paneladebarroqatar.com</footer>
-    </>
+    <ErrorBoundary>
+      <Nav lang={lang} />
+      {Page}
+      <footer className="footer">
+        <small>© {new Date().getFullYear()} Panela de Barro</small>
+      </footer>
+    </ErrorBoundary>
   );
 }
