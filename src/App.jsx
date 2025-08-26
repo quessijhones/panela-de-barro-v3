@@ -49,7 +49,7 @@ const dict = {
       family: "Nossa família",
       people: {
         quessi: {
-          name: "Quessi Jones — Proprietária",
+          name: "Quessi Jones — Proprietario",
           text:
             "Quessi conduz a casa e preserva o propósito: cozinhar com alma, acolher com carinho.",
           img: "/heritage/chef-quessi.jpg",
