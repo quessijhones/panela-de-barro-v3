@@ -1,11 +1,18 @@
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useEffect, useMemo, useRef, useState } from "react";
 import "./styles.css";
 import { LOCALES, getLang, setLang, t } from "./i18n";
 import { MENU } from "./menuData";
 
-/* --------------------------
-   Utils / Hooks
---------------------------- */
+/** =======================
+ *  Pequenos utilitários
+ *  ======================= */
+const tr = (k, lang, fallback) => {
+  // Evita mostrar "home.carousel.dishes" etc.
+  const s = t(k, lang);
+  if (!s || /\w+\.\w+/.test(s)) return fallback;
+  return s;
+};
+
 const useHashRoute = () => {
   const parse = () => {
     const h = window.location.hash || "#/home";
@@ -31,27 +38,25 @@ const useLang = () => {
   return [lang, setLang];
 };
 
-/** Img com fallback se a imagem não existir (evita quadradinho azul no iPhone) */
-const Img = ({ src, alt = "", className = "", style, ...rest }) => {
-  const [err, setErr] = useState(false);
-  const finalSrc = err ? "/images/placeholder.jpg" : src;
+const Img = ({ src, alt = "", style, className = "", ...rest }) => {
+  const [ok, setOk] = useState(true);
   return (
     <img
       loading="lazy"
       decoding="async"
-      src={finalSrc}
+      src={ok ? src : "/images/placeholder.jpg"}
       alt={alt}
-      className={className}
+      onError={() => setOk(false)}
       style={style}
-      onError={() => setErr(true)}
+      className={className}
       {...rest}
     />
   );
 };
 
-/* --------------------------
-   Error Boundary
---------------------------- */
+/** =======================
+ *  Error Boundary
+ *  ======================= */
 class ErrorBoundary extends React.Component {
   constructor(p) {
     super(p);
@@ -79,9 +84,44 @@ class ErrorBoundary extends React.Component {
   }
 }
 
-/* --------------------------
-   Layout / Navbar
---------------------------- */
+/** =======================
+ *  Splash (logo inicial)
+ *  ======================= */
+const Splash = () => {
+  const [show, setShow] = useState(true);
+  useEffect(() => {
+    const hide = () => setShow(false);
+    window.__hideSplash = hide;
+    const id = setTimeout(hide, 1200);
+    return () => {
+      clearTimeout(id);
+      delete window.__hideSplash;
+    };
+  }, []);
+  if (!show) return null;
+  return (
+    <div
+      style={{
+        position: "fixed",
+        inset: 0,
+        background: "var(--bg)",
+        display: "grid",
+        placeItems: "center",
+        zIndex: 9999,
+      }}
+    >
+      <img
+        src="/logo.png"
+        alt=""
+        style={{ width: 96, height: 96, filter: "drop-shadow(0 6px 18px #0002)" }}
+      />
+    </div>
+  );
+};
+
+/** =======================
+ *  Navbar
+ *  ======================= */
 const LangSwitch = ({ lang }) => (
   <div className="lang-switch">
     {Object.keys(LOCALES).map((k) => (
@@ -105,227 +145,306 @@ const Nav = ({ lang }) => (
       <span>Panela de Barro</span>
     </a>
     <nav className="links">
-      <a href="#/about">{t("nav.about", lang) || "Sobre"}</a>
-      <a href="#/menu">{t("nav.menu", lang) || "Menu"}</a>
-      <a href="#/gallery">{t("nav.gallery", lang) || "Galeria"}</a>
-      <a href="#/woodfire">{t("nav.woodfire", lang) || "Fogão a Lenha"}</a>
-      <a href="#/location">{t("nav.location", lang) || "Localização"}</a>
-      <a href="#/support">{t("nav.support", lang) || "Suporte"}</a>
+      <a href="#/about">{tr("nav.about", lang, "Sobre")}</a>
+      <a href="#/menu">{tr("nav.menu", lang, "Menu")}</a>
+      <a href="#/gallery">{tr("nav.gallery", lang, "Galeria")}</a>
+      <a href="#/woodfire">{tr("nav.woodfire", lang, "Fogão a Lenha")}</a>
+      <a href="#/location">{tr("nav.location", lang, "Localização")}</a>
+      <a href="#/support">{tr("nav.support", lang, "Suporte")}</a>
     </nav>
     <LangSwitch lang={lang} />
   </header>
 );
 
-/* --------------------------
-   Reutilizáveis
---------------------------- */
-const Tag = ({ children }) => <span className="tag">{children}</span>;
-
-const Arrow = ({ dir = "left", onClick }) => (
-  <button
-    className={`carousel-arrow ${dir}`}
-    aria-label={dir === "left" ? "Anterior" : "Próxima"}
-    onClick={onClick}
-  >
-    {dir === "left" ? "‹" : "›"}
-  </button>
-);
-
-const SimpleCarousel = ({ items, captionKey = "caption" }) => {
+/** =======================
+ *  Carrossel simples
+ *  ======================= */
+const Carousel = ({ slides, ariaLabel }) => {
   const [i, setI] = useState(0);
-  const go = (d) => setI((v) => (v + d + items.length) % items.length);
-  const it = items[i];
+  const go = (d) => setI((p) => (p + d + slides.length) % slides.length);
+  const timer = useRef(null);
+  useEffect(() => {
+    timer.current = setInterval(() => go(1), 5000);
+    return () => clearInterval(timer.current);
+  }, [slides.length]);
+  if (!slides?.length) return null;
+  const s = slides[i];
   return (
-    <div className="carousel">
-      <div className="carousel-frame">
-        <Img src={it.src} alt={it[captionKey] || ""} />
-        {it[captionKey] && <div className="carousel-cap">{it[captionKey]}</div>}
-        <Arrow dir="left" onClick={() => go(-1)} />
-        <Arrow dir="right" onClick={() => go(+1)} />
+    <div
+      className="card"
+      role="region"
+      aria-label={ariaLabel}
+      style={{ padding: 0, overflow: "hidden" }}
+    >
+      <div style={{ position: "relative", height: "46vh", minHeight: 280 }}>
+        <Img
+          src={s.src}
+          alt={s.alt || s.label || ""}
+          style={{
+            width: "100%",
+            height: "100%",
+            objectFit: "cover",
+            display: "block",
+          }}
+        />
+        {s.label && (
+          <div
+            style={{
+              position: "absolute",
+              left: 16,
+              bottom: 16,
+              color: "white",
+              fontWeight: 700,
+              textShadow: "0 2px 12px #0009",
+              fontSize: "1.25rem",
+            }}
+          >
+            {s.label}
+          </div>
+        )}
+        <button
+          onClick={() => go(-1)}
+          aria-label="Anterior"
+          className="carousel-nav left"
+        >
+          ‹
+        </button>
+        <button
+          onClick={() => go(1)}
+          aria-label="Próxima"
+          className="carousel-nav right"
+        >
+          ›
+        </button>
+        {s.href && (
+          <a
+            href={s.href}
+            style={{ position: "absolute", inset: 0 }}
+            aria-label={s.label || "Abrir"}
+          />
+        )}
       </div>
     </div>
   );
 };
 
-/* --------------------------
-   Páginas
---------------------------- */
+/** =======================
+ *  Páginas
+ *  ======================= */
 const Home = ({ lang }) => {
   useEffect(() => {
     if (window.__hideSplash) window.__hideSplash();
   }, []);
 
-  // Carrossel de pratos (usa imagens existentes em /public/images)
-  const dishHighlights = [
-    { src: "/images/fraldinha-inteira.jpg", caption: "Fraldinha Inteira" },
-    { src: "/images/picanha-grelhada.jpg", caption: "Picanha Grelhada" },
-    { src: "/images/feijoada-costela.jpg", caption: "Feijoada de Costela" },
-    { src: "/images/moqueca-baiana.jpg", caption: "Moqueca Baiana" },
-  ];
+  // Carrossel de pratos: usa alguns itens do MENU
+  const dishSlides = useMemo(
+    () =>
+      MENU.slice(0, 12).map((d) => ({
+        src: d.image,
+        label: d.name,
+        href: "#/menu",
+      })),
+    []
+  );
 
-  // Carrossel imersivo (paisagens que você já subiu)
-  const immersive = [
-    { src: "/images/pe-de-serra.jpg", caption: "Pé de Serra" },
-    { src: "/immersive/amazonia.jpg", caption: "Amazônia" },
+  // Carrossel imersivo
+  const immersiveSlides = [
+    { src: "/immersive/chapada.jpg", label: tr("home.imm1", lang, "Brasil: Cerrado") },
+    { src: "/immersive/amazonia.jpg", label: tr("home.imm2", lang, "Amazônia") },
+    { src: "/immersive/mangue.jpg", label: tr("home.imm3", lang, "Mangues e rios") },
   ];
 
   return (
     <main className="container">
-      {/* HERO com overlay mais forte para leitura */}
-      <section className="hero readable-on-image">
-        <div className="hero-img-wrap">
-          <Img src="/images/fraldinha-inteira.jpg" alt="" />
-          <div className="hero-overlay" />
+      {/* HERO legível com overlay */}
+      <section className="hero">
+        <div
+          className="hero-inner"
+          style={{
+            backgroundImage:
+              "linear-gradient( to bottom, #00000066, #00000055 ), url('/images/fraldinha-inteira.jpg')",
+            backgroundSize: "cover",
+            backgroundPosition: "center",
+          }}
+        >
+          <div style={{ maxWidth: 680 }}>
+            <h1>{tr("hero.title", lang, "Sabores brasileiros, calor de família")}</h1>
+            <p className="muted" style={{ color: "#fff", opacity: 0.95 }}>
+              {tr(
+                "hero.subtitle",
+                lang,
+                "Restaurante familiar no Qatar. 20+ anos de hospitalidade, fogão a lenha e raízes brasileiras."
+              )}
+            </p>
+            <p className="soon" style={{ color: "#fff", opacity: 0.9 }}>
+              {tr("hero.soon", lang, "Inauguração em Novembro — reservas online em breve.")}
+            </p>
+            <a href="#/menu" className="btn">
+              {tr("hero.cta", lang, "Ver Menu")}
+            </a>
+          </div>
         </div>
-
-        <div className="hero-inner">
-          <h1>Sabores brasileiros, calor de família</h1>
-          <p className="muted">
-            Restaurante familiar no Qatar. 20+ anos de hospitalidade, fogão a
-            lenha e raízes brasileiras.
-          </p>
-          <p className="soon">
-            Inauguração em Novembro — reservas online em breve.
-          </p>
-          <a href="#/menu" className="btn">
-            Ver Menu
-          </a>
-        </div>
       </section>
 
-      {/* CARROSSEL DE PRATOS */}
-      <section className="home-block">
-        <h2>{t("home.carousel.dishes", lang) || "Destaques do Menu"}</h2>
-        <SimpleCarousel items={dishHighlights} />
-      </section>
+      {/* Carrosséis */}
+      <h2 style={{ marginTop: 24 }}>
+        {tr("home.carousel.dishes", lang, "Destaques do Menu")}
+      </h2>
+      <Carousel slides={dishSlides} ariaLabel="Destaques do Menu" />
 
-      {/* CARROSSEL IMERSIVO */}
-      <section className="home-block">
-        <h2>{t("home.carousel.immersive", lang) || "Brasil Imersivo"}</h2>
-        <SimpleCarousel items={immersive} />
-      </section>
+      <h2 style={{ marginTop: 24 }}>
+        {tr("home.carousel.immersive", lang, "Imersões do Brasil")}
+      </h2>
+      <Carousel slides={immersiveSlides} ariaLabel="Imersões do Brasil" />
     </main>
   );
 };
 
 const About = ({ lang }) => (
   <main className="container readable">
-    <h1>Sobre</h1>
+    <h1>{tr("about.title", lang, "Sobre")}</h1>
 
     <p>
-      Panela de Barro é um tributo às raízes brasileiras: cozinha de fazenda,
-      ingredientes frescos e fogo de lenha. Nossa família acumula décadas de
-      cozinha — e traz essa memória para Doha.
+      {tr(
+        "about.p1",
+        lang,
+        "Panela de Barro é um tributo às raízes brasileiras: cozinha de fazenda, ingredientes frescos e fogo de lenha. Nossa família acumula décadas de cozinha — e traz essa memória para Doha."
+      )}
     </p>
 
     <p>
-      A panela de barro atravessa a nossa história: dos povos indígenas à
-      criatividade das cozinhas afro-brasileiras. Ela cozinha devagar, permite
-      que os sabores conversem e imprime um toque terroso inconfundível.
+      {tr(
+        "about.p2",
+        lang,
+        "A panela de barro atravessa a nossa história: dos povos indígenas à criatividade das cozinhas afro-brasileiras. Ela cozinha devagar, permite que os sabores conversem e imprime um toque terroso inconfundível."
+      )}
     </p>
 
     <p>
-      Esse é o sabor que buscamos em cada prato. Tradição, calma e afeto —
-      servidos à mesa.
+      {tr(
+        "about.p3",
+        lang,
+        "Esse é o sabor que buscamos em cada prato. Tradição, calma e afeto — servidos à mesa."
+      )}
     </p>
 
-    <div className="grid-2 about-figs">
-      <figure className="tile-figure">
-        {/* confirme o nome do arquivo EXATO: /public/heritage/panela-1.jpg */}
-        <Img src="/heritage/panela-1.jpg" alt="" />
-        <figcaption>Panelas artesanais de barro</figcaption>
+    <div className="grid-2">
+      <figure className="card" style={{ overflow: "hidden" }}>
+        <Img
+          src="/heritage/panela-1.jpg"
+          alt=""
+          style={{ width: "100%", aspectRatio: "4/3", objectFit: "cover" }}
+        />
+        <figcaption>{tr("about.cap.panela", lang, "Panelas artesanais de barro")}</figcaption>
       </figure>
-      <figure className="tile-figure">
-        {/* confirme o nome do arquivo EXATO: /public/heritage/panela-mao.jpg */}
-        <Img src="/heritage/panela-mao.jpg" alt="" />
-        <figcaption>Feita à mão, como manda a tradição</figcaption>
+      <figure className="card" style={{ overflow: "hidden" }}>
+        <Img
+          src="/heritage/panela-mao.jpg"
+          alt=""
+          style={{ width: "100%", aspectRatio: "4/3", objectFit: "cover" }}
+        />
+        <figcaption>{tr("about.cap.artesanal", lang, "Feita à mão, como manda a tradição")}</figcaption>
       </figure>
     </div>
 
-    <h3>Nossa família</h3>
-
+    <h3 style={{ marginTop: 24 }}>{tr("about.team", lang, "Nossa família")}</h3>
     <div className="cards">
-      <article className="card person">
-        <div className="person-media">
-          <Img src="/heritage/chef-quessi.jpg" alt="Quessi Jones" />
-        </div>
-        <div className="p16">
-          <h4>Quessi Jones — Proprietária</h4>
-          <p>
-            Quessi conduz a casa e preserva o propósito: cozinhar com alma,
-            acolher com carinho.
-          </p>
-        </div>
-      </article>
-
-      <article className="card person">
-        <div className="person-media">
-          <Img src="/heritage/chef-alex.jpg" alt="Alex" />
-        </div>
-        <div className="p16">
-          <h4>Alex — Chef de Cozinha</h4>
-          <p>
-            Alex lidera a cozinha com técnica e memória afetiva — ponto perfeito
-            e fogo certo.
-          </p>
-        </div>
-      </article>
-
-      <article className="card person">
-        {/* foco no rosto da Dona Cleusa */}
-        <div className="person-media focus-top">
-          <Img src="/heritage/cleusa.jpg" alt="Dona Cleusa" />
-        </div>
-        <div className="p16">
-          <h4>Cleusa Gonçalves — Mãe & Guardiã das Receitas</h4>
-          <p>
-            Dona Cleusa inspira nossos sabores: panelas no fogo, histórias e
-            receitas passadas de geração em geração.
-          </p>
-        </div>
-      </article>
+      {[
+        {
+          img: "/heritage/chef-quessi.jpg",
+          title: `Quessi Jones — ${tr("about.owner", lang, "Proprietária")}`,
+          text: tr(
+            "about.quessi",
+            lang,
+            "Quessi conduz a casa e preserva o propósito: cozinhar com alma, acolher com carinho."
+          ),
+        },
+        {
+          img: "/heritage/chef-alex.jpg",
+          title: `Alex — ${tr("about.headchef", lang, "Chef de Cozinha")}`,
+          text: tr(
+            "about.alex",
+            lang,
+            "Alex lidera a cozinha com técnica e memória afetiva — ponto perfeito e fogo certo."
+          ),
+        },
+        {
+          img: "/heritage/cleusa.jpg",
+          title: `Cleusa Gonçalves — ${tr("about.mom", lang, "Mãe & Guardiã das Receitas")}`,
+          text: tr(
+            "about.cleusa",
+            lang,
+            "Dona Cleusa inspira nossos sabores: panelas no fogo, histórias e receitas passadas de geração em geração."
+          ),
+        },
+      ].map((p) => (
+        <article key={p.title} className="card person" style={{ overflow: "hidden" }}>
+          <Img
+            src={p.img}
+            alt=""
+            style={{
+              width: "100%",
+              aspectRatio: "4/3",
+              objectFit: "cover",
+              objectPosition: "50% 20%", // sobe um pouco para nunca cortar o rosto
+              display: "block",
+            }}
+          />
+          <div className="p16">
+            <h4>{p.title}</h4>
+            <p>{p.text}</p>
+          </div>
+        </article>
+      ))}
     </div>
 
     <a href="#/home" className="backlink">
-      Voltar ao início
+      {tr("nav.back", lang, "Voltar ao início")}
     </a>
   </main>
 );
 
 const Woodfire = ({ lang }) => (
   <main className="container readable">
-    <h1>Fogão a Lenha</h1>
+    <h1>{tr("wood.title", lang, "Fogão a Lenha")}</h1>
+
     <p>
-      Do interior do Brasil ao mundo: madeiras corretas, brasa constante e
-      paciência — o segredo do caldo encorpado.
+      {tr(
+        "wood.p1",
+        lang,
+        "Do interior do Brasil ao mundo: madeiras corretas, brasa constante e paciência — o segredo do caldo encorpado."
+      )}
     </p>
     <p>
-      Nossa cozinha honra esse saber, unindo tradição e cuidado com o
-      ingrediente.
+      {tr(
+        "wood.p2",
+        lang,
+        "Nosso fogão honra esse saber. Fogo baixo para apurar, panelas pesadas para abraçar o calor e respeito ao ingrediente. Cozinha de memória, aroma de casa."
+      )}
     </p>
 
-    <div className="grid-3 wood-figs">
-      <figure className="tile-figure">
-        <Img src="/heritage/fogao-1.jpg" alt="" />
-      </figure>
-      <figure className="tile-figure">
-        <Img src="/heritage/fogao-2.jpg" alt="" />
-      </figure>
-      <figure className="tile-figure">
-        <Img src="/heritage/fogao-3.jpg" alt="" />
-      </figure>
+    <div className="grid-3">
+      {["fogonaria-1.jpg", "fogonaria-2.jpg", "fogonaria-3.jpg"].map((n) => (
+        <figure key={n} className="card" style={{ overflow: "hidden" }}>
+          <Img
+            src={`/heritage/${n}`}
+            alt=""
+            style={{ width: "100%", aspectRatio: "1/1", objectFit: "cover" }}
+          />
+        </figure>
+      ))}
     </div>
 
     <a href="#/home" className="backlink">
-      Voltar ao início
+      {tr("nav.back", lang, "Voltar ao início")}
     </a>
   </main>
 );
 
 const Gallery = ({ lang }) => (
   <main className="container">
-    <h1>Galeria</h1>
-    <div className="grid-3 about-figs">
+    <h1>{tr("gallery.title", lang, "Galeria")}</h1>
+    <div className="grid-3">
       {[
         "picanha-grelhada.jpg",
         "moqueca-baiana.jpg",
@@ -337,37 +456,92 @@ const Gallery = ({ lang }) => (
         "pao-de-queijo.jpg",
         "mandioca-frita.jpg",
       ].map((n) => (
-        <figure key={n} className="tile-figure">
-          <Img src={`/images/${n}`} alt="" />
+        <figure key={n} className="card" style={{ overflow: "hidden" }}>
+          <Img
+            src={`/images/${n}`}
+            alt=""
+            style={{ width: "100%", aspectRatio: "4/3", objectFit: "cover" }}
+          />
         </figure>
       ))}
     </div>
     <a href="#/home" className="backlink">
-      Voltar ao início
+      {tr("nav.back", lang, "Voltar ao início")}
     </a>
   </main>
 );
 
+const Tag = ({ children }) => <span className="tag">{children}</span>;
+
+/** ========= Modal do Menu ========= */
+const DishModal = ({ item, lang, onClose }) => {
+  if (!item) return null;
+  return (
+    <div
+      role="dialog"
+      aria-modal="true"
+      className="modal-backdrop"
+      onClick={onClose}
+    >
+      <div
+        className="modal"
+        onClick={(e) => e.stopPropagation()}
+        style={{ maxWidth: 920, maxHeight: "85vh", display: "flex", flexDirection: "column" }}
+      >
+        <div style={{ display: "flex", alignItems: "center", gap: 12, padding: 12 }}>
+          <h3 style={{ margin: 0, flex: 1 }}>{item.name}</h3>
+          <button className="chip" onClick={onClose}>× {tr("menu.modal.close", lang, "Fechar")}</button>
+        </div>
+        <div style={{ padding: 0, overflow: "auto" }}>
+          <Img
+            src={item.image}
+            alt=""
+            style={{
+              width: "100%",
+              height: "60vh",
+              objectFit: "contain",
+              background: "#00000008",
+              display: "block",
+            }}
+          />
+          <div className="p16">
+            <p style={{ marginTop: 0 }} className="muted">
+              {item.desc?.[lang] || item.desc?.pt}
+            </p>
+            {!!item.tags?.length && (
+              <div className="tags">
+                {item.tags.map((tg) => (
+                  <Tag key={tg}>{tg}</Tag>
+                ))}
+              </div>
+            )}
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
+
 const MenuPage = ({ lang }) => {
   const [tab, setTab] = useState("all");
+  const [open, setOpen] = useState(null);
+
   const items = useMemo(() => {
     if (tab === "all") return MENU;
     return MENU.filter((i) => i.category === tab);
   }, [tab]);
 
   const tabs = [
-    ["all", t("menu.tabs.all", lang) || "Todos"],
-    ["mains", t("menu.tabs.mains", lang) || "Pratos"],
-    ["seasonal", t("menu.tabs.seasonal", lang) || "Sazonais"],
-    ["beverages", t("menu.tabs.beverages", lang) || "Bebidas"],
-    ["desserts", t("menu.tabs.desserts", lang) || "Sobremesas"],
+    ["all", tr("menu.tabs.all", lang, "Todos")],
+    ["mains", tr("menu.tabs.mains", lang, "Pratos")],
+    ["seasonal", tr("menu.tabs.seasonal", lang, "Sazonais")],
+    ["beverages", tr("menu.tabs.beverages", lang, "Bebidas")],
+    ["desserts", tr("menu.tabs.desserts", lang, "Sobremesas")],
   ];
-
-  const [modal, setModal] = useState(null);
 
   return (
     <main className="container">
-      <h1>Menu</h1>
+      <h1>{tr("menu.title", lang, "Menu")}</h1>
 
       <div className="tabs">
         {tabs.map(([key, label]) => (
@@ -380,7 +554,7 @@ const MenuPage = ({ lang }) => {
           </button>
         ))}
         <a href="#/home" className="backlink" style={{ marginLeft: "auto" }}>
-          Voltar ao início
+          {tr("nav.back", lang, "Voltar ao início")}
         </a>
       </div>
 
@@ -389,12 +563,17 @@ const MenuPage = ({ lang }) => {
           <article
             key={it.id}
             className="card dish"
-            onClick={() => setModal(it)}
+            onClick={() => setOpen(it)}
+            style={{ cursor: "pointer" }}
           >
-            <Img src={it.image} alt={it.name} />
+            <Img
+              src={it.image}
+              alt=""
+              style={{ width: "100%", aspectRatio: "4/3", objectFit: "cover" }}
+            />
             <div className="p16">
               <h4>{it.name}</h4>
-              <p className="muted">{it.desc?.[lang] || it.desc?.pt || ""}</p>
+              <p className="muted">{it.desc?.[lang] || it.desc?.pt}</p>
               <div className="tags">
                 {it.tags.map((tg) => (
                   <Tag key={tg}>{tg}</Tag>
@@ -405,29 +584,7 @@ const MenuPage = ({ lang }) => {
         ))}
       </div>
 
-      {/* Modal do prato com descrição completa */}
-      {modal && (
-        <div className="modal" onClick={() => setModal(null)}>
-          <div className="modal-card" onClick={(e) => e.stopPropagation()}>
-            <header className="modal-head">
-              <h3>{modal.name}</h3>
-              <button className="chip" onClick={() => setModal(null)}>
-                × Fechar
-              </button>
-            </header>
-            <div className="modal-body">
-              <Img src={modal.image} alt={modal.name} />
-              <p className="mt12">
-                {modal.longDesc?.[lang] ||
-                  modal.longDesc?.pt ||
-                  modal.desc?.[lang] ||
-                  modal.desc?.pt ||
-                  ""}
-              </p>
-            </div>
-          </div>
-        </div>
-      )}
+      <DishModal item={open} lang={lang} onClose={() => setOpen(null)} />
     </main>
   );
 };
@@ -437,50 +594,63 @@ const Location = ({ lang }) => {
   const src = `https://www.google.com/maps?q=${q}&output=embed`;
   return (
     <main className="container">
-      <h1>Localização</h1>
-      <p className="muted">Em breve, endereço e horários completos.</p>
+      <h1>{tr("loc.title", lang, "Localização")}</h1>
+      <p className="muted">{tr("loc.subtitle", lang, "Veja como chegar até nós")}</p>
       <div className="mapwrap">
-        <iframe title="Map" src={src} allowFullScreen />
+        <iframe title="Map" src={src} allowFullScreen referrerPolicy="no-referrer-when-downgrade" />
       </div>
       <a href="#/home" className="backlink">
-        Voltar ao início
+        {tr("nav.back", lang, "Voltar ao início")}
       </a>
     </main>
   );
 };
 
-const Support = ({ lang }) => (
-  <main className="container readable">
-    <h1>Suporte</h1>
-    <ul>
-      <li>Pedidos e reservas em breve</li>
-      <li>Eventos e encomendas</li>
-      <li>Parcerias</li>
-    </ul>
-    <a href="#/home" className="backlink">
-      Voltar ao início
-    </a>
-  </main>
-);
+const Support = ({ lang }) => {
+  // 🔁 Troque pelos seus dados reais
+  const PHONE = "+974 0000 0000";
+  const WHATS = "+974 0000 0000";
+  const EMAIL = "contato@paneladebarroqatar.com";
+  return (
+    <main className="container readable">
+      <h1>{tr("support.title", lang, "Suporte")}</h1>
+      <ul>
+        <li>{tr("support.opt1", lang, "Pedidos e reservas em breve")}</li>
+        <li>{tr("support.opt2", lang, "Eventos e encomendas")}</li>
+        <li>{tr("support.opt3", lang, "Parcerias")}</li>
+      </ul>
+      <h3 style={{ marginTop: 16 }}>{tr("support.contact", lang, "Contato")}</h3>
+      <p className="muted" style={{ lineHeight: 1.9 }}>
+        WhatsApp: <a href={`https://wa.me/${WHATS.replace(/\D/g, "")}`}>{WHATS}</a><br />
+        Telefone: <a href={`tel:${PHONE}`}>{PHONE}</a><br />
+        E-mail: <a href={`mailto:${EMAIL}`}>{EMAIL}</a>
+      </p>
+      <a href="#/home" className="backlink">
+        {tr("nav.back", lang, "Voltar ao início")}
+      </a>
+    </main>
+  );
+};
 
 const NotFound = ({ lang }) => (
   <main className="container">
     <h1>404</h1>
-    <p className="muted">Página não encontrada.</p>
+    <p className="muted">{tr("notfound", lang, "Página não encontrada")}</p>
     <a href="#/home" className="backlink">
-      Voltar ao início
+      {tr("nav.back", lang, "Voltar ao início")}
     </a>
   </main>
 );
 
-/* --------------------------
-   App
---------------------------- */
+/** =======================
+ *  App
+ *  ======================= */
 export default function App() {
   const [route] = useHashRoute();
   const [lang] = useLang();
 
   useEffect(() => {
+    // garante que o splash suma
     if (window.__hideSplash) window.__hideSplash();
   }, []);
 
@@ -507,11 +677,37 @@ export default function App() {
 
   return (
     <ErrorBoundary>
+      <Splash />
       <Nav lang={lang} />
       {Page}
       <footer className="footer">
         <small>© {new Date().getFullYear()} Panela de Barro</small>
       </footer>
+
+      {/* ======= estilos específicos que não dependem do seu CSS ======= */}
+      <style>{`
+        .hero-inner {
+          border-radius: 24px;
+          padding: 32px;
+          min-height: 44vh;
+          display: flex;
+          align-items: center;
+          color: #fff;
+        }
+        .carousel-nav{
+          position:absolute; top:50%; transform:translateY(-50%);
+          border:none; background:#0008; color:#fff; width:40px; height:40px;
+          border-radius:999px; font-size:24px; line-height:0; cursor:pointer;
+        }
+        .carousel-nav.left{ left:10px }
+        .carousel-nav.right{ right:10px }
+        .modal-backdrop{
+          position:fixed; inset:0; background:#0007; display:grid; place-items:center; padding:12px; z-index: 50;
+        }
+        .modal{
+          background:var(--paper); border-radius:16px; box-shadow:0 10px 50px #0006; width: min(96vw, 980px);
+        }
+      `}</style>
     </ErrorBoundary>
   );
 }
