@@ -1,7 +1,7 @@
 import React, { useEffect, useMemo, useState } from "react";
 import "./styles.css";
 import { LOCALES, getLang, setLang, t } from "./i18n";
-import { MENU } from "./menuData"; // <-- export nomeado
+import { MENU } from "./menuData"; // export nomeado
 
 /**********************
  *  Utilitários
@@ -32,6 +32,7 @@ const useLang = () => {
   return [lang, setLang];
 };
 
+// Img com fallback automático para placeholder
 const Img = ({ src, alt = "", className = "", ...rest }) => (
   <img
     loading="lazy"
@@ -39,6 +40,10 @@ const Img = ({ src, alt = "", className = "", ...rest }) => (
     src={src}
     alt={alt}
     className={className}
+    onError={(e) => {
+      e.currentTarget.onerror = null;
+      e.currentTarget.src = "/images/placeholder.jpg";
+    }}
     {...rest}
   />
 );
@@ -228,13 +233,27 @@ const Gallery = ({ lang }) => (
 
 const Tag = ({ children }) => <span className="tag">{children}</span>;
 
+/**********************
+ *  MENU (blindado)
+ **********************/
 const MenuPage = ({ lang }) => {
   const [tab, setTab] = useState("all");
 
+  const ALL = Array.isArray(MENU) ? MENU : [];
+
   const items = useMemo(() => {
-    if (tab === "all") return MENU;
-    return MENU.filter((i) => i.category === tab);
-  }, [tab]);
+    const base = tab === "all" ? ALL : ALL.filter((i) => i?.category === tab);
+    return base.map((it) => {
+      const safeDesc =
+        it?.desc?.[lang] ??
+        it?.desc?.pt ??
+        it?.desc?.en ??
+        ""; // nunca quebra
+      const safeImg = it?.image || "/images/placeholder.jpg";
+      const safeTags = Array.isArray(it?.tags) ? it.tags : [];
+      return { ...it, _desc: safeDesc, _image: safeImg, _tags: safeTags };
+    });
+  }, [ALL, tab, lang]);
 
   const tabs = [
     ["all", t("menu.tabs.all", lang)],
@@ -264,16 +283,18 @@ const MenuPage = ({ lang }) => {
 
       <div className="grid-3">
         {items.map((it) => (
-          <article key={it.id} className="card dish">
-            <Img src={it.image} alt="" />
+          <article key={it.id || it.name} className="card dish">
+            <Img src={it._image} alt="" />
             <div className="p16">
               <h4>{it.name}</h4>
-              <p className="muted">{it.desc[lang] || it.desc.pt}</p>
-              <div className="tags">
-                {it.tags.map((tg) => (
-                  <Tag key={tg}>{tg}</Tag>
-                ))}
-              </div>
+              <p className="muted">{it._desc}</p>
+              {it._tags.length > 0 && (
+                <div className="tags">
+                  {it._tags.map((tg, idx) => (
+                    <Tag key={`${tg}-${idx}`}>{tg}</Tag>
+                  ))}
+                </div>
+              )}
             </div>
           </article>
         ))}
@@ -282,8 +303,10 @@ const MenuPage = ({ lang }) => {
   );
 };
 
+/**********************
+ *  Outras páginas
+ **********************/
 const Location = ({ lang }) => {
-  // iframe simples e estável (evita travar com link de share)
   const q = encodeURIComponent("Baraha Town, Doha, Qatar");
   const src = `https://www.google.com/maps?q=${q}&output=embed`;
   return (
