@@ -1,128 +1,93 @@
-:root{
-  --bg:#f1dfc8;
-  --paper:#f7efe4;
-  --ink:#2a231e;
-  --muted:#6d5f56;
-  --brand:#8b3e2f;
-  --brand2:#b55b46;
-  --card: #ffffff;
-  --shadow: 0 10px 30px rgba(0,0,0,.15);
+/* styles.css – ajustes de legibilidade e modal */
+
+/* Tipografia base */
+:root {
+  --bg: #ecd6bd;
+  --paper: #f3e7da;
+  --text: #2d241c;
+  --muted: #6f5d4f;
+  --brand: #8b3e2f;
+  --chip: #e9d5c3;
+  --shadow: 0 10px 24px rgba(0,0,0,.14);
 }
 
-*{box-sizing:border-box}
-html,body{height:100%}
-body{
-  margin:0; background:var(--bg); color:var(--ink);
-  font-family: ui-sans-serif,system-ui,-apple-system,Segoe UI,Roboto,Arial,"Noto Sans",sans-serif;
-}
+* { box-sizing: border-box; }
+html, body, #root { height: 100%; }
+body { margin: 0; background: var(--bg); color: var(--text); font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, "Helvetica Neue", Arial; }
+img { max-width: 100%; display: block; }
 
-/* NAV */
-.nav{
-  position:sticky; top:0; z-index:50;
-  display:flex; align-items:center; gap:18px;
-  padding:10px 18px; background:rgba(247,239,228,.85);
-  backdrop-filter:saturate(1.1) blur(6px);
-  border-bottom:1px solid rgba(0,0,0,.06);
-}
-.nav .brand{display:flex;align-items:center;gap:8px;text-decoration:none;color:inherit;font-weight:700}
-.nav .brand img{width:20px;height:20px}
-.nav .links{display:flex;flex-wrap:wrap;gap:12px}
-.nav .links a{color:inherit;text-decoration:none;opacity:.85}
-.nav .links a:hover{opacity:1}
-.lang-switch{margin-left:auto;display:flex;gap:6px}
-.lang-switch button{
-  border:0; background:#e8d9c5; color:#553a31;
-  padding:6px 8px; border-radius:999px; cursor:pointer; font-weight:700;
-}
-.lang-switch button.on{background:var(--brand); color:white}
+.container { width: min(1100px, 92%); margin: 0 auto; padding: 28px 0 80px; }
+.readable p { line-height: 1.7; color: var(--text); }
 
-/* LAYOUT */
-.container{max-width:1060px;margin:0 auto;padding:24px 18px}
-.readable{max-width:900px}
+/* Navbar */
+.nav { position: sticky; top: 0; z-index: 20; background: rgba(255,255,255,.6); backdrop-filter: blur(6px); border-bottom: 1px solid rgba(0,0,0,.05); }
+.nav .brand { display: inline-flex; align-items: center; gap: 10px; padding: 12px 14px; text-decoration: none; color: var(--text); font-weight: 700; }
+.nav .brand img { width: 26px; height: 26px; }
+.nav .links { display: inline-flex; flex-wrap: wrap; gap: 18px; padding: 0 12px; vertical-align: middle; }
+.nav .links a { color: var(--text); text-decoration: none; padding: 14px 0; }
+.lang-switch { margin-left: auto; display: inline-flex; gap: 8px; float: right; padding: 10px 14px; }
+.lang-switch button { border: 0; padding: 8px 10px; border-radius: 12px; background: var(--chip); color: var(--text); font-weight: 700; }
+.lang-switch .on { background: var(--brand); color: #fff; }
 
-/* HERO com fumaça */
-.hero{
-  position:relative; border-radius:24px; overflow:hidden;
-  min-height:380px; display:grid; place-items:center;
-  background:#111 url('/images/picanha-grelhada.jpg') center/cover no-repeat;
-  box-shadow:var(--shadow);
-}
-.hero::before{
-  /* véu escuro */
-  content:""; position:absolute; inset:0; background:linear-gradient(to bottom, rgba(0,0,0,.45), rgba(0,0,0,.25));
-}
-.hero::after{
-  /* fumaça suave animada */
-  content:""; position:absolute; inset:-20%;
-  background:
-    radial-gradient(60% 30% at 50% 80%, rgba(255,255,255,.10), transparent 60%) ,
-    radial-gradient(40% 25% at 40% 70%, rgba(255,255,255,.10), transparent 60%) ,
-    radial-gradient(55% 30% at 60% 85%, rgba(255,255,255,.10), transparent 60%);
-  filter: blur(18px) contrast(120%);
-  animation: smoke 28s linear infinite;
-  pointer-events:none;
-}
-@keyframes smoke{
-  0%{transform:translateY(15%) translateX(-8%) scale(1.05); opacity:.8}
-  50%{transform:translateY(-10%) translateX(8%) scale(1.08); opacity:.9}
-  100%{transform:translateY(15%) translateX(-8%) scale(1.05); opacity:.8}
-}
-.hero .hero-inner{position:relative; z-index:1; text-align:center; color:#fff; padding:26px}
-.hero h1{margin:0 0 12px; font-size:28px}
-.hero .muted{opacity:.9; max-width:780px; margin:0 auto 6px}
-.hero .soon{opacity:.9;margin:0 0 18px}
-.btn{
-  display:inline-block; background:linear-gradient(180deg,var(--brand),var(--brand2));
-  color:#fff; padding:12px 20px; border-radius:999px; text-decoration:none; font-weight:700;
-  box-shadow:0 10px 24px rgba(139,62,47,.35);
-}
+/* Hero */
+.hero { margin-top: 18px; }
+.hero-inner { position: relative; border-radius: 24px; overflow: hidden; box-shadow: var(--shadow); }
+.hero-inner::before { content: ""; position: absolute; inset: 0; background: url("/images/picanha-grelhada.jpg") center/cover no-repeat; transform: scale(1.02); }
+.hero-inner::after { content:""; position:absolute; inset:0; background: linear-gradient(180deg, rgba(0,0,0,.45), rgba(0,0,0,.25)); }
+.hero-inner > * { position: relative; z-index: 1; }
+.hero h1, .hero p { color: #fff; text-shadow: 0 1px 2px rgba(0,0,0,.4); }
+.hero .muted { opacity: .92; }
+.hero .soon { margin-top: 6px; font-weight: 600; }
+.hero .btn { display:inline-block; margin: 18px 0 24px; background: var(--brand); color:#fff; border-radius: 16px; padding: 12px 20px; text-decoration:none; font-weight:700; }
+.hero .hero-inner { padding: 48px 24px; }
 
-/* IMERSIVA */
-.immersive{margin-top:24px;border-radius:18px;overflow:hidden;box-shadow:var(--shadow)}
-.immersive img{display:block;width:100%; transform:scale(1.05); opacity:.95; transition:transform .6s ease}
-.immersive img:hover{transform:scale(1.08)}
+/* Imersivo */
+.immersive { margin-top: 22px; border-radius: 18px; overflow: hidden; box-shadow: var(--shadow); }
 
-/* TEXTOS */
-h1,h2,h3,h4{font-family:inherit}
-h1{font-size:28px}
-h3{margin-top:24px}
-.muted{color:var(--muted)}
-.backlink{display:inline-block;margin-top:18px;color:var(--brand);text-decoration:none}
+/* Cards de prato */
+.grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
+.grid-2 { display: grid; grid-template-columns: repeat(2, 1fr); gap: 18px; }
+@media (max-width: 900px) { .grid-3 { grid-template-columns: 1fr; } .grid-2 { grid-template-columns: 1fr; } }
 
-/* GRIDS & CARDS */
-.grid-2{display:grid;grid-template-columns:1fr 1fr;gap:16px}
-.grid-3{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
-@media (max-width:850px){.grid-3{grid-template-columns:1fr 1fr}}
-@media (max-width:560px){.grid-2,.grid-3{grid-template-columns:1fr}}
-.card{
-  background:var(--card); border-radius:16px; overflow:hidden;
-  box-shadow:var(--shadow);
+.card { background: #fff; border-radius: 16px; overflow: hidden; box-shadow: var(--shadow); }
+.card.dish img { aspect-ratio: 16/10; object-fit: cover; }
+.p16 { padding: 16px; }
+.card.dish h4 { margin: 0 0 8px; }
+.card.dish p.muted { margin: 0 0 10px; color: #3a2f26; opacity: .96; font-size: 15px; line-height: 1.55; } /* MAIS LEGÍVEL */
+
+/* Chips */
+.tags { display: flex; flex-wrap: wrap; gap: 6px; }
+.tag { background: var(--chip); padding: 6px 10px; border-radius: 999px; font-size: 12px; color: var(--text); }
+
+/* Tabs */
+.tabs { display:flex; align-items:center; gap:10px; margin: 10px 0 18px; }
+.tabs button { border:0; background: var(--chip); color: var(--text); padding: 10px 14px; border-radius: 999px; font-weight:700; }
+.tabs .on { background: var(--brand); color:#fff; }
+.backlink { margin-left:auto; color: var(--brand); text-decoration: none; font-weight:700; }
+
+/* Map */
+.mapwrap { margin: 14px 0 24px; border-radius: 16px; overflow:hidden; box-shadow: var(--shadow); background: #ddd; }
+.mapwrap iframe { width:100%; height: 420px; border:0; }
+
+/* Footer */
+.footer { text-align:center; padding: 36px 0; color: var(--muted); }
+
+/* -------- Modal de prato -------- */
+.modal-backdrop {
+  position: fixed; inset: 0; background: rgba(0,0,0,.55);
+  display: grid; place-items: center; z-index: 50;
 }
-.card img{display:block;width:100%;height:auto}
-.card .p16{padding:14px}
-.card.dish h4{margin:0 0 6px}
-.cards{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
-.cards .person{padding-bottom:8px}
-@media (max-width:850px){.cards{grid-template-columns:1fr 1fr}}
-@media (max-width:560px){.cards{grid-template-columns:1fr}}
-
-.tag{
-  display:inline-block;background:#efdfcf;color:#553a31;border-radius:999px;
-  padding:4px 8px;margin:4px 6px 0 0;font-size:12px
+.modal {
+  width: min(880px, 92%); max-height: 90vh; overflow: auto;
+  background: #fff; border-radius: 18px; box-shadow: 0 30px 60px rgba(0,0,0,.35);
 }
-
-.tabs{display:flex;gap:8px;align-items:center;margin:8px 0 18px}
-.tabs button{
-  border:0;background:#e8d9c5;color:#553a31;border-radius:999px;cursor:pointer;
-  padding:8px 12px;font-weight:700
+.modal header { position: sticky; top: 0; background: rgba(255,255,255,.95); backdrop-filter: blur(4px); padding: 12px 16px; display:flex; gap:10px; align-items:center; border-bottom: 1px solid rgba(0,0,0,.06); }
+.modal header h3 { margin: 0; font-size: 20px; }
+.modal .close {
+  margin-left: auto; border:0; background: var(--chip); padding: 8px 12px; border-radius: 12px; font-weight: 700; color: var(--text);
 }
-.tabs button.on{background:var(--brand);color:#fff}
+.modal .cover { width: 100%; aspect-ratio: 16/9; object-fit: cover; }
+.modal .body { padding: 16px; }
+.modal .body p { color: #3a2f26; line-height: 1.7; font-size: 16px; }
 
-/* MAPA */
-.mapwrap{
-  border-radius:16px; overflow:hidden; box-shadow:var(--shadow); margin-top:8px;
-}
-.mapwrap iframe{display:block;border:0;width:100%;height:380px}
-
-/* FOOTER */
-.footer{padding:30px 18px;text-align:center;color:#816e64}
+body.modal-open { overflow: hidden; }
