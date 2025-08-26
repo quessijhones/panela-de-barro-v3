@@ -1,361 +1,296 @@
-// ==========================================================================
-// Panela de Barro — Menu completo
-// Categorias usadas pelo site: "mains", "seasonal", "beverages"
-// O filtro "All" mostra tudo. Sinta-se à vontade para mudar descrições depois.
-// ==========================================================================
-
+// Lista de pratos. Categorias: 'mains' | 'seasonal' | 'beverages'
 export const MENU = [
-  // ===================== MAINS =====================
   {
     id: "vaca-atolada",
     category: "mains",
     image: "/images/vaca-atolada.jpg",
-    name: { pt: "Vaca Atolada (Ossobuco)", en: "Vaca Atolada (Ossobuco)", ar: "فاكا أتولادا (أوسوبوكو)" },
-    brief: {
+    name: "Vaca Atolada (Ossobuco)",
+    nameAr: "فاكا أتولادا (أوسوبوكو)",
+    desc: {
       pt: "Ossobuco com polenta cremosa e rúcula cítrica.",
       en: "Ossobuco with creamy polenta and citrus arugula.",
-      ar: "أوسوبوكو مع بولينتا كريمية وجرجير حمضي."
+      ar: "أوسوبوكو مع بولينتا كريمية وجرجير بالحمضيات.",
     },
-    tags: ["Halal","Beef","Gluten","Dairy"]
+    tags: ["Halal", "Beef", "Gluten", "Dairy"],
   },
   {
     id: "feijoada-costela",
     category: "mains",
     image: "/images/feijoada-costela.jpg",
-    name: { pt: "Feijoada de Costela", en: "Beef Rib Feijoada", ar: "فيجوادا بأضلاع اللحم" },
-    brief: {
+    name: "Feijoada de Costela",
+    nameAr: "فيجوادا دي كوستيلا",
+    desc: {
       pt: "Feijão preto com costela, farofa de banana e vinagrete.",
       en: "Black beans with beef ribs, banana farofa and vinaigrette.",
-      ar: "فاصوليا سوداء مع أضلاع لحم، فاروفا الموز وفيناكريت."
+      ar: "فول أسود مع أضلاع لحم، فاروفا بالموز وصلصة فيناغريت.",
     },
-    tags: ["Halal","Beef","Gluten"]
+    tags: ["Halal", "Beef", "Gluten"],
   },
   {
     id: "moqueca-baiana",
     category: "mains",
     image: "/images/moqueca-baiana.jpg",
-    name: { pt: "Moqueca Baiana", en: "Bahian Moqueca", ar: "موكيكا بايانا" },
-    brief: {
+    name: "Moqueca Baiana",
+    nameAr: "موكيكا بايانا",
+    desc: {
       pt: "Peixe no leite de coco, urucum/dendê e coentro.",
-      en: "Fish in coconut milk, annatto/dendê oil and cilantro.",
-      ar: "سمك بصلصة حليب جوز الهند وزيت الدندِي والكزبرة."
+      en: "Fish with coconut milk, annatto/palm oil and cilantro.",
+      ar: "سمك بحليب جوز الهند وزيت الدندِه والكزبرة.",
     },
-    tags: ["Halal","Sea","Gluten","Dairy"]
+    tags: ["Halal", "Sea", "Gluten", "Dairy"],
   },
   {
     id: "picanha-grelhada",
     category: "mains",
     image: "/images/picanha-grelhada.jpg",
-    name: { pt: "Picanha Grelhada", en: "Grilled Picanha", ar: "بيكانيا مشوية" },
-    brief: {
-      pt: "Com risoto de cogumelos, polenta verde e molho de pimenta-do-reino.",
+    name: "Picanha Grelhada",
+    nameAr: "بيكانيا غريلادا",
+    desc: {
+      pt: "Com risoto de cogumelos, polenta verde e molho de pimenta do reino.",
       en: "With mushroom risotto, green polenta and black-pepper sauce.",
-      ar: "مع ريزوتو الفطر وبولينتا خضراء وصلصة الفلفل الأسود."
+      ar: "مع ريزوتو الفطر وبولينتا خضراء وصلصة الفلفل الأسود.",
     },
-    tags: ["Halal","Beef","Dairy","Gluten"]
+    tags: ["Halal", "Beef", "Dairy", "Gluten"],
   },
   {
-    id: "galinhada-caipira",
+    id: "galinhada",
     category: "mains",
     image: "/images/galinhada-caipira.jpg",
-    name: { pt: "Galinhada Caipira", en: "Country-Style Chicken Rice", ar: "غاليِنهادا على الطريقة الريفية" },
-    brief: {
-      pt: "Arroz de quintal com frango, milho, cheiro-verde e açafrão-da-terra.",
-      en: "Farm-style rice with chicken, corn, scallions and turmeric.",
-      ar: "أرز منزلي مع دجاج وذرة وبصل أخضر وكركم."
+    name: "Galinhada Caipira",
+    nameAr: "غالينهادَا كايبيرا",
+    desc: {
+      pt: "Arroz de quintal com frango caipira ao caldo de legumes.",
+      en: "Country-style rice with free-range chicken and veggie broth.",
+      ar: "أرز ريفي مع دجاج بلدي ومرق خضار.",
     },
-    tags: ["Halal","Gluten-Free"]
+    tags: ["Halal", "Gluten-Free"],
   },
   {
     id: "rubacao",
     category: "mains",
     image: "/images/rubacao.jpg",
-    name: { pt: "Rubacão", en: "Rubacão (Northeastern rice & beans)", ar: "روباكاأو" },
-    brief: {
-      pt: "Clássico nordestino: arroz, feijão-de-corda, queijo e carne seca.",
-      en: "Northeastern classic of rice, beans, cheese and cured beef.",
-      ar: "طبق شمال شرقي: أرز مع فاصوليا وجبن ولحم بقري مجفف."
+    name: "Rubacão",
+    nameAr: "روباكان",
+    desc: {
+      pt: "Clássico nordestino de arroz, feijão verde, queijo coalho e carne.",
+      en: "Northeastern mix of rice, green beans, grilled curd cheese and meat.",
+      ar: "طبق شمال شرقي من أرز وفاصوليا خضراء وجبن مشوي ولحم.",
     },
-    tags: ["Halal","Beef","Dairy","Gluten-Free"]
+    tags: ["Halal", "Gluten"],
   },
   {
     id: "fraldinha-inteira",
     category: "mains",
     image: "/images/fraldinha-inteira.jpg",
-    name: { pt: "Fraldinha Inteira", en: "Whole Flank Steak", ar: "فرالدينها كاملة" },
-    brief: {
-      pt: "Grelhada lenta, molho de ervas e purê rústico.",
-      en: "Slow-grilled with herb sauce and rustic mash.",
-      ar: "مشوية ببطء مع صلصة الأعشاب وهريس ريفي."
+    name: "Fraldinha Inteira",
+    nameAr: "فرالدينيا",
+    desc: {
+      pt: "Corte macio, assado lentamente, com mandioca e molho da casa.",
+      en: "Slow-roasted flank, with cassava and house jus.",
+      ar: "قطعة لحم طرية مشوية ببطء مع الكسافا وصلصة المطعم.",
     },
-    tags: ["Halal","Beef","Gluten-Free","Dairy"]
+    tags: ["Halal", "Beef"],
   },
   {
-    id: "hamburguer-de-picanha",
+    id: "hamburguer-picanha",
     category: "mains",
     image: "/images/hamburguer-de-picanha.jpg",
-    name: { pt: "Hambúrguer de Picanha", en: "Picanha Burger", ar: "برغر بيكانيا" },
-    brief: {
-      pt: "Blend suculento, queijo e molho da casa.",
-      en: "Juicy blend, cheese and house sauce.",
-      ar: "مزيج عصاري مع جبن وصلصة خاصة."
+    name: "Hambúrguer de Picanha",
+    nameAr: "هامبرغر بيكانيا",
+    desc: {
+      pt: "Blend de picanha, queijo, cebola dourada e pão da casa.",
+      en: "Picanha blend, cheese, caramelized onion, house bun.",
+      ar: "مزيج بيكانيا مع جبن وبصل مكرمل وخبز البيت.",
     },
-    tags: ["Halal","Beef","Dairy","Gluten"]
+    tags: ["Halal", "Beef", "Gluten", "Dairy"],
   },
-  {
-    id: "lasanha-banana",
-    category: "seasonal",
-    image: "/images/lasanha-banana.jpg",
-    name: { pt: "Lasanha de Banana (Sazonal)", en: "Banana Lasagna (Seasonal)", ar: "لازانيا الموز (موسمية)" },
-    brief: {
-      pt: "Doce-salgado brasileiro — surpreendente e aconchegante.",
-      en: "A Brazilian sweet–savory surprise — comforting and unique.",
-      ar: "مفاجأة حلوة مالحة على الطريقة البرازيلية."
-    },
-    tags: ["Veg","Gluten","Dairy"]
-  },
-
-  // ===================== ENTRADAS / ACOMPANHAMENTOS (aparecem em All) =====================
-  {
-    id: "coxinhas-de-costela",
-    category: "mains",
-    image: "/images/coxinhas-de-costela.jpg",
-    name: { pt: "Coxinhas de Costela", en: "Beef Rib Coxinhas", ar: "كوخينيا بأضلاع اللحم" },
-    brief: {
-      pt: "Clássico de boteco com recheio de costela desfiada.",
-      en: "Bar classic stuffed with shredded beef ribs.",
-      ar: "حلوى مالحة محشوة بأضلاع اللحم المفرومة."
-    },
-    tags: ["Halal","Beef","Gluten","Dairy"]
-  },
-  {
-    id: "pasteis-brasileiros",
-    category: "mains",
-    image: "/images/pasteis-brasileiros.jpg",
-    name: { pt: "Pastéis Brasileiros", en: "Brazilian Pastéis", ar: "باستيل برازيلي" },
-    brief: {
-      pt: "Massa crocante com recheios variados.",
-      en: "Crispy pastries with assorted fillings.",
-      ar: "عجينة مقرمشة بحشوات منوّعة."
-    },
-    tags: ["Halal","Gluten","Dairy"]
-  },
+  // ----- Acompanhamentos / lanches -----
   {
     id: "pao-de-queijo",
     category: "mains",
     image: "/images/pao-de-queijo.jpg",
-    name: { pt: "Pão de Queijo", en: "Cheese Bread (GF)", ar: "خبز الجبن" },
-    brief: {
-      pt: "Mineiro, 100% sem glúten: polvilho e queijo.",
-      en: "Minas classic, naturally gluten-free.",
-      ar: "كلاسيكي من ميناس، خالٍ من الغلوتين."
+    name: "Pão de Queijo",
+    nameAr: "باو دي كيجو",
+    desc: {
+      pt: "Clássico mineiro — crocante por fora, macio por dentro.",
+      en: "Cheesy Minas classic — crisp outside, soft inside.",
+      ar: "كلاسيك ميناس الجبني — مقرمش من الخارج وطري من الداخل.",
     },
-    tags: ["Halal","Dairy","Gluten-Free","Veg"]
+    tags: ["Gluten-Free", "Dairy"],
   },
   {
     id: "pao-de-alho",
     category: "mains",
     image: "/images/pao-de-alho.jpg",
-    name: { pt: "Pão de Alho", en: "Garlic Bread", ar: "خبز بالثوم" },
-    brief: {
-      pt: "Tostado na brasa, manteiga de alho e ervas.",
-      en: "Grilled with garlic butter and herbs.",
-      ar: "مشوي مع زبدة الثوم والأعشاب."
-    },
-    tags: ["Veg","Gluten","Dairy"]
-  },
-  {
-    id: "polenta-frita",
-    category: "mains",
-    image: "/images/polenta-frita.jpg",
-    name: { pt: "Polenta Frita", en: "Crispy Polenta Fries", ar: "بولينتا مقلية مقرمشة" },
-    brief: {
-      pt: "Porção crocante com parmesão e ervas.",
-      en: "Crispy sticks with parmesan and herbs.",
-      ar: "قضبان مقرمشة مع بارميزان وأعشاب."
-    },
-    tags: ["Veg","Gluten-Free","Dairy"]
+    name: "Pão de Alho",
+    nameAr: "خبز بالثوم",
+    desc: { pt: "Pão artesanal com pasta de alho da casa.",
+           en: "Artisan bread with house garlic paste.",
+           ar: "خبز مُعد يدوياً مع معجون الثوم الخاص." },
+    tags: ["Gluten", "Dairy"],
   },
   {
     id: "mandioca-frita",
     category: "mains",
     image: "/images/mandioca-frita.jpg",
-    name: { pt: "Mandioca Frita", en: "Fried Cassava", ar: "كسافا مقلية" },
-    brief: {
-      pt: "Raiz dourada, por fora crocante e por dentro macia.",
-      en: "Golden cassava — crisp outside, tender inside.",
-      ar: "كسافا ذهبية مقرمشة من الخارج وطريّة من الداخل."
-    },
-    tags: ["Veg","Gluten-Free"]
+    name: "Mandioca Frita",
+    nameAr: "كسافا مقلية",
+    desc: { pt: "Crocante por fora, macia por dentro.", en: "Crispy outside, tender inside.", ar: "مقرمشة من الخارج وطريّة من الداخل." },
+    tags: ["Halal", "Gluten-Free"],
   },
   {
     id: "mandioca-real",
     category: "mains",
     image: "/images/mandioca-real.jpg",
-    name: { pt: "Mandioca Real", en: "Creamy Cassava Purée", ar: "هريس الكسافا" },
-    brief: {
-      pt: "Purê cremoso para acompanhar grelhados.",
-      en: "Silky purée to pair with grills.",
-      ar: "هريس ناعم يرافق المشاوي."
-    },
-    tags: ["Veg","Gluten-Free","Dairy"]
+    name: "Mandioca Real",
+    nameAr: "كسافا ريال",
+    desc: { pt: "Purê amanteigado de mandioca com queijo.",
+           en: "Buttery cassava purée with cheese.",
+           ar: "مهروس كسافا بالزبدة والجبن." },
+    tags: ["Gluten-Free", "Dairy"],
   },
   {
-    id: "farofa-de-castanha",
+    id: "polenta-frita",
     category: "mains",
-    image: "/images/farofa-de-castanha.jpg",
-    name: { pt: "Farofa de Castanha", en: "Brazil Nut Farofa", ar: "فاروفا الجوز البرازيلي" },
-    brief: {
-      pt: "Crocrante de mandioca com castanhas.",
-      en: "Toasted cassava crumbs with nuts.",
-      ar: "فتات مانديوكا محمّصة مع المكسرات."
-    },
-    tags: ["Veg","Gluten-Free"]
+    image: "/images/polenta-frita.jpg",
+    name: "Polenta Frita",
+    nameAr: "بولينتا مقلية",
+    desc: { pt: "Bastões dourados, toque de parmesão.",
+           en: "Golden sticks with a touch of parmesan.",
+           ar: "أصابع ذهبية مع لمسة بارميزان." },
+    tags: ["Gluten-Free", "Dairy"],
   },
   {
-    id: "pe-de-serra",
-    category: "seasonal",
-    image: "/images/pe-de-serra.jpg",
-    name: { pt: "Pé-de-Serra", en: "Pé-de-Serra", ar: "بيه-دي-سيرا" },
-    brief: {
-      pt: "Doce nordestino (versão da casa).",
-      en: "Northeastern sweet (house version).",
-      ar: "حلوى من شمال شرق البرازيل (نسخة المطعم)."
-    },
-    tags: ["Veg","Dairy","Gluten"]
+    id: "coxinhas-costela",
+    category: "mains",
+    image: "/images/coxinhas-de-costela.jpg",
+    name: "Coxinhas de Costela",
+    nameAr: "كوشينيا أضلاع",
+    desc: { pt: "Clássico de boteco recheado com costela desfiada.",
+           en: "Brazilian croquettes stuffed with shredded ribs.",
+           ar: "كروكيت برازيلي محشو بأضلاع مبشورة." },
+    tags: ["Gluten", "Dairy"],
   },
+  {
+    id: "pasteis-brasileiros",
+    category: "mains",
+    image: "/images/pasteis-brasileiros.jpg",
+    name: "Pastéis Brasileiros",
+    nameAr: "باستييس برازيلي",
+    desc: { pt: "Massa crocante com recheios variados.",
+           en: "Crispy pastries with assorted fillings.",
+           ar: "فطائر مقرمشة بحشوات متنوعة." },
+    tags: ["Gluten"],
+  },
+  {
+    id: "lasanha-banana",
+    category: "mains",
+    image: "/images/lasanha-banana.jpg",
+    name: "Lasanha de Banana",
+    nameAr: "لازانيا الموز",
+    desc: { pt: "Versão do Norte com banana-da-terra e queijo.",
+           en: "Northern twist with plantain and cheese.",
+           ar: "نسخة شمالية بموز الجنة والجبن." },
+    tags: ["Vegetarian", "Gluten", "Dairy"],
+  },
+  // ---------- Sazonais ----------
   {
     id: "pamonha",
     category: "seasonal",
     image: "/images/pamonha.jpg",
-    name: { pt: "Pamonha (Sazonal)", en: "Pamonha (Seasonal)", ar: "بامونيا (موسمية)" },
-    brief: {
+    name: "Pamonha (Sazonal)",
+    nameAr: "بامونيا (موسمي)",
+    desc: {
       pt: "Clássico de milho verde — doce ou salgado.",
       en: "Green-corn classic — sweet or savory.",
-      ar: "طبق الذرة الخضراء الكلاسيكي — حلو أو مالح."
+      ar: "كلاسيك الذرة الخضراء — حلو أو مالح.",
     },
-    tags: ["Veg","Gluten-Free","Dairy"]
+    tags: ["Veg", "Gluten-Free", "Dairy"],
   },
   {
-    id: "doce-da-roca-com-gelo",
+    id: "farofa-castanha",
     category: "seasonal",
-    image: "/images/doce-da-roca-com-gelo.jpg",
-    name: { pt: "Doce da Roça com Gelo", en: "Country Sweet on Ice", ar: "حلوى المزرعة مع الثلج" },
-    brief: {
-      pt: "Sobremesa refrescante, receita de roça.",
-      en: "Refreshing farm-style dessert.",
-      ar: "تحلية منعشة على طريقة المزارع."
+    image: "/images/farofa-de-castanha.jpg",
+    name: "Farofa de Castanha",
+    nameAr: "فاروفا الكستناء",
+    desc: {
+      pt: "Manteigada, com castanhas e cheiro-verde.",
+      en: "Buttery farofa with nuts and herbs.",
+      ar: "فاروفا بالزبدة والمكسرات والأعشاب.",
     },
-    tags: ["Veg","Dairy","Gluten-Free"]
+    tags: ["Gluten-Free"],
   },
-
-  // ===================== BEBIDAS =====================
+  // ---------- Bebidas ----------
   {
     id: "amazon-breeze",
     category: "beverages",
     image: "/images/amazon-breeze.jpg",
-    name: { pt: "Amazon Breeze", en: "Amazon Breeze", ar: "أمازون بريز" },
-    brief: {
-      pt: "Maracujá, cupuaçu e toque de limão.",
-      en: "Passion fruit, cupuaçu and lime.",
-      ar: "باشن فروت وكوبواسو ولمسة ليمون."
-    },
-    tags: ["Veg","Non-Alcoholic"]
+    name: "Amazon Breeze",
+    nameAr: "نسيم الأمازون",
+    desc: { pt: "Cupuçu, limão e gelo moído.", en: "Cupuaçu, lime and crushed ice.", ar: "كوبواسو، ليمون وثلج مطحون." },
+    tags: ["Veg"],
   },
   {
     id: "blueberry-coco-fizz",
     category: "beverages",
     image: "/images/blueberry-coco-fizz.jpg",
-    name: { pt: "Blueberry Coco Fizz", en: "Blueberry Coco Fizz", ar: "بلوبيري كوكو فيز" },
-    brief: {
-      pt: "Mirtilo, coco e final cítrico.",
-      en: "Blueberry, coconut and citrus finish.",
-      ar: "توت أزرق مع جوز الهند ولمسة حمضية."
-    },
-    tags: ["Veg","Non-Alcoholic","Dairy-Free"]
+    name: "Blueberry Coco Fizz",
+    nameAr: "بلو بيري كوكو فِز",
+    desc: { pt: "Mirtilo, coco e gás.", en: "Blueberry, coconut and fizz.", ar: "توت أزرق وجوز هند وفوّار." },
+    tags: ["Veg"],
   },
   {
     id: "caipile-classico",
     category: "beverages",
     image: "/images/caipile-classico.jpg",
-    name: { pt: "Caipilé Clássico", en: "Classic Caipilé (non-alcoholic)", ar: "كايبيليه كلاسيكي (بدون كحول)" },
-    brief: {
-      pt: "Nosso twist sem álcool inspirado na caipirinha.",
-      en: "Our alcohol-free twist inspired by caipirinha.",
-      ar: "لمستنا بدون كحول مستوحاة من الكايبيرينها."
-    },
-    tags: ["Veg","Non-Alcoholic"]
+    name: "Caipilé Clássico",
+    nameAr: "كايبيليه كلاسيكو",
+    desc: { pt: "Nosso clássico gelado sem álcool.", en: "Our classic iced mocktail.", ar: "مشروبنا الكلاسيكي البارد دون كحول." },
+    tags: ["Veg"],
   },
   {
     id: "encanto-de-coco",
     category: "beverages",
     image: "/images/encanto-de-coco.jpg",
-    name: { pt: "Encanto de Coco", en: "Coconut Charm", ar: "سحر جوز الهند" },
-    brief: {
-      pt: "Creme de coco, gelo e especiarias.",
-      en: "Coconut cream, ice and spices.",
-      ar: "كريمة جوز الهند مع الثلج والتوابل."
-    },
-    tags: ["Veg","Non-Alcoholic","Dairy"]
+    name: "Encanto de Coco",
+    nameAr: "سحر جوز الهند",
+    desc: { pt: "Coco cremoso com toque de baunilha.", en: "Creamy coconut with a hint of vanilla.", ar: "جوز هند كريمي مع لمسة فانيلا." },
+    tags: ["Veg", "Dairy"],
   },
   {
     id: "uva-limao-gelo",
     category: "beverages",
     image: "/images/uva-limao-gelo.jpg",
-    name: { pt: "Uva & Limão no Gelo", en: "Grape & Lime on Ice", ar: "عنب وليمون على الثلج" },
-    brief: {
-      pt: "Fresco e perfumado.",
-      en: "Fresh and fragrant.",
-      ar: "منعش وعطِر."
-    },
-    tags: ["Veg","Non-Alcoholic"]
+    name: "Uva & Limão Gelo",
+    nameAr: "عنب وليمون بالثلج",
+    desc: { pt: "Refresco gelado de uva e limão.", en: "Icy grape & lime refresher.", ar: "منعش العنب والليمون المثلج." },
+    tags: ["Veg"],
   },
   {
     id: "verao-brasil",
     category: "beverages",
     image: "/images/verao-brasil.jpg",
-    name: { pt: "Verão Brasil", en: "Brazilian Summer", ar: "صيف البرازيل" },
-    brief: {
-      pt: "Abacaxi, hortelã e toque de rapadura.",
-      en: "Pineapple, mint & a touch of raw sugar.",
-      ar: "أناناس ونعناع ولمسة سكر خام."
-    },
-    tags: ["Veg","Non-Alcoholic"]
+    name: "Verão Brasil",
+    nameAr: "صيف البرازيل",
+    desc: { pt: "Frutado e perfumado, cara de praia.", en: "Fruity, aromatic — beach vibes.", ar: "فاكهي وعطري — أجواء الشاطئ." },
+    tags: ["Veg"],
   },
   {
     id: "vitamina-do-cerrado",
     category: "beverages",
     image: "/images/vitamina-do-cerrado.jpg",
-    name: { pt: "Vitamina do Cerrado", en: "Cerrado Smoothie", ar: "سموثي سيرادو" },
-    brief: {
-      pt: "Frutas do cerrado batidas com leite.",
-      en: "Cerrado fruits blended with milk.",
-      ar: "فاكهة سيرادو مخفوقة مع الحليب."
-    },
-    tags: ["Veg","Dairy","Non-Alcoholic"]
-  },
-  {
-    id: "frescor-da-amazonia",
-    category: "beverages",
-    image: "/images/frescor-da-amazonia.jpg",
-    name: { pt: "Frescor da Amazônia", en: "Amazon Fresh", ar: "نَسمة الأمازون" },
-    brief: {
-      pt: "Cítrico e herbal, super refrescante.",
-      en: "Citrusy, herbal and ultra refreshing.",
-      ar: "حمضي وعشبي ومنعش للغاية."
-    },
-    tags: ["Veg","Non-Alcoholic"]
+    name: "Vitamina do Cerrado",
+    nameAr: "فيتامين السِيرادو",
+    desc: { pt: "Polpa do cerrado batida cremosa.", en: "Cerrado fruit shake, creamy.", ar: "عصير فواكه السِيرادو الكريمي." },
+    tags: ["Veg", "Dairy"],
   },
   {
     id: "sol-do-cerrado",
     category: "beverages",
     image: "/images/sol-do-cerrado.jpg",
-    name: { pt: "Sol do Cerrado", en: "Cerrado Sun", ar: "شمس السيرادو" },
-    brief: {
-      pt: "Manga, maracujá, hortelã e cítricos.",
-      en: "Mango, passion fruit, mint and citrus.",
-      ar: "مانجو وباشن فروت ونعناع وحمضيات."
-    },
-    tags: ["Veg","Non-Alcoholic"]
-  }
+    name: "Sol do Cerrado",
+    nameAr: "شمس السِيرادو",
+    desc: { pt: "Manga, maracujá, hortelã e gelo.", en: "Mango, passion fruit, mint and ice.", ar: "مانجو وباشن فروت ونعناع وثلج." },
+    tags: ["Veg"],
+  },
 ];
