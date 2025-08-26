@@ -140,3 +140,59 @@ export const setLang = (l) => {
 };
 
 export const t = (key, lang = getLang()) => M[lang]?.[key] ?? key;
+// --- acrescente isto no FINAL de src/i18n.js ---
+
+/**
+ * Lê ?lang= tanto na URL normal (location.search) quanto dentro do hash (#/rota?lang=)
+ * e aplica se for um código suportado (pt, en, ar).
+ */
+export function initLangFromURL() {
+  try {
+    let lang = null;
+
+    // 1) procura em location.search
+    if (typeof window !== "undefined" && window.location && window.location.search) {
+      const p = new URLSearchParams(window.location.search);
+      lang = p.get("lang");
+    }
+
+    // 2) se não achou, procura depois do ? dentro do hash (#/rota?lang=xx)
+    if (!lang && typeof window !== "undefined" && window.location && window.location.hash) {
+      const hash = window.location.hash; // ex: "#/menu?lang=en"
+      const qIndex = hash.indexOf("?");
+      if (qIndex !== -1) {
+        const qs = hash.slice(qIndex + 1);
+        const p2 = new URLSearchParams(qs);
+        lang = p2.get("lang");
+      }
+    }
+
+    // valida e aplica
+    if (lang && typeof setLang === "function") {
+      // só aplica se for um dos idiomas suportados
+      const supported = (typeof LOCALES === "object") ? Object.keys(LOCALES) : ["pt", "en", "ar"];
+      if (supported.includes(lang)) {
+        setLang(lang);
+      }
+    }
+  } catch (e) {
+    // não quebra o app se algo der errado
+    console.warn("initLangFromURL falhou:", e);
+  }
+}
+
+/**
+ * Ajusta <html lang=".."> e a direção (dir) para RTL no árabe.
+ */
+export function applyDocumentLang(l) {
+  try {
+    const lang = l || (typeof getLang === "function" ? getLang() : "pt");
+    if (typeof document !== "undefined") {
+      const el = document.documentElement;
+      el.setAttribute("lang", lang);
+      el.setAttribute("dir", lang === "ar" ? "rtl" : "ltr");
+    }
+  } catch (e) {
+    console.warn("applyDocumentLang falhou:", e);
+  }
+}
