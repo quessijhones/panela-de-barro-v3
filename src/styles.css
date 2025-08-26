@@ -91,3 +91,12 @@ img { max-width: 100%; display: block; }
 .modal .body p { color: #3a2f26; line-height: 1.7; font-size: 16px; }
 
 body.modal-open { overflow: hidden; }
+/* reforça contraste dos textos de descrição nos cards */
+.card .muted { 
+  color: #4a3b35; 
+}
+
+/* título e descrição sobem um pouco para dar mais respiro em telas pequenas */
+.card.dish .p16 { 
+  padding-top: 14px;
+}
