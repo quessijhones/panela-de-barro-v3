@@ -2,7 +2,7 @@
 import React, { useEffect, useMemo, useState } from "react";
 
 /* ======================================================
-   I18N BÁSICO
+   I18N
    ====================================================== */
 const LANGS = ["pt", "en", "ar"];
 const DEFAULT_LANG = "pt";
@@ -80,7 +80,7 @@ const dict = {
         "Nossa cozinha honra esse saber, unindo tradição e cuidado com o ingrediente.",
       imgs: ["/heritage/fogao-1.jpg", "/heritage/fogao-2.jpg", "/heritage/fogao-3.jpg"],
     },
-    gallery: { title: "Galeria (Somente pratos)" },
+    gallery: { title: "Galeria (somente pratos)" },
     support: {
       title: "Suporte",
       items: ["Pedidos e reservas em breve", "Eventos e encomendas", "Parcerias"],
@@ -100,7 +100,41 @@ const dict = {
       addressLabel: "Endereço",
       back: "Voltar ao início",
     },
+    /* Nomes/descrições dos itens por ID */
+    items: {
+      "picanha": { name: "Picanha Grelhada", desc: "Picanha na brasa, ponto perfeito e suculência." },
+      "fraldinha": { name: "Fraldinha Inteira", desc: "Corte macio servido na tábua, perfeito para compartilhar." },
+      "vaca-atolada": { name: "Vaca Atolada (Ossobuco)", desc: "Ossobuco com polenta cremosa e rúcula cítrica." },
+      "feijoada-costela": { name: "Feijoada de Costela", desc: "Feijão preto com costela, farofa de banana e vinagrete." },
+      "moqueca": { name: "Moqueca Baiana", desc: "Peixe no leite de coco, urucum/dendê e coentro." },
+      "galinhada": { name: "Galinhada Caipira", desc: "Arroz de quintal, frango dourado e cheiro-verde." },
+      "hamburguer-picanha": { name: "Hambúrguer de Picanha", desc: "Blend suculento de picanha, pão macio e queijo." },
+
+      "coxinhas-costela": { name: "Coxinhas de Costela", desc: "Clássico brasileiro, recheio suculento de costela." },
+      "pasteis": { name: "Pastéis Brasileiros", desc: "Pastéis crocantes com recheios variados." },
+      "pao-alho": { name: "Pão de Alho", desc: "Pão dourado na brasa com manteiga de alho." },
+      "polenta-frita": { name: "Polenta Frita", desc: "Porção crocante por fora e cremosa por dentro." },
+      "mandioca-frita": { name: "Mandioca Frita", desc: "Raiz brasileira crocante, perfeita para compartilhar." },
+      "farofa-castanha": { name: "Farofa de Castanha", desc: "Crocrância e sabor para acompanhar os pratos." },
+
+      "mandioca-real": { name: "Mandioca Real", desc: "Bolo cremoso de mandioca com coco." },
+      "encanto-coco": { name: "Encanto de Coco", desc: "Cocada cremosa servida gelada." },
+      "doce-roca-gelo": { name: "Doce da Roça com Gelo", desc: "Doce caseiro da fazenda, servido gelado." },
+      "pamonha": { name: "Pamonha Doce (Sazonal)", desc: "Clássico de milho verde — disponível em épocas de safra." },
+
+      "caipile": { name: "Caipilé Clássico", desc: "Refrescante e cítrico." },
+      "uva-limao": { name: "Uva, Limão & Gelo", desc: "Doce, ácido e gelado." },
+      "blueberry-coco": { name: "Blueberry & Coco Fizz", desc: "Frutas e coco em borbulhas tropicais." },
+      "verao-brasil": { name: "Verão Brasil", desc: "Notas cítricas e doçura na medida." },
+      "amazonia-breeze": { name: "Amazon Breeze", desc: "Ervas e frutas da floresta." },
+      "frescor-amazonia": { name: "Frescor da Amazônia", desc: "Suco verde aromático." },
+      "pe-de-serra": { name: "Pé de Serra", desc: "Toques de rapadura e limão." },
+      "sol-do-cerrado": { name: "Sol do Cerrado", desc: "Manga e maracujá em harmonia." },
+      "vitamina-cerrado": { name: "Vitamina do Cerrado", desc: "Cremosa e nutritiva." },
+    },
   },
+
+  /* ---------------- EN ---------------- */
   en: {
     nav: {
       about: "About",
@@ -134,29 +168,9 @@ const dict = {
       },
       modal: { close: "Close" },
     },
-    about: {
-      title: "About",
-      p1: "Panela de Barro is a tribute to Brazilian roots: farm cooking, fresh ingredients and wood fire. Our family brings decades of kitchen memories to Doha.",
-      p2: "Clay pots cross our history: from indigenous peoples to Afro-Brazilian creativity. Slow cooking lets flavors speak and leaves an unmistakable earthy touch.",
-      p3: "That’s the taste we seek in every dish. Tradition, calm and affection — served at the table.",
-      family: "Our family",
-      people: {
-        quessi: { name: "Quessi Jones — Owner", text: "Quessi leads the house and preserves the purpose: cook with soul, welcome with care.", img: "/heritage/chef-quessi.jpg" },
-        alex:   { name: "Alex — Head Chef",       text: "Alex runs the kitchen with technique and memory — perfect doneness and steady fire.", img: "/heritage/chef-alex.jpg" },
-        cleusa: { name: "Cleusa Gonçalves — Mother & Recipe Guardian", text: "Dona Cleusa inspires our flavors: pots on the fire, stories and recipes passed down generations.", img: "/heritage/cleusa.jpg" },
-      },
-      heritageImgs: [
-        { src: "/heritage/panela-1.jpg", caption: "Handmade clay pots" },
-        { src: "/heritage/panela-artesanal.jpg", caption: "Handcrafted, as tradition dictates" },
-      ],
-    },
-    wood: {
-      title: "Wood-Fired Stove",
-      p1: "From Brazil’s countryside: right woods, steady embers and patience — the secret of rich broths.",
-      p2: "Our kitchen honors this knowledge, uniting tradition and care for the ingredient.",
-      imgs: ["/heritage/fogao-1.jpg", "/heritage/fogao-2.jpg", "/heritage/fogao-3.jpg"],
-    },
-    gallery: { title: "Gallery (Dishes only)" },
+    about: { title: "About" },
+    wood: { title: "Wood-Fired Stove" },
+    gallery: { title: "Gallery (dishes only)" },
     support: {
       title: "Support",
       items: ["Orders & reservations soon", "Events & catering", "Partnerships"],
@@ -176,7 +190,40 @@ const dict = {
       addressLabel: "Address",
       back: "Back to start",
     },
+    items: {
+      "picanha": { name: "Grilled Picanha", desc: "Char-grilled picanha, perfect doneness and juiciness." },
+      "fraldinha": { name: "Whole Flank Steak", desc: "Tender cut on a sharing board, perfect to split." },
+      "vaca-atolada": { name: "Vaca Atolada (Beef Shank)", desc: "Beef shank with creamy polenta and citrus arugula." },
+      "feijoada-costela": { name: "Beef-Rib Feijoada", desc: "Black beans with beef rib, banana farofa and vinaigrette." },
+      "moqueca": { name: "Bahian Moqueca", desc: "Fish in coconut milk with annatto/dendê and cilantro." },
+      "galinhada": { name: "Country Chicken & Rice", desc: "Backyard-style rice, golden chicken and herbs." },
+      "hamburguer-picanha": { name: "Picanha Burger", desc: "Juicy picanha blend, soft bun and cheese." },
+
+      "coxinhas-costela": { name: "Beef-Rib Coxinhas", desc: "Brazil’s classic snack filled with tender beef rib." },
+      "pasteis": { name: "Brazilian Pastéis", desc: "Crispy turnovers with assorted fillings." },
+      "pao-alho": { name: "Garlic Bread", desc: "Grilled bread with garlic butter." },
+      "polenta-frita": { name: "Fried Polenta", desc: "Crispy outside, creamy inside." },
+      "mandioca-frita": { name: "Fried Cassava", desc: "Crispy Brazilian root, great for sharing." },
+      "farofa-castanha": { name: "Nut Farofa", desc: "Crunchy farofa to pair with mains." },
+
+      "mandioca-real": { name: "Royal Cassava Cake", desc: "Creamy cassava cake with coconut." },
+      "encanto-coco": { name: "Coconut Delight", desc: "Creamy coconut sweet, served chilled." },
+      "doce-roca-gelo": { name: "Farmhouse Sweet on Ice", desc: "Homestyle dessert, served cold." },
+      "pamonha": { name: "Sweet Pamonha (Seasonal)", desc: "Green-corn classic — available during harvest season." },
+
+      "caipile": { name: "Classic Caipilé", desc: "Refreshing and citrusy." },
+      "uva-limao": { name: "Grape, Lime & Ice", desc: "Sweet, tart and icy." },
+      "blueberry-coco": { name: "Blueberry & Coconut Fizz", desc: "Berries and coconut in tropical bubbles." },
+      "verao-brasil": { name: "Brazilian Summer", desc: "Citrus notes with balanced sweetness." },
+      "amazonia-breeze": { name: "Amazon Breeze", desc: "Forest herbs and fruits." },
+      "frescor-amazonia": { name: "Amazon Freshness", desc: "Aromatic green juice." },
+      "pe-de-serra": { name: "Pé de Serra", desc: "Hints of raw sugar and lime." },
+      "sol-do-cerrado": { name: "Cerrado Sun", desc: "Mango and passion fruit in harmony." },
+      "vitamina-cerrado": { name: "Cerrado Smoothie", desc: "Creamy and nutritious." },
+    },
   },
+
+  /* ---------------- AR ---------------- */
   ar: {
     nav: {
       about: "نبذة",
@@ -188,13 +235,14 @@ const dict = {
     },
     hero: {
       title: "نكهات برازيلية ودفء العائلة",
-      subtitle: "مطعم عائلي في قطر. أكثر من 20 عامًا من الضيافة ونار الحطب والجذور البرازيلية.",
+      subtitle:
+        "مطعم عائلي في قطر، أكثر من 20 عامًا من الضيافة ونار الحطب والجذور البرازيلية.",
       cta: "عرض القائمة",
       soon: "الافتتاح في نوفمبر — الحجوزات قريبًا.",
     },
     sections: {
       menuHighlights: "مختارات القائمة",
-      immersive: "جولات برازيلية",
+      immersive: "جولات في البرازيل",
       back: "العودة للبداية",
     },
     menu: {
@@ -209,28 +257,6 @@ const dict = {
       },
       modal: { close: "إغلاق" },
     },
-    about: {
-      title: "نبذة",
-      p1: "«بانِيلا دي بارّو» تحية للجذور البرازيلية: طبخ ريفي ومكوّنات طازجة ونار الحطب.",
-      p2: "قدور الطين جزء من تاريخنا…",
-      p3: "هذا ما نبحث عنه في كل طبق…",
-      family: "عائلتنا",
-      people: {
-        quessi: { name: "كِوِسّي جونز — المالكة", text: "تقود كِوِسّي المكان وتحفظ غايته: الطبخ بروح واستقبال بحفاوة.", img: "/heritage/chef-quessi.jpg" },
-        alex:   { name: "أليكس — الشيف", text: "يُدير أليكس المطبخ بحرفية وذاكرة ذوقية — نضج مثالي ونار ثابتة.", img: "/heritage/chef-alex.jpg" },
-        cleusa: { name: "كلوزا غونشالفِس — الأم وحافظة الوصفات", text: "تُلهمنا دونا كلوزا…", img: "/heritage/cleusa.jpg" },
-      },
-      heritageImgs: [
-        { src: "/heritage/panela-1.jpg", caption: "قدور طين يدوية الصنع" },
-        { src: "/heritage/panela-artesanal.jpg", caption: "صناعة كما تُمليه التقاليد" },
-      ],
-    },
-    wood: {
-      title: "موقد الحطب",
-      p1: "من الأرياف البرازيلية…",
-      p2: "نُكرّم هذا الإرث…",
-      imgs: ["/heritage/fogao-1.jpg", "/heritage/fogao-2.jpg", "/heritage/fogao-3.jpg"],
-    },
     gallery: { title: "المعرض (أطباق فقط)" },
     support: {
       title: "الدعم",
@@ -244,12 +270,43 @@ const dict = {
       cerrado: "السِّيرادو",
       lencois: "لِنسويس",
       litoral: "الساحل",
-      serra: "الجبال",
+      serra: "المرتفعات",
     },
     location: {
       title: "الموقع",
       addressLabel: "العنوان",
       back: "العودة للبداية",
+    },
+    items: {
+      "picanha": { name: "بيكانيا مشوية", desc: "بيكانيا على الجمر بنضج مثالي وعصارة رائعة." },
+      "fraldinha": { name: "فرالدينها كاملة", desc: "قطعة طرية مقدمة على لوح للمشاركة." },
+      "vaca-atolada": { name: "فاكا أتولادا (ساق البقر)", desc: "ساق بقر مع بولينتا كريمية وجرجير بحموضة لطيفة." },
+      "feijoada-costela": { name: "فيجوادا ضلع بقر", desc: "فاصوليا سوداء مع ضلع بقر وفاروفا بالموز وفينيجريت." },
+      "moqueca": { name: "موكيكا بايانا", desc: "سمك بحليب جوز الهند وزيت الدندِي والكزبرة." },
+      "galinhada": { name: "أرز بالدجاج الريفي", desc: "أرز على طريقة الفناء ودجاج ذهبي وأعشاب." },
+      "hamburguer-picanha": { name: "برجر بيكانيا", desc: "خليط بيكانيا عصير مع خبز طري وجبن." },
+
+      "coxinhas-costela": { name: "كوشينيا ضلع بقر", desc: "سمبوسة برازيلية محشوة بضلع بقر طري." },
+      "pasteis": { name: "باستياس برازيلية", desc: "فطائر مقرمشة بحشوات متنوعة." },
+      "pao-alho": { name: "خبز بالثوم", desc: "خبز مشوي بزبدة الثوم." },
+      "polenta-frita": { name: "بولينتا مقلية", desc: "مقرمشة من الخارج كريمية من الداخل." },
+      "mandioca-frita": { name: "يوكا مقلية", desc: "جذر كاسافا مقرمش للمشاركة." },
+      "farofa-castanha": { name: "فاروفا بالمكسرات", desc: "قوام مقرمش يرافق الأطباق." },
+
+      "mandioca-real": { name: "كيكة كاسافا ملكية", desc: "كيكة كاسافا كريمية بجوز الهند." },
+      "encanto-coco": { name: "متعة جوز الهند", desc: "حلوى جوز الهند كريمية مبردة." },
+      "doce-roca-gelo": { name: "حلوى ريفية على الثلج", desc: "حلوى منزلية تقدم باردة." },
+      "pamonha": { name: "بامونيا حلوة (موسمية)", desc: "كلاسيكية الذرة الخضراء — متوفرة في موسم الحصاد." },
+
+      "caipile": { name: "كايبيليه كلاسيكي", desc: "منعش وحمضي." },
+      "uva-limao": { name: "عنب وليمون وثلج", desc: "حلو، حامض وبارد." },
+      "blueberry-coco": { name: "بلو بيري مع جوز الهند", desc: "توت وجوز هند بفقاعات استوائية." },
+      "verao-brasil": { name: "صيف البرازيل", desc: "لمسات حمضية مع حلاوة متوازنة." },
+      "amazonia-breeze": { name: "نسيم الأمازون", desc: "أعشاب وفواكه الغابة." },
+      "frescor-amazonia": { name: "انتعاش الأمازون", desc: "عصير أخضر عطِر." },
+      "pe-de-serra": { name: "بي دي سيرا", desc: "لمحات من السكر البني والليمون." },
+      "sol-do-cerrado": { name: "شمس السّيرادو", desc: "مانجو وماراكيجا متناغمان." },
+      "vitamina-cerrado": { name: "سموثي السّيرادو", desc: "كريمي ومغذٍّ." },
     },
   },
 };
@@ -260,6 +317,8 @@ const t = (lang, key, fallback) => {
   for (const k of path) cur = cur?.[k];
   return typeof cur === "string" ? cur : fallback;
 };
+const itemName = (lang, id, fallback) => dict[lang]?.items?.[id]?.name || fallback;
+const itemDesc = (lang, id, fallback) => dict[lang]?.items?.[id]?.desc || fallback;
 
 /* ======================================================
    DADOS
@@ -317,14 +376,13 @@ const MENU_ITEMS = [
   { id:"vitamina-cerrado", name:"Vitamina do Cerrado", desc:"Cremosa e nutritiva.", img:"/images/vitamina-do-cerrado.jpg", tags:["Beverage"], cat:"beverages" },
 ];
 
-/* ====== Endereço (edite quando tiver o final) ====== */
+/* ====== Endereço ====== */
 const ADDRESS_LINES = {
-  pt: ["Doha, Qatar"],
-  en: ["Doha, Qatar"],
-  ar: ["الدوحة، قطر"],
+  pt: ["Barra Town do Hakata", "Qatar"],
+  en: ["Barra Town do Hakata", "Qatar"],
+  ar: ["بارا تاون دو هاكاتا", "قطر"],
 };
-// ajuste o query do mapa quando souber o endereço exato
-const MAP_QUERY = "Doha, Qatar";
+const MAP_QUERY = "Barra Town do Hakata, Qatar";
 
 /* ======================================================
    UTILS / COMPONENTES
@@ -345,12 +403,7 @@ const useHashRoute = () => {
 };
 
 const SectionTitle = ({ children }) => <h2 className="title">{children}</h2>;
-
-const Card = ({ children, style }) => (
-  <div className="card" style={style}>
-    {children}
-  </div>
-);
+const Card = ({ children, style }) => <div className="card" style={style}>{children}</div>;
 
 const Img = ({ src, alt, ratio = "16/9", round = true }) => (
   <div className={`imgwrap ${round ? "round" : ""}`} style={{ aspectRatio: ratio }}>
@@ -381,7 +434,7 @@ const Modal = ({ open, onClose, title, children }) => {
   if (!open) return null;
   return (
     <div className="modalbg" onClick={onClose}>
-      <div className="modal" onClick={(e) => e.stopPropagation()} role="dialog" aria-modal="true">
+      <div className="modal" onClick={(e) => e.stopPropagation())} role="dialog" aria-modal="true">
         <div className="modalhead">
           <div className="modaltitle">{title}</div>
           <button className="close" onClick={onClose} aria-label="close">×</button>
@@ -404,9 +457,11 @@ const Home = ({ lang }) => (
       <div className="heroinfo">
         <h1>{t(lang, "hero.title", "Sabores brasileiros, calor de família")}</h1>
         <p className="sub">
-          {t(lang, "hero.subtitle", "Restaurante familiar no Qatar. 20+ anos de hospitalidade, fogão a lenha e raízes brasileiras.")}
+          {t(lang, "hero.subtitle",
+            "Restaurante familiar no Qatar. 20+ anos de hospitalidade, fogão a lenha e raízes brasileiras.")}
         </p>
-        <p className="soon">{t(lang, "hero.soon", "Inauguração em Novembro — reservas online em breve.")}</p>
+        <p className="soon">{t(lang, "hero.soon",
+          "Inauguração em Novembro — reservas online em breve.")}</p>
         <a className="btn" href="#/menu">{t(lang, "hero.cta", "Ver Menu")}</a>
       </div>
     </div>
@@ -475,9 +530,9 @@ const Menu = ({ lang }) => {
         {filtered.map((item) => (
           <Card key={item.id} style={{ paddingBottom: 12 }}>
             <button className="cardbtn" onClick={() => setOpen(item)}>
-              <Img src={item.img} alt={item.name} ratio="16/9" />
-              <div className="cardtitle">{item.name}</div>
-              <div className="carddesc">{item.desc}</div>
+              <Img src={item.img} alt={itemName(lang, item.id, item.name)} ratio="16/9" />
+              <div className="cardtitle">{itemName(lang, item.id, item.name)}</div>
+              <div className="carddesc">{itemDesc(lang, item.id, item.desc)}</div>
               <div className="tags">
                 {item.tags.map((tg) => (
                   <span key={tg} className="tag">{tg}</span>
@@ -488,15 +543,11 @@ const Menu = ({ lang }) => {
         ))}
       </div>
 
-      <Modal
-        open={!!open}
-        onClose={() => setOpen(null)}
-        title={open?.name || ""}
-      >
+      <Modal open={!!open} onClose={() => setOpen(null)} title={open ? itemName(lang, open.id, open.name) : ""}>
         {open && (
           <>
-            <Img src={open.img} alt={open.name} ratio="4/3" />
-            <p style={{ marginTop: 12 }}>{open.desc}</p>
+            <Img src={open.img} alt={itemName(lang, open.id, open.name)} ratio="4/3" />
+            <p style={{ marginTop: 12 }}>{itemDesc(lang, open.id, open.desc)}</p>
             <div className="tags" style={{ marginTop: 8 }}>
               {open.tags.map((tg) => (
                 <span key={tg} className="tag">{tg}</span>
@@ -511,12 +562,7 @@ const Menu = ({ lang }) => {
 
 const About = ({ lang }) => {
   const p = dict[lang].about;
-  // imagens de família em tamanho menor/quadrado conforme pedido
-  const people = [
-    p.people.quessi,
-    p.people.alex,
-    p.people.cleusa,
-  ];
+  const people = [p.people.quessi, p.people.alex, p.people.cleusa];
   return (
     <>
       <SectionTitle>{p.title}</SectionTitle>
@@ -552,8 +598,8 @@ const WoodFire = ({ lang }) => {
   return (
     <>
       <SectionTitle>{w.title}</SectionTitle>
-      <p>{w.p1}</p>
-      <p>{w.p2}</p>
+      <p>{dict[lang].wood.p1}</p>
+      <p>{dict[lang].wood.p2}</p>
       <div className="heritage">
         {w.imgs.map((src) => (
           <Card key={src}>
@@ -566,9 +612,14 @@ const WoodFire = ({ lang }) => {
 };
 
 const Gallery = ({ lang }) => {
-  // SOMENTE FOTOS DOS PRATOS (pego de MENU_ITEMS)
+  // somente pratos (usando nomes traduzidos)
   const pics = Array.from(
-    new Map(MENU_ITEMS.map((i) => [i.img, { src: i.img, name: i.name }])).values()
+    new Map(
+      MENU_ITEMS.map((i) => [
+        i.img,
+        { src: i.img, id: i.id, fallback: i.name },
+      ])
+    ).values()
   );
   return (
     <>
@@ -576,8 +627,8 @@ const Gallery = ({ lang }) => {
       <div className="heritage">
         {pics.map((p) => (
           <Card key={p.src}>
-            <Img src={p.src} alt={p.name} ratio="4/3" />
-            <div className="caption">{p.name}</div>
+            <Img src={p.src} alt={itemName(lang, p.id, p.fallback)} ratio="4/3" />
+            <div className="caption">{itemName(lang, p.id, p.fallback)}</div>
           </Card>
         ))}
       </div>
@@ -634,7 +685,7 @@ export default function App() {
 
   useEffect(() => {
     const hashLang = new URLSearchParams(window.location.search).get("lang");
-    if (LANGS.includes(hashLang)) setLang(hashLang);
+    if (hashLang && LANGS.includes(hashLang)) setLang(hashLang);
   }, []);
 
   const NavLink = ({ r, children }) => (
@@ -654,7 +705,8 @@ export default function App() {
     <div className="page">
       <header className="topbar">
         <a href="#/home" className="brand">
-          <span className="emoji">🥘</span> Panela de Barro
+          <img src="/logo.png" alt="Panela de Barro" className="brandlogo" />
+          <span>Panela de Barro</span>
         </a>
         <nav className="nav">
           <NavLink r="about">{t(lang, "nav.about", "Sobre")}</NavLink>
@@ -685,64 +737,77 @@ export default function App() {
 
       <footer className="foot">© 2025 Panela de Barro</footer>
 
-      {/* CSS mínimo para manter o layout que você já está usando */}
+      {/* CSS */}
       <style>{`
-        :root {
-          --bg:#f2e6d7; --card:#f7efe7; --ink:#2b2019; --muted:#6b5a50;
-          --accent:#a4563b; --chip:#eadfd5;
-        }
-        * { box-sizing:border-box; }
-        body, html, #root { height:100%; }
-        .page { min-height:100%; background:var(--bg); color:var(--ink); font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial; }
-        a { color: var(--accent); text-decoration: none; }
-        .topbar{position:sticky;top:0;z-index:10;background:#fff9;backdrop-filter:saturate(180%) blur(10px);display:flex;gap:16px;align-items:center;padding:10px 16px;border-bottom:1px solid #0001}
-        .brand{font-weight:700;color:var(--ink);display:flex;align-items:center;gap:8px}
-        .emoji{font-size:18px}
+        :root{ --bg:#f2e6d7; --card:#f7efe7; --ink:#2b2019; --muted:#6b5a50; --accent:#a4563b; --chip:#eadfd5; }
+        *{box-sizing:border-box}
+        body, html, #root { height:100% }
+        .page{min-height:100%;background:var(--bg);color:var(--ink);font-family:ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial}
+        a{color:var(--accent);text-decoration:none}
+
+        .topbar{position:sticky;top:0;z-index:10;background:#fff9;backdrop-filter:saturate(180%) blur(10px);
+          display:flex;gap:16px;align-items:center;padding:10px 16px;border-bottom:1px solid #0001}
+        .brand{font-weight:700;color:var(--ink);display:flex;align-items:center;gap:10px}
+        .brandlogo{width:22px;height:22px;border-radius:50%;object-fit:cover}
         .nav{display:flex;gap:14px;flex-wrap:wrap}
         .navlink{padding:6px 8px;border-radius:8px}
         .navlink.active{background:var(--chip)}
         .langs{margin-left:auto;display:flex;gap:6px}
         .chip{border:0;background:var(--chip);padding:6px 10px;border-radius:999px;color:var(--ink)}
         .chip.active{background:var(--accent);color:#fff}
+
         .content{max-width:1080px;margin:24px auto;padding:0 16px}
         .title{font-size:28px;margin:18px 0}
-        .card{background:var(--card); border-radius:18px; padding:10px; box-shadow: 0 2px 6px #00000014;}
-        .imgwrap{width:100%; overflow:hidden;}
+
+        .card{background:var(--card);border-radius:18px;padding:10px;box-shadow:0 2px 6px #00000014}
+        .imgwrap{width:100%;overflow:hidden}
         .imgwrap.round{border-radius:16px}
-        .imgwrap img{width:100%; height:100%; object-fit:cover; display:block;}
-        .caption{margin-top:8px; color:var(--muted)}
-        .grid{display:grid; grid-template-columns: repeat(auto-fill, minmax(260px,1fr)); gap:16px; margin-top:14px}
-        .cardbtn{all:unset; display:block; cursor:pointer}
-        .cardtitle{font-weight:700; margin-top:10px}
-        .carddesc{color:var(--muted); margin-top:4px}
+        .imgwrap img{width:100%;height:100%;object-fit:cover;display:block}
+        .caption{margin-top:8px;color:var(--muted)}
+
+        .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:16px;margin-top:14px}
+        .cardbtn{all:unset;display:block;cursor:pointer}
+        .cardtitle{font-weight:700;margin-top:10px}
+        .carddesc{color:var(--muted);margin-top:4px}
         .tags{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
-        .tag{background:#00000010;padding:4px 8px;border-radius:999px;font-size:12px;color:var(--muted)}
-        .bullets{margin:8px 0 0 18px}
-        .heritage{display:grid; grid-template-columns: repeat(auto-fill, minmax(220px,1fr)); gap:16px}
-        .people{display:grid; grid-template-columns: repeat(auto-fill, minmax(260px,1fr)); gap:16px}
+        .tag{background:#0001;padding:4px 8px;border-radius:999px;font-size:12px;color:var(--muted)}
+
+        .heritage{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:16px}
+        .people{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:16px}
+
         .hero{position:relative}
-        .herooverlay{position:absolute;inset:0;background:linear-gradient(180deg, #0000 30%, #0005 100%);border-radius:16px}
-        .heroinfo{position:absolute; left:24px; bottom:24px; color:#fff; max-width:640px}
-        .heroinfo .sub{opacity:.9}
-        .heroinfo .soon{opacity:.9;margin:6px 0 14px}
+        .hero .imgwrap{border-radius:16px}
+        .herooverlay{position:absolute;inset:0;border-radius:16px;background:linear-gradient(180deg,#0000 25%,#0005 100%)}
+        .heroinfo{position:absolute;left:24px;bottom:24px;color:#fff;max-width:640px}
+        .heroinfo h1{margin:0 0 8px}
+        .heroinfo .sub{opacity:.95}
+        .heroinfo .soon{opacity:.95;margin:6px 0 14px}
         .btn{background:var(--accent);color:#fff;padding:10px 16px;border-radius:999px}
+
         .carousel{position:relative;margin:8px 0 18px}
         .cinner{overflow:hidden}
-        .cbtn{position:absolute; top:50%; transform:translateY(-50%); width:36px;height:36px;border:0;border-radius:50%; background:#fff; box-shadow:0 2px 6px #0002; cursor:pointer}
-        .cbtn.left{left:6px} .cbtn.right{right:6px}
-        .modalbg{position:fixed; inset:0; background:#0008; display:grid; place-items:center; padding:16px}
-        .modal{background:#fff; max-width:860px; width:100%; border-radius:16px; overflow:hidden}
+        .cbtn{position:absolute;top:50%;transform:translateY(-50%);width:36px;height:36px;border:0;border-radius:50%;
+          background:#fff;box-shadow:0 2px 6px #0002;cursor:pointer}
+        .cbtn.left{left:6px}.cbtn.right{right:6px}
+
+        .modalbg{position:fixed;inset:0;background:#0008;display:grid;place-items:center;padding:16px}
+        .modal{background:#fff;max-width:860px;width:100%;border-radius:16px;overflow:hidden}
         .modalhead{display:flex;justify-content:space-between;align-items:center;padding:10px 14px;border-bottom:1px solid #0001}
         .modaltitle{font-weight:700}
         .close{border:0;background:#0000;font-size:22px;cursor:pointer}
         .modalbody{padding:12px 14px}
-        .mapwrap{margin:12px 0; height:360px; border-radius:16px; overflow:hidden; box-shadow:0 2px 6px #0001}
-        .mapwrap iframe{width:100%; height:100%; border:0}
+
+        .mapwrap{margin:12px 0;height:360px;border-radius:16px;overflow:hidden;box-shadow:0 2px 6px #0001}
+        .mapwrap iframe{width:100%;height:100%;border:0}
         .backlink{display:inline-block;margin-top:12px}
-        .foot{opacity:.7; text-align:center; padding:28px 0}
+        .foot{opacity:.7;text-align:center;padding:28px 0}
+
         @media (max-width:600px){
-          .heroinfo h1{font-size:28px}
           .title{font-size:24px}
+          /* dá mais altura para caber o título no mobile */
+          .hero .imgwrap{aspect-ratio:16/10 !important;}
+          .heroinfo h1{font-size:24px;line-height:1.15}
+          .heroinfo .sub{font-size:14px}
         }
       `}</style>
     </div>
