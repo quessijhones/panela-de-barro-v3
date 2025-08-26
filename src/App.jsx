@@ -840,3 +840,66 @@ const Styles = () => (
    export
    ============================= */
 export default App;
+/* ===== FIX HERO no MOBILE – legibilidade ===== */
+@media (max-width: 480px) {
+  /* Força o wrapper do HERO a ter altura maior e ignora o aspect-ratio inline */
+  .hero .imgwrap {
+    height: 58vh !important;
+    aspect-ratio: auto !important;
+  }
+  .hero img {
+    object-fit: cover;
+    object-position: center;
+  }
+
+  /* Gradiente mais forte para ler o texto com qualquer foto */
+  .herooverlay {
+    background: linear-gradient(
+      180deg,
+      rgba(0,0,0,0.05) 12%,
+      rgba(0,0,0,0.40) 55%,
+      rgba(0,0,0,0.62) 100%
+    );
+  }
+
+  /* Texto ancorado embaixo, dentro da área visível */
+  .heroinfo {
+    position: absolute;
+    left: 16px;
+    right: 16px;
+    bottom: 18px;
+    top: auto;
+    transform: none;
+    gap: 8px;
+    padding: 0;
+    max-width: 100%;
+  }
+
+  .heroinfo h1 {
+    font-size: clamp(20px, 6vw, 26px);
+    line-height: 1.2;
+    margin: 0;
+  }
+  .heroinfo .sub {
+    font-size: clamp(13px, 3.8vw, 15px);
+    line-height: 1.35;
+    margin: 0;
+  }
+  .heroinfo .soon {
+    font-size: clamp(12px, 3.5vw, 14px);
+    line-height: 1.35;
+  }
+
+  /* Botão um pouco mais compacto */
+  .heroinfo .btn {
+    padding: 10px 16px;
+    font-size: 14px;
+    border-radius: 14px;
+  }
+}
+
+/* Leve ajuste também para telas médias */
+@media (min-width: 481px) and (max-width: 768px) {
+  .heroinfo h1 { font-size: clamp(24px, 4.5vw, 32px); }
+  .heroinfo .sub { font-size: clamp(14px, 2.6vw, 18px); }
+}
