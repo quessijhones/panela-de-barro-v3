@@ -622,6 +622,19 @@ const App = () => {
   useEffect(() => { localStorage.setItem("lang", lang); }, [lang]);
   useEffect(() => { setOpenDrawer(false); }, [route]); // fecha drawer ao mudar rota
 
+  // mede a altura real do header e salva em --navh (corrige sticky em PT/EN no mobile)
+  useEffect(() => {
+    const setNavHeight = () => {
+      const el = document.querySelector('.nav');
+      if (!el) return;
+      const h = Math.ceil(el.getBoundingClientRect().height);
+      document.documentElement.style.setProperty('--navh', `${h}px`);
+    };
+    setNavHeight();
+    window.addEventListener('resize', setNavHeight);
+    return () => window.removeEventListener('resize', setNavHeight);
+  }, [lang]);
+
   return (
     <div className="app" dir={lang === "ar" ? "rtl" : "ltr"}>
       <Styles />
@@ -684,15 +697,18 @@ const Styles = () => (
 
   /* Nav */
   .nav{
-    position:sticky;top:0;z-index:30;background:rgba(246,234,219,.88);
+    position:sticky; top:0; z-index:30;
+    background:rgba(246,234,219,.88);
     backdrop-filter:saturate(140%) blur(8px);
-    display:flex;gap:16px;align-items:center;justify-content:space-between;
-    padding:10px 14px;border-bottom:1px solid #e5d5c2; min-height:var(--navh);
+    display:flex; gap:16px; align-items:center; justify-content:space-between;
+    padding: calc(8px + var(--safeTop)) 14px 8px 14px; /* respeita a área segura do iPhone */
+    border-bottom:1px solid #e5d5c2; 
+    min-height:64px; /* o valor real é medido em runtime e aplicado em --navh */
   }
   .hamb{display:none;border:0;background:var(--pill-ghost);width:40px;height:36px;border-radius:10px;font-size:20px;cursor:pointer}
   .brand{display:flex;align-items:center;gap:10px;text-decoration:none;color:var(--ink);font-weight:800}
   .brand img{width:28px;height:28px}
-  .brand span{font-size:20px;letter-spacing:.2px}
+  .brand span{font-size:20px;letter-spacing:.2px;white-space:nowrap} /* "Panela de Barro" sempre em uma linha */
   .links a{margin:0 10px;text-decoration:none;color:var(--ink)}
   .langs .chip{margin-left:6px}
 
@@ -700,8 +716,15 @@ const Styles = () => (
   @media (max-width:920px){
     .links{display:none !important;} /* esconde links no celular */
     .hamb{display:inline-block}
-    .brand img{width:30px;height:30px}
-    .brand span{font-size:22px}
+
+    /* Centraliza a marca no cabeçalho, logo maior */
+    .brand{flex:1;min-width:0;justify-content:center}
+    .brand img{width:34px;height:34px}
+    .brand span{font-size:clamp(18px,5.2vw,22px);white-space:nowrap}
+
+    /* Idiomas na direita em coluna, menores */
+    .langs{display:flex;flex-direction:column;gap:6px;align-items:flex-end;margin-left:6px}
+    .langs .chip{padding:6px 10px;font-size:12px;margin:0}
   }
 
   .container{max-width:1100px;margin:0 auto;padding:18px}
@@ -729,7 +752,7 @@ const Styles = () => (
   .tabs.sticky{
     position:-webkit-sticky; /* iOS Safari */
     position:sticky;
-    top: calc(var(--safeTop) + var(--navh) + 6px);
+    top: calc(var(--safeTop) + var(--navh) + 6px); /* usa altura real medida no JS */
     z-index:20;
     background:linear-gradient(#f6eadb,#f6eadb);
     padding:8px 6px;border-radius:14px;box-shadow:var(--shadow)
