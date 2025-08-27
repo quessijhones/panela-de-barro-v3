@@ -674,6 +674,7 @@ const Styles = () => (
     --bg:#f0e2cf; --paper:#f6eadb; --ink:#2d241c; --muted:#7b6a5c;
     --pill:#b8644e; --pill-ghost:#e7d6c5; --shadow: 0 8px 24px rgba(0,0,0,.08);
     --radius:18px; --navh:64px;
+    --safeTop: env(safe-area-inset-top, 0px);
   }
   *{box-sizing:border-box}
   body,html,#root{height:100%}
@@ -697,7 +698,7 @@ const Styles = () => (
 
   /* Desktop vs mobile */
   @media (max-width:920px){
-    .links{display:none}
+    .links{display:none !important;} /* esconde links no celular */
     .hamb{display:inline-block}
     .brand img{width:30px;height:30px}
     .brand span{font-size:22px}
@@ -725,7 +726,14 @@ const Styles = () => (
   .familygrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:16px}
 
   .tabs{display:flex;flex-wrap:wrap;gap:10px;margin:6px}
-  .tabs.sticky{position:sticky;top:calc(var(--navh) + 6px);z-index:20;background:linear-gradient(#f6eadb,#f6eadb);padding:8px 6px;border-radius:14px;box-shadow:var(--shadow)}
+  .tabs.sticky{
+    position:-webkit-sticky; /* iOS Safari */
+    position:sticky;
+    top: calc(var(--safeTop) + var(--navh) + 6px);
+    z-index:20;
+    background:linear-gradient(#f6eadb,#f6eadb);
+    padding:8px 6px;border-radius:14px;box-shadow:var(--shadow)
+  }
   .chip{border:0;background:var(--pill-ghost);color:var(--ink);padding:8px 14px;border-radius:999px;cursor:pointer}
   .chip.active{background:var(--pill);color:#fff}
 
