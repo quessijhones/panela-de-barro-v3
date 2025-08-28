@@ -1,36 +1,52 @@
 // src/App.jsx
 import React, { useEffect, useMemo, useState } from "react";
 
-/* =========================================================
-   Idiomas (PT padrão) + rótulos de navegação e UI
-   ========================================================= */
+/* =========================================
+   Idiomas (PT como padrão) + dicionário UI
+   ========================================= */
 const LANGS = ["pt", "en", "ar"];
 const DEFAULT_LANG = "pt";
 
 const dict = {
   pt: {
     brand: "Panela de Barro",
-    nav: {
-      home: "Início",
-      clay: "Panela de Barro",
-      woodfire: "Fogão a Lenha",
-      menu: "Menu",
-      gallery: "Galeria",
-      location: "Localização",
-      support: "Suporte",
-    },
+    nav: { about: "Sobre", menu: "Menu", gallery: "Galeria", woodfire: "Fogão a Lenha", location: "Localização", support: "Suporte" },
     hero: {
       title: "Sabores brasileiros, calor de família",
-      subtitle:
-        "Restaurante familiar no Qatar. 20+ anos de hospitalidade, fogão a lenha e raízes brasileiras.",
+      subtitle: "Restaurante familiar no Qatar. 20+ anos de hospitalidade, fogão a lenha e raízes brasileiras.",
       cta: "Ver Menu",
       soon: "Inauguração em Novembro — reservas online em breve.",
     },
-    sections: {
-      menuHighlights: "Destaques do Menu",
-      back: "Voltar ao início",
+    sections: { menuHighlights: "Destaques do Menu", immersive: "Imersões do Brasil", back: "Voltar ao início" },
+    menu: {
+      title: "Menu",
+      tabs: { all: "Todos", mains: "Pratos", appetizers: "Entradas", seasonal: "Sazonais", beverages: "Bebidas", desserts: "Sobremesas" },
+      modal: { close: "Fechar" },
+      tags: { Halal: "Halal", Beef: "Carne", Dairy: "Laticínio", Gluten: "Glúten", Sea: "Peixe", Dessert: "Sobremesa", Beverage: "Bebida", Seasonal: "Sazonal" },
     },
-    location: { title: "Localização", addr: "Baraha Town — Doha, Qatar", map: "Ver no mapa" },
+    about: {
+      title: "Sobre",
+      p1: "Panela de Barro é um tributo às raízes brasileiras: cozinha de fazenda, ingredientes frescos e fogo de lenha. Nossa família acumula décadas de cozinha — e traz essa memória para Doha.",
+      p2: "A panela de barro atravessa a nossa história: dos povos indígenas à criatividade das cozinhas afro-brasileiras. Ela cozinha devagar, permite que os sabores conversem e imprime um toque terroso inconfundível.",
+      p3: "Esse é o sabor que buscamos em cada prato. Tradição, calma e afeto — servidos à mesa.",
+      family: "Nossa família",
+      people: {
+        quessi: { name: "Quessi Jones — Proprietário", text: "Quessi conduz a casa e preserva o propósito: cozinhar com alma, acolher com carinho.", img: "/heritage/chef-quessi.jpg" },
+        alex: { name: "Alex — Chef de Cozinha", text: "Alex lidera a cozinha com técnica e memória afetiva — ponto perfeito e fogo certo.", img: "/heritage/chef-alex.jpg" },
+        cleusa: { name: "Cleusa Gonçalves — Mãe & Guardiã das Receitas", text: "Dona Cleusa inspira nossos sabores: panelas no fogo, histórias e receitas passadas de geração em geração.", img: "/heritage/cleusa.jpg" },
+      },
+      heritageImgs: [
+        { src: "/heritage/panela-1.jpg", caption: "Panelas artesanais de barro" },
+        { src: "/heritage/panela-artesanal.jpg", caption: "Feita à mão, como manda a tradição" },
+      ],
+    },
+    wood: {
+      title: "Fogão a Lenha",
+      p1: "Do interior do Brasil ao mundo: madeiras corretas, brasa constante e paciência — o segredo do caldo encorpado.",
+      p2: "Nossa cozinha honra esse saber, unindo tradição e cuidado com o ingrediente.",
+      imgs: ["/heritage/fogao-1.jpg", "/heritage/fogao-2.jpg", "/heritage/fogao-3.jpg"],
+    },
+    gallery: { title: "Galeria" },
     support: {
       title: "Suporte",
       items: ["Pedidos e reservas em breve", "Eventos e encomendas", "Parcerias"],
@@ -38,30 +54,49 @@ const dict = {
       phone: "974 3047 5279",
       email: "restaurant@paneladebarroqatar.com",
     },
+    location: { title: "Localização", addr: "Baraha Town — Doha, Qatar", map: "Ver no mapa" },
+    immersiveLabels: { amazonia: "Amazônia", cerrado: "Cerrado", lencois: "Lençóis", litoral: "Litoral", serra: "Serra" },
+    drawer: { menu: "Menu", social: "Redes sociais", languages: "Idiomas", close: "Fechar" },
   },
   en: {
     brand: "Panela de Barro",
-    nav: {
-      home: "Home",
-      clay: "Panela de Barro",
-      woodfire: "Wood-Fired Stove",
-      menu: "Menu",
-      gallery: "Gallery",
-      location: "Location",
-      support: "Support",
-    },
+    nav: { about: "About", menu: "Menu", gallery: "Gallery", woodfire: "Wood-Fired Stove", location: "Location", support: "Support" },
     hero: {
       title: "Brazilian flavors, family warmth",
-      subtitle:
-        "Family-run restaurant in Qatar. 20+ years of hospitality, wood fire and Brazilian roots.",
+      subtitle: "Family-run restaurant in Qatar. 20+ years of hospitality, wood fire and Brazilian roots.",
       cta: "View Menu",
       soon: "Opening in November — online reservations soon.",
     },
-    sections: {
-      menuHighlights: "Menu Highlights",
-      back: "Back to start",
+    sections: { menuHighlights: "Menu Highlights", immersive: "Brazil Immersions", back: "Back to start" },
+    menu: {
+      title: "Menu",
+      tabs: { all: "All", mains: "Mains", appetizers: "Appetizers", seasonal: "Seasonal", beverages: "Beverages", desserts: "Desserts" },
+      modal: { close: "Close" },
+      tags: { Halal: "Halal", Beef: "Beef", Dairy: "Dairy", Gluten: "Gluten", Sea: "Fish", Dessert: "Dessert", Beverage: "Beverage", Seasonal: "Seasonal" },
     },
-    location: { title: "Location", addr: "Baraha Town — Doha, Qatar", map: "Open map" },
+    about: {
+      title: "About",
+      p1: "Panela de Barro is a tribute to Brazilian roots: farm cooking, fresh ingredients and wood fire. Our family brings decades of kitchen memories to Doha.",
+      p2: "Clay pots cross our history: from indigenous peoples to Afro-Brazilian creativity. Slow cooking lets flavors speak and leaves an unmistakable earthy touch.",
+      p3: "That’s the taste we seek in every dish — tradition, calm and affection at the table.",
+      family: "Our family",
+      people: {
+        quessi: { name: "Quessi Jones — Owner", text: "Quessi leads the house with soul and warmth.", img: "/heritage/chef-quessi.jpg" },
+        alex: { name: "Alex — Head Chef", text: "Technique and memory — perfect doneness and steady fire.", img: "/heritage/chef-alex.jpg" },
+        cleusa: { name: "Cleusa Gonçalves — Mother & Recipe Guardian", text: "Stories and recipes passed down generations.", img: "/heritage/cleusa.jpg" },
+      },
+      heritageImgs: [
+        { src: "/heritage/panela-1.jpg", caption: "Handmade clay pots" },
+        { src: "/heritage/panela-artesanal.jpg", caption: "Handcrafted, as tradition dictates" },
+      ],
+    },
+    wood: {
+      title: "Wood-Fired Stove",
+      p1: "From Brazil’s countryside: the right woods, steady embers and patience — the secret of rich broths.",
+      p2: "We honor this know-how, uniting tradition and care for the ingredient.",
+      imgs: ["/heritage/fogao-1.jpg", "/heritage/fogao-2.jpg", "/heritage/fogao-3.jpg"],
+    },
+    gallery: { title: "Gallery" },
     support: {
       title: "Support",
       items: ["Orders & reservations soon", "Events & catering", "Partnerships"],
@@ -69,181 +104,195 @@ const dict = {
       phone: "974 3047 5279",
       email: "restaurant@paneladebarroqatar.com",
     },
+    location: { title: "Location", addr: "Baraha Town — Doha, Qatar", map: "Open map" },
+    immersiveLabels: { amazonia: "Amazon", cerrado: "Cerrado", lencois: "Lençóis", litoral: "Coast", serra: "Highlands" },
+    drawer: { menu: "Menu", social: "Social", languages: "Languages", close: "Close" },
   },
   ar: {
     brand: "بانِيلا دي بارّو",
-    nav: {
-      home: "الرئيسية",
-      clay: "بانيلا دي بارّو",
-      woodfire: "موقد الحطب",
-      menu: "القائمة",
-      gallery: "المعرض",
-      location: "الموقع",
-      support: "الدعم",
-    },
+    nav: { about: "نبذة", menu: "القائمة", gallery: "المعرض", woodfire: "موقد الحطب", location: "الموقع", support: "الدعم" },
     hero: {
       title: "نكهات برازيلية ودفء العائلة",
-      subtitle:
-        "مطعم عائلي في قطر — أكثر من 20 عامًا من الضيافة ونار الحطب والجذور البرازيلية.",
+      subtitle: "مطعم عائلي في قطر — أكثر من 20 عامًا من الضيافة ونار الحطب والجذور البرازيلية.",
       cta: "عرض القائمة",
       soon: "الافتتاح في نوفمبر — الحجوزات قريبًا.",
     },
-    sections: {
-      menuHighlights: "مختارات القائمة",
-      back: "العودة للبداية",
+    sections: { menuHighlights: "مختارات القائمة", immersive: "جولات برازيلية", back: "العودة للبداية" },
+    menu: {
+      title: "القائمة",
+      tabs: { all: "الكل", mains: "الأطباق الرئيسية", appetizers: "المقبلات", seasonal: "موسمية", beverages: "المشروبات", desserts: "الحلويات" },
+      modal: { close: "إغلاق" },
+      tags: { Halal: "حلال", Beef: "لحم بقر", Dairy: "ألبان", Gluten: "غلوتين", Sea: "سمك", Dessert: "حلوى", Beverage: "مشروب", Seasonal: "موسمي" },
     },
+    about: {
+      title: "نبذة",
+      p1: "«بانِيلا دي بارّو» تحية للجذور البرازيلية: طبخ ريفي ومكوّنات طازجة ونار الحطب. تنقل عائلتنا عقودًا من الذكريات إلى الدوحة.",
+      p2: "قدور الطين جزء من تاريخنا — الطهي البطيء يترك لمسة ترابية لا تُنسى.",
+      p3: "هذا ما نبحث عنه في كل طبق: تقليد وهدوء ومودّة على المائدة.",
+      family: "عائلتنا",
+      people: {
+        quessi: { name: "كِوِسّي جونز — المالك", text: "يقود المكان بروحٍ دافئة.", img: "/heritage/chef-quessi.jpg" },
+        alex: { name: "أليكس — الشيف", text: "حرفية ونار ثابتة.", img: "/heritage/chef-alex.jpg" },
+        cleusa: { name: "كلوزا غونشالفِس — الأم وحافظة الوصفات", text: "حكايات ووصفات تتوارثها الأجيال.", img: "/heritage/cleusa.jpg" },
+      },
+      heritageImgs: [
+        { src: "/heritage/panela-1.jpg", caption: "قدور طين يدوية الصنع" },
+        { src: "/heritage/panela-artesanal.jpg", caption: "صناعة تقليدية" },
+      ],
+    },
+    wood: { title: "موقد الحطب", p1: "من الأرياف البرازيلية: أخشاب مناسبة وجمر ثابت وصبر.", p2: "نُكرّم هذا الإرث بعنايةٍ بالمكوّن.", imgs: ["/heritage/fogao-1.jpg", "/heritage/fogao-2.jpg", "/heritage/fogao-3.jpg"] },
+    gallery: { title: "المعرض" },
+    support: { title: "الدعم", items: ["الطلبات والحجوزات قريبًا", "الفعاليات والولائم", "شراكات"], contactTitle: "التواصل", phone: "974 3047 5279", email: "restaurant@paneladebarroqatar.com" },
     location: { title: "الموقع", addr: "باراها تاون — الدوحة، قطر", map: "افتح الخريطة" },
-    support: {
-      title: "الدعم",
-      items: ["الطلبات والحجوزات قريبًا", "الفعاليات والولائم", "شراكات"],
-      contactTitle: "التواصل",
-      phone: "974 3047 5279",
-      email: "restaurant@paneladebarroqatar.com",
-    },
+    immersiveLabels: { amazonia: "الأمازون", cerrado: "السِّيرادو", lencois: "لِنسويس", litoral: "الساحل", serra: "الجبال" },
+    drawer: { menu: "القائمة", social: "التواصل الاجتماعي", languages: "اللغات", close: "إغلاق" },
   },
 };
 
+// util de texto
 const t = (lang, key, fallback = "") => {
   const value = key.split(".").reduce((o, k) => (o && o[k] !== undefined ? o[k] : undefined), dict[lang]);
   return typeof value === "string" ? value : fallback;
 };
 
-/* =========================================================
-   TEXTOS COMPLETOS (Fogão a Lenha + Panela de Barro)
-   ========================================================= */
-
-// ---------- FOGÃO A LENHA ----------
-const WOOD_TEXT = {
-  pt: `O Fogão a Lenha: A Alma do Brasil em Chamas e Argila
-
-A história do fogão a lenha no Brasil é a própria história da formação do povo brasileiro. Muito antes de ser um ícone da gastronomia afetiva, ele foi uma ferramenta fundamental de sobrevivência e o epicentro da vida doméstica. Suas origens remontam aos colonizadores portugueses, que trouxeram a técnica da alvenaria e o hábito de cozinhar em lareiras fixas. No entanto, foi no solo brasileiro que esse instrumento se transformou, incorporando saberes indígenas e africanos, tornando-se único.
-
-Os indígenas, com seu profundo conhecimento do fogo e das madeiras nativas, ensinaram quais eram as melhores lenhas para cada propósito. Os escravizados africanos, forçados a adaptar-se, foram os primeiros alquimistas desses fogões, transformando cortes de carne menos nobres e ingredientes negligenciados em pratos de uma riqueza cultural imensurável. A feijoada, hoje nosso prato nacional, nasceu nas senzalas, fervilhando pacientemente em grandes panelas de ferro sobre esses fogões.
-
-Assim, o fogão a lenha se ergueu como o coração pulsante da casa brasileira. Era ao seu redor que as famílias se reuniam, as histórias eram contadas, o pão era amassado e o café, coado. Seu calor irregular não é uma falha, mas uma virtude. É essa imprevisibilidade que exige do cozinheiro paciência, sensibilidade e um conhecimento quase espiritual do fogo. O sabor "fumê" (o *smokey* natural) que impregna os alimentos não é um condimento que se adiciona; é a própria essência da memória, é o carvão e a madeira se transformando no sublime.
-
-É essa alma ancestral, forjada a fogo e história, que nós do Panela de Barro transplantamos para o Qatar. Nosso fogão a lenha, visível em nossa cozinha aberta, não é uma peça de museu; é o artista principal da nossa cozinha. Cada prato que sai dele é uma carta de amor à tradição brasileira.
-
-*   Nossa Feijoada de Costela Bovina: Resgatamos a origem do prato com um toque de sofisticação do sertão. A costela bovina é assada lentamente pela brasa da lenha, até desfiar-se ao toque, conferindo ao caldo do feijão preto uma profundidade e uma riqueza incomparáveis. Cada colher é um mergulho na história do Brasil, um sabor robusto e verdadeiro.
-
-*   Nossa Vaca Atolada: Este clássico caipira, que narra poeticamente a vaca "atolada" na mandioca, ganha vida em nosso fogão. A mandioca cozinha na brasa branda, absorvendo todo o sabor da carne bovina macia, criando uma harmonia perfeita entre o doce do legume e o savor da carne. É um prato humilde em sua origem, mas de uma complexidade de sabores que só o cozimento lento e fumegante pode proporcionar.
-
-*   Nossa Farofa de Banana da Terra: A farofa, a companheira indispensável, é elevada a outro patamar. A banana da terra é delicadamente fatiada e dourada, depois misturada à farinha de mandioca torrada no calor do nosso fogão. O resultado é um contraste celestial de texturas: a crocância da farofa e a maciez adocicada da banana, tudo com o aroma inconfundível de fogo de lenha.
-
-No Panela de Barro, nossa cozinha aberta convida você a testemunhar a magia desse ritual secular. Deixe que o aroma inebriante de lenha queimada e comida caseira transporte os seus sentidos para o interior do Brasil. Aqui, você não fará apenas uma refeição; você vivenciará a autenticidade de uma tradição celebrada com os sabores mais puros da nossa terra.
-
-Venha. O fogo está aceso.`,
-
-  en: `The Wood-Fired Stove: The Soul of Brazil in Flames and Clay
-
-The history of the wood-fired stove in Brazil is the very history of the formation of the Brazilian people. Long before it became an icon of affective gastronomy, it was a fundamental tool for survival and the epicenter of domestic life. Its origins trace back to the Portuguese colonizers, who brought masonry techniques and the habit of cooking in fixed hearths. However, it was on Brazilian soil that this instrument transformed, incorporating Indigenous and African knowledge, becoming unique.
-
-The Indigenous people, with their deep understanding of fire and native woods, taught which were the best logs for each purpose. Enslaved Africans, forced to adapt, were the first alchemists of these stoves, transforming lesser cuts of meat and neglected ingredients into dishes of immeasurable cultural richness. Feijoada, now our national dish, was born in the senzalas (slave quarters), patiently simmering in large iron pots over these stoves.
-
-Thus, the wood-fired stove stood as the beating heart of the Brazilian home. It was around it that families gathered, stories were told, bread was kneaded, and coffee was brewed. Its irregular heat is not a flaw but a virtue. It is this unpredictability that demands from the cook patience, sensitivity, and an almost spiritual knowledge of fire. The natural "fumê" (the smoky flavor) that imbues the food is not an added seasoning; it is the very essence of memory — it is the charcoal and wood transforming into the sublime.
-
-It is this ancestral soul, forged by fire and history, that we at **Panela de Barro** have transplanted to Qatar. Our wood-fired stove, visible in our open kitchen, is not a museum piece; it is the lead artist in our kitchen. Every dish that comes from it is a love letter to Brazilian tradition.
-
-*   Our Beef Rib Feijoada: We rescue the origin of the dish with a touch of sertão sophistication. The beef ribs are slow-roasted by the wood embers until they fall apart at the touch, giving the black bean broth an unmatched depth and richness. Every spoonful is a dive into Brazil's history, a robust and true flavor.
-
-*   Our Vaca Atolada ("Cow Stuck in the Mud"): This rustic classic, which poetically tells of a cow "stuck" in manioc, comes to life on our stove. The manioc cooks over gentle embers, absorbing all the flavor of the tender beef, creating a perfect harmony between the vegetable's sweetness and the meat's savor. It is a humble dish in origin but with a complexity of flavors that only slow, smoky cooking can provide.
-
-*   Our Farofa with Plantain: Farofa, the indispensable companion, is elevated to another level. The plantain is delicately sliced and golden-fried, then mixed with manioc flour toasted in the heat of our stove. The result is a heavenly contrast of textures: the crunchiness of the farofa and the sweet softness of the plantain, all with the unmistakable aroma of wood fire.
-
-At Panela de Barro, our open kitchen invites you to witness the magic of this centuries-old ritual. Let the intoxicating aroma of burning wood and home-cooked food transport your senses to the heart of rural Brazil. Here, you will not just have a meal; you will experience the authenticity of a tradition celebrated with the purest flavors of our land.
-
-Come. The fire is lit.`,
-
-  ar: ` روح البرازيل في ألسنة اللهب والطين
-
-تاريخ موقد الحطب في البرازيل هو نفسه تاريخ تكوين الشعب البرازيلي. قبل أن يصبح أيقونة للطهي العاطفي، كان أداة أساسية للبقاء ومحور الحياة المنزلية. تعود أصوله إلى المستعمرين البرتغاليين الذين جلبوا تقنيات البناء وعادة الطهي في مواقد ثابتة. لكنها في التربة البرازيلية حيث تحولت هذه الأداة، متضمنةً معرفة السكان الأصليين والأفارقة، لتصبح فريدة من نوعها.
-
-علم السكان الأصليون، بمعرفتهم العميقة بالنار وأخشاب الغابات الأصلية، أي الحطب هو الأفضل لكل غرض. الأفارقة المستعبدون، المجبرون على التكيف، كانوا الخيميائيين الأوائل لهذه المواقد، محولين قطع اللحوم الأقل جودة والمكونات المهملة إلى أطباق ذات ثراء ثقافي لا يقاس. طبق الفيجوادا، الذي أصبح الآن الطبق الوطني، وُلد في السينزالات (أماكن عيش العبيد)، حيث كان يغلي بصبر في أواني حديدية كبيرة فوق هذه المواقد.
-
-هكذا، ارتفع موقد الحطب كقلب نابض للبيت البرازيلي. حوله تجمعت العائلات، وحُكيت القصص، وُعُجن الخبز، وصُفي القهوة. حرارته غير المنتظمة ليست عيباً بل فضيلة. هذا التقلب هو ما يتطلب من الطاهي الصبر والحساسية ومعرفة روحية تقريباً بالنار. نكهة "الدخان" الطبيعية التي تتشربها الطعام ليست بهاراً يضاف؛ بل هي جوهر الذاكرة本身، هي الفحم والخشب يتحولان إلى السامي.
-
-هذه الروح الأصيلة، المُشكلة بالنار والتاريخ، هي ما نقلناه في بانيلا دي بارّو إلى قطر. موقد الحطب لدينا، المرئي في مطبخنا المفتوح، ليس قطعة متحف؛ هو الفنان الرئيسي في مطبخنا. كل طبق يخرج منه هو رسالة حب إلى التقاليد البرازيلية.
-
-*    فيجوادا بأضلاع البقر: نستعيد أصل الطبق ولكن بلمسة من تطور الـ"سيرتاو" (المناطق الداخلية). أضلاع البقر تُشوى ببطء على جمر الحطب حتى تتفكك بمجرد اللمس، معطية مرق الفاصوليا السوداء عمقاً وثراءً لا مثيل لهما. كل ملعقة هي غوص في تاريخ البرازيل، نكهة قوية وصادقة.
-*   فاكا أتولادا ("البقرة العالقة في الوحل"): هذا الطبق التقليدي الريفي، الذي يحكي بشاعرية عن بقرة "عالقة" في المنيهوت (الكسافا)، يولد من جديد على موقدنا. المنيهوت يطهى على الجمر اللطيف، ممتصاً كل نكهة اللحم البقري الطري، خالقاً تناغماً مثالياً بين حلاوة الخضروات وطعم اللحم. هو طبق متواضع في أصله، لكنه ذو تعقيد في النكهات لا يمكن أن يتحقق إلا بالطهي البطيء المدخن.
-*    فاروفا بموز الجنة:** الفاروفا، الرفيق indispensável، تُرفع إلى مستوى آخر. موز الجنة يُقطع شرائح رقيقة ويُقلى إلى الذهبية، ثم يُمزج مع دقيق المنيهوت المحمص على حرارة موقدنا. النتيجة تباين سماوي في القوام: قرمشة الفاروفا وليونة حلاوة الموز، كل ذلك مع رائحة نار الحطب التي لا تخطئها الأذن.
-
-في بانيلا دي بارّو، مطبخنا المفتوح يدعوكم لمشاهدة سحر هذا الطقوس القديمة. دع الرائحة المسكرة للخشب المحترق والطعام المنزلي تنقل حواسكم إلى عمق البرازيل الريفي. هنا، لن تتناولوا فقط وجبة؛ بل ستعيشون أصالة ت التقليد تُحتفل بها بأصفى نكهات أرضنا.
-
-*تعالوا. النار مشتعلة.`,
-};
-
-// ---------- PANELA DE BARRO ----------
-const CLAY_TEXT = {
-  pt: `Panela de Barro: O Útero da Culinária Brasileira
-
-Mais do que um simples recipiente, a panela de barro é um símbolo arquetípico da alimentação brasileira. Sua história se confunde com a própria formação do nosso povo, sendo uma das mais antigas e sagradas tecnologias culinárias das Américas.
-
-Antes da chegada dos europeus, os povos indígenas já dominavam a arte da cerâmica, moldando com as mãos e cozendo no fogo panelas, potes e alguidares que eram o centro de sua vida comunitária. Eram nestas vasilhas de barro que se cozinhava o peixe moqueado, se preparava o beiju e se fermentava a caiçuma. Cada panela carregava a identidade e o saber de seu povo.
-
-Com a colonização, a panela de barro foi adotada e adaptada. Nas senzalas, tornou-se instrumento de resistência e criatividade. Foi no seu bojo quente e generoso que nasceram alguns dos pilares de nossa gastronomia: o feijão guisado, o angu, os ensopados. A ela se atribui a qualidade única de cozinhar os alimentos de forma lenta e uniforme, conservando seus sucos e nutrientes como nenhuma outra panela de metal é capaz. O barro respira, interage com o fogo e com a comida, cedendo minerais e conferindo um sabor terroso e singular, conhecido carinhosamente como "sabor de roça".
-
-A panela de barro é, portanto, o útero onde se gestaram os sabores mais autênticos do Brasil. Ela representa a simplicidade, a tradição, a conexão com a terra e a generosidade de compartilhar o alimento.
-
-Foi inspirado por toda essa carga cultural e afetiva que escolhemos o nome **Panela de Barro** para o nosso restaurante no Qatar. Não é apenas uma referência ao utensílio, mas uma declaração de intenções.
-
-Queremos que cada cliente sinta que está sendo servido diretamente daquelas panelas quentes que ecoam séculos de história. Nossos pratos, preparados com a mesma dedicação e amor que exigiam as cozinheiras de outrora, buscam capturar essa alma. O barro é nossa fonte de inspiração: rústico, autêntico, acolhedor e cheio de histórias para contar.
-
-No **Panela de Barro**, servimos mais que uma refeição; servimos uma herança. Convidamos você a experimentar o sabor aconchegante e verdadeiro que só uma boa comida, feita com alma e história, pode oferecer.
-
-*Do nosso barro para o seu paladar.`,
-
-  en: `Panela de Barro: The Womb of Brazilian Cuisine
-
-More than a simple pot, the "panela de barro" (clay pot) is an archetypal symbol of Brazilian food culture. Its history is intertwined with the very formation of our people, being one of the oldest and most sacred culinary technologies in the Americas.
-
-Long before the arrival of Europeans, Indigenous peoples had already mastered the art of pottery, hand-shaping and firing clay pots, bowls, and platters that were the center of their community life. It was in these clay vessels that fish was moqueado (smoked-cooked), beiju (cassava flatbread) was prepared, and caiçuma (a fermented drink) was made. Each pot carried the identity and knowledge of its people.
-
-With colonization, the clay pot was adopted and adapted. In the senzalas (slave quarters), it became an instrument of resistance and creativity. It was in its warm and generous belly that some of the pillars of our gastronomy were born: stewed beans, angu (a polenta-like dish), and hearty stews. It is credited with the unique quality of cooking food slowly and evenly, preserving its juices and nutrients like no metal pot can. The clay breathes, interacts with the fire and the food, releasing minerals and imparting an earthy, unique flavor, affectionately known as "sabor de roça" (countryside flavor).
-
-The clay pot is, therefore, the womb where the most authentic flavors of Brazil were gestated. It represents simplicity, tradition, connection to the land, and the generosity of sharing food.
-
-Inspired by all this cultural and emotional significance, we chose the name **Panela de Barro** for our restaurant in Qatar. It is not just a reference to the utensil, but a statement of intent.
-
-We want every customer to feel like they are being served directly from those warm pots that echo centuries of history. Our dishes, prepared with the same dedication and love required of cooks of yesteryear, seek to capture this soul. The clay is our source of inspiration: rustic, authentic, welcoming, and full of stories to tell.
-
-At **Panela de Barro**, we serve more than a meal; we serve a heritage. We invite you to experience the comforting and genuine flavor that only good food, made with soul and history, can provide.
-
-From our clay to your palate.`,
-
-  ar: ` رحم المطبخ البرازيلي
-
-أكثر من مجرد وعاء، "بانيلا دي بارّو" (القدر الفخاري) هو رمز أساسي في ثقافة الطهي البرازيلية. تاريخها متشابك مع نشأة شعبنا نفسه، حيث تُعد واحدة من أقدم تقنيات الطهي قدسية في الأمريكتين.
-
-قبل وصول الأوروبيين بوقت طويل، كان السكان الأصليون قد أتقنوا بالفعل فن صناعة الفخار، يشكلون بأيديهم الأواني الفخارية والطاسات والأطباق التي كانت مركز حياتهم المجتمعية. في هذه الأواني الفخارية كان يُطهى السمك "موكيادو" (مدخن-مطبوخ)، ويُحضّر "بيجو" (خبز الكسافا المسطح)، ويُصنع "كايصوما" (مشروب مخمّر). كل قدر حمل هوية ومعرفة شعبه.
-
-مع الاستعمار، تم تبنّي القدر الفخاري والتكيّف معه. في السينزالات (أماكن عيش العبيد)، أصبح أداة للمقاومة والإبداع. في أحشائه الدافئة وُلدت بعض أعمدة مطبخنا: الفاصوليا المطهية، و"أنغو" (طبق يشبه البولنتا)، واليخنات الغنية. ويُنسب إليه طهي الطعام ببطء وبشكل متساوٍ، محافظًا على العصارة والعناصر الغذائية على نحو لا تقدر عليه الأواني المعدنية. الطين يتنفس، ويتفاعل مع النار والطعام، مطلقًا معادن ومضفيًا نكهة ترابية فريدة تُعرف بمحبة باسم "نكهة الريف".
-
-لذلك فالقدر الفخاري هو الرحم الذي تخلّقت فيه أشهى نكهات البرازيل. إنّه يُجسّد البساطة والتقاليد والاتصال بالأرض وكرم مشاركة الطعام.
-
-مستلهمين هذه الدلالات الثقافية والعاطفية، اخترنا اسم **بانيلا دي بارّو** لمطعمنا في قطر. ليس مجرّد إشارة إلى الأداة، بل إعلان عن نوايانا.
-
-نريد لكلّ زبون أن يشعر كأن الطعام يُقدَّم له مباشرة من تلك القدور الدافئة التي تصدح بقرون من التاريخ. أطباقنا، المصنوعة بنفس الحبّ والإخلاص، تحاول التقاط هذه الروح. الطين مصدر إلهامنا: ريفيّ، أصيل، مرحّب، ومفعم بالقصص.
-
-في بانيلا دي بارّو، نحن لا نقدّم وجبة فحسب؛ بل إرثًا حيًّا. ندعوكم لتذوّق النكهة الدافئة الصادقة التي لا يمنحها إلا طعام مصنوع بروح وتاريخ.
-
-من طيننا إلى paladarكم.`,
-};
-
-/* =========================================================
-   HOME (hero + destaques simples)
-   ========================================================= */
+/* ===================================================
+   Dados de Home e Imersões
+   =================================================== */
 const heroImage = "/images/picanha-grelhada.jpg";
+
 const highlights = [
   { label: "Fraldinha Inteira", src: "/images/fraldinha-inteira.jpg" },
   { label: "Galinhada Caipira", src: "/images/galinhada-caipira.jpg" },
-  { label: "Moqueca Baiana", src: "/images/moqueca-baiana.jpg" },
+  { label: "Rubacão", src: "/images/rubacao.jpg" },
   { label: "Pão de Queijo da Casa", src: "/images/pao-de-queijo.jpg" },
 ];
 
-/* =========================================================
-   Router por hash
-   ========================================================= */
+const immersions = [
+  { key: "amazonia", src: "/immersive/amazonia.jpg" },
+  { key: "cerrado", src: "/immersive/cerrado.jpg" },
+  { key: "lencois", src: "/immersive/lencois.jpg" },
+  { key: "litoral", src: "/immersive/litoral.jpg" },
+  { key: "serra", src: "/immersive/serra.jpg" },
+];
+
+/* ===================================================
+   MENU — lista base (PT) + traduções EN/AR por item
+   =================================================== */
+const MENU_ITEMS = [
+  { id: "picanha", name: "Picanha Grelhada", desc: "Picanha na brasa, ponto perfeito e suculência.", img: "/images/picanha-grelhada.jpg", tags: ["Halal","Beef"], cat: "mains" },
+  { id: "fraldinha", name: "Fraldinha Inteira", desc: "Corte macio servido na tábua, perfeito para compartilhar.", img: "/images/fraldinha-inteira.jpg", tags: ["Halal","Beef"], cat: "mains" },
+  { id: "vaca-atolada", name: "Vaca Atolada (Ossobuco)", desc: "Ossobuco com polenta cremosa e rúcula cítrica.", img: "/images/vaca-atolada.jpg", tags: ["Halal","Beef","Gluten","Dairy"], cat: "mains" },
+  { id: "feijoada-costela", name: "Feijoada de Costela", desc: "Feijão preto com costela, farofa de banana e vinagrete.", img: "/images/feijoada-costela.jpg", tags: ["Halal","Beef"], cat: "mains" },
+  { id: "moqueca", name: "Moqueca Baiana", desc: "Peixe no leite de coco, urucum/dendê e coentro.", img: "/images/moqueca-baiana.jpg", tags: ["Halal","Sea","Dairy"], cat: "mains" },
+  { id: "galinhada", name: "Galinhada Caipira", desc: "Arroz de quintal, frango dourado e cheiro-verde.", img: "/images/galinhada-caipira.jpg", tags: ["Halal"], cat: "mains" },
+  { id: "hamburguer-picanha", name: "Hambúrguer de Picanha", desc: "Blend de picanha, pão macio e queijo.", img: "/images/hamburguer-de-picanha.jpg", tags: ["Halal","Beef","Gluten","Dairy"], cat: "mains" },
+  { id: "lasanha-banana", name: "Lasanha de Banana-da-Terra", desc: "Camadas de banana-da-terra, queijo e molho caseiro.", img: "/images/lasanha-banana.jpg", tags: ["Dairy","Gluten"], cat: "mains" },
+  { id: "rubacao", name: "Rubacão", desc: "Arroz, feijão verde e queijo coalho — sertão no prato.", img: "/images/rubacao.jpg", tags: ["Dairy"], cat: "mains" },
+
+  { id: "coxinhas-costela", name: "Coxinhas de Costela", desc: "Clássico brasileiro com recheio de costela.", img: "/images/coxinhas-de-costela.jpg", tags: ["Gluten","Dairy"], cat: "appetizers" },
+  { id: "pasteis", name: "Pastéis Brasileiros", desc: "Pastéis crocantes com recheios variados.", img: "/images/pasteis-brasileiros.jpg", tags: ["Gluten"], cat: "appetizers" },
+  { id: "pao-alho", name: "Pão de Alho", desc: "Pão dourado na brasa com manteiga de alho.", img: "/images/pao-de-alho.jpg", tags: ["Gluten","Dairy"], cat: "appetizers" },
+  { id: "polenta-frita", name: "Polenta Frita", desc: "Crocante por fora, cremosa por dentro.", img: "/images/polenta-frita.jpg", tags: ["Gluten","Dairy"], cat: "appetizers" },
+  { id: "mandioca-frita", name: "Mandioca Frita", desc: "Aipim crocante para compartilhar.", img: "/images/mandioca-frita.jpg", tags: [], cat: "appetizers" },
+  { id: "farofa-castanha", name: "Farofa de Castanha", desc: "Crocrância e sabor para acompanhar.", img: "/images/farofa-de-castanha.jpg", tags: ["Gluten"], cat: "appetizers" },
+  { id: "pao-queijo", name: "Pão de Queijo da Casa", desc: "Mineiro, quentinho e puxando no queijo.", img: "/images/pao-de-queijo.jpg", tags: ["Gluten","Dairy"], cat: "appetizers" },
+
+  { id: "mandioca-real", name: "Mandioca Real", desc: "Bolo cremoso de mandioca com coco.", img: "/images/mandioca-real.jpg", tags: ["Dessert","Dairy","Gluten"], cat: "desserts" },
+  { id: "encanto-coco", name: "Encanto de Coco", desc: "Cocada cremosa servida gelada.", img: "/images/encanto-de-coco.jpg", tags: ["Dessert","Dairy"], cat: "desserts" },
+  { id: "doce-roca-gelo", name: "Doce da Roça com Gelo", desc: "Docinho de fazenda, servido gelado.", img: "/images/doce-da-roca-com-gelo.jpg", tags: ["Dessert"], cat: "desserts" },
+  { id: "pamonha", name: "Pamonha Doce (Sazonal)", desc: "Clássico de milho verde — disponível em épocas de safra.", img: "/images/pamonha.jpg", tags: ["Dessert","Seasonal"], cat: "seasonal" },
+
+  { id: "caipile", name: "Caipilé Clássico", desc: "Refrescante e cítrico.", img: "/images/caipile-classico.jpg", tags: ["Beverage"], cat: "beverages" },
+  { id: "uva-limao", name: "Uva, Limão & Gelo", desc: "Doce, ácido e gelado.", img: "/images/uva-limao-gelo.jpg", tags: ["Beverage"], cat: "beverages" },
+  { id: "blueberry-coco", name: "Blueberry & Coco Fizz", desc: "Frutas e coco em borbulhas tropicais.", img: "/images/blueberry-coco-fizz.jpg", tags: ["Beverage"], cat: "beverages" },
+  { id: "verao-brasil", name: "Verão Brasil", desc: "Notas cítricas e doçura na medida.", img: "/images/verao-brasil.jpg", tags: ["Beverage"], cat: "beverages" },
+  { id: "amazonia-breeze", name: "Amazon Breeze", desc: "Ervas e frutas da floresta.", img: "/images/amazon-breeze.jpg", tags: ["Beverage"], cat: "beverages" },
+  { id: "frescor-amazonia", name: "Frescor da Amazônia", desc: "Suco verde aromático.", img: "/images/frescor-da-amazonia.jpg", tags: ["Beverage"], cat: "beverages" },
+  { id: "pe-de-serra", name: "Pé de Serra", desc: "Rapadura e limão em harmonia.", img: "/images/pe-de-serra.jpg", tags: ["Beverage"], cat: "beverages" },
+  { id: "sol-do-cerrado", name: "Sol do Cerrado", desc: "Manga e maracujá vibrantes.", img: "/images/sol-do-cerrado.jpg", tags: ["Beverage"], cat: "beverages" },
+  { id: "vitamina-cerrado", name: "Vitamina do Cerrado", desc: "Cremosa e nutritiva.", img: "/images/vitamina-do-cerrado.jpg", tags: ["Beverage"], cat: "beverages" },
+];
+
+const MENU_I18N = {
+  en: {
+    picanha: { name: "Grilled Picanha", desc: "Char-grilled picanha, perfect doneness and juiciness." },
+    fraldinha: { name: "Whole Flank Steak", desc: "Tender cut on the board, great for sharing." },
+    "vaca-atolada": { name: "Ossobuco with Creamy Polenta", desc: "Rich ossobuco with citrus arugula." },
+    "feijoada-costela": { name: "Beef Rib Feijoada", desc: "Black beans, rib, banana farofa and vinaigrette." },
+    moqueca: { name: "Bahian Moqueca", desc: "Fish in coconut milk, annatto/dendê and cilantro." },
+    galinhada: { name: "Country Chicken Rice", desc: "Backyard-style rice, golden chicken and herbs." },
+    "hamburguer-picanha": { name: "Picanha Burger", desc: "Juicy picanha blend, soft bun and cheese." },
+    "lasanha-banana": { name: "Plantain Lasagna", desc: "Layers of plantain, cheese and house sauce." },
+    rubacao: { name: "Rubacão", desc: "Rice, green beans and grilled cheese." },
+
+    "coxinhas-costela": { name: "Beef Rib Coxinhas", desc: "Brazilian classic with rib filling." },
+    pasteis: { name: "Brazilian Pastéis", desc: "Crispy pastries with assorted fillings." },
+    "pao-alho": { name: "Garlic Bread", desc: "Grilled bread with garlic butter." },
+    "polenta-frita": { name: "Fried Polenta", desc: "Crispy outside, creamy inside." },
+    "mandioca-frita": { name: "Fried Cassava", desc: "Perfect to share." },
+    "farofa-castanha": { name: "Chestnut Farofa", desc: "Crunch and flavor to pair." },
+    "pao-queijo": { name: "House Pão de Queijo", desc: "Cheesy, fresh from the oven." },
+
+    "mandioca-real": { name: "Royal Cassava Cake", desc: "Creamy cassava cake with coconut." },
+    "encanto-coco": { name: "Coconut Delight", desc: "Creamy coconut pudding served cold." },
+    "doce-roca-gelo": { name: "Farm Sweet on Ice", desc: "Homestyle sweet, served cold." },
+    pamonha: { name: "Sweet Corn Pamonha (Seasonal)", desc: "Green-corn classic — available in harvest season." },
+
+    caipile: { name: "Classic Caipilé", desc: "Refreshing and citrusy." },
+    "uva-limao": { name: "Grape, Lime & Ice", desc: "Sweet, tangy and icy." },
+    "blueberry-coco": { name: "Blueberry & Coco Fizz", desc: "Bubbles with fruit and coconut." },
+    "verao-brasil": { name: "Brazilian Summer", desc: "Citrusy notes with balanced sweetness." },
+    "amazonia-breeze": { name: "Amazon Breeze", desc: "Forest herbs and fruits." },
+    "frescor-amazonia": { name: "Amazon Fresh", desc: "Aromatic green juice." },
+    "pe-de-serra": { name: "Pé de Serra", desc: "Rapadura sugar with lime." },
+    "sol-do-cerrado": { name: "Cerrado Sun", desc: "Mango & passion-fruit harmony." },
+    "vitamina-cerrado": { name: "Cerrado Smoothie", desc: "Creamy and nourishing." },
+  },
+  ar: {
+    picanha: { name: "بيكانيا مشوية", desc: "بيكانيا على الفحم بدرجة نضج مثالية." },
+    fraldinha: { name: "فلانك كامل", desc: "قطعة طرية للتقديم والمشاركة." },
+    "vaca-atolada": { name: "عظم الساق مع بولِنتا كريمية", desc: "نكهة غنية مع جرجير حمضي." },
+    "feijoada-costela": { name: "فيجوادا ضلع بقر", desc: "فاصولياء سوداء مع ضلع وفاروفا بالموز." },
+    moqueca: { name: "موكيكا باهية", desc: "سمك مع حليب جوز الهند وزيت الدندِه." },
+    galinhada: { name: "أرز الدجاج الريفي", desc: "دجاج ذهبي مع أعشاب." },
+    "hamburguer-picanha": { name: "برغر بيكانيا", desc: "خليط لحم طري مع خبز طري وجبن." },
+    "lasanha-banana": { name: "لازانيا الموز البلدي", desc: "طبقات موز وجبن وصلصة." },
+    rubacao: { name: "روباكان", desc: "أرز مع فاصولياء خضراء وجبن مشوي." },
+
+    "coxinhas-costela": { name: "كوكسينيا ضلع", desc: "طبق برازيلي محشو بالضلوع." },
+    pasteis: { name: "فطائر باستيل", desc: "مقرمشة بحشوات متنوعة." },
+    "pao-alho": { name: "خبز بالثوم", desc: "مشوي مع زبدة الثوم." },
+    "polenta-frita": { name: "بولِنتا مقلية", desc: "مقرمشة من الخارج كريمية من الداخل." },
+    "mandioca-frita": { name: "كسافا مقلية", desc: "مثالية للمشاركة." },
+    "farofa-castanha": { name: "فاروٙفا بالبندق", desc: "قرمشة ونكهة مرافقة." },
+    "pao-queijo": { name: "خبز جبن منزلي", desc: "ساخن وطري." },
+
+    "mandioca-real": { name: "كيك الكسافا الملكي", desc: "كريمي مع جوز الهند." },
+    "encanto-coco": { name: "لذّة جوز الهند", desc: "حلوى كريمية باردة." },
+    "doce-roca-gelo": { name: "حلوى ريفية باردة", desc: "حلوى منزلية على الثلج." },
+    pamonha: { name: "بامونيا حلوة (موسمية)", desc: "ذرة خضراء — متاحة بموسم الحصاد." },
+
+    caipile: { name: "كايبيلي كلاسيكي", desc: "منعش وحامضي." },
+    "uva-limao": { name: "عنب وليمون وثلج", desc: "حلو وحامضي وبارد." },
+    "blueberry-coco": { name: "بلو بيري مع جوز الهند فِز", desc: "فقاعات فاكهية بجوز الهند." },
+    "verao-brasil": { name: "صيف البرازيل", desc: "نَفَحات حمضية متوازنة." },
+    "amazonia-breeze": { name: "نسيم الأمازون", desc: "أعشاب وفواكه الغابة." },
+    "frescor-amazonia": { name: "نضارة الأمازون", desc: "عصير أخضر عطِر." },
+    "pe-de-serra": { name: "پي دي سيرا", desc: "رابدورا مع ليمون." },
+    "sol-do-cerrado": { name: "شمس السيرادو", desc: "مانغا وماراكويا." },
+    "vitamina-cerrado": { name: "سموثي السيرادو", desc: "كريمي ومغذٍ." },
+  },
+};
+
+const menuT = (lang, id, field, fallback) => {
+  const pack = MENU_I18N[lang] && MENU_I18N[lang][id];
+  const val = pack ? pack[field] : undefined;
+  return typeof val === "string" ? val : fallback;
+};
+
+/* =============================
+   Navegação por hash simples
+   ============================= */
 const useHashRoute = () => {
   const [route, setRoute] = useState(
     typeof window !== "undefined" ? window.location.hash.replace("#/", "") || "home" : "home"
@@ -256,27 +305,16 @@ const useHashRoute = () => {
   return [route, (r) => (window.location.hash = `#/${r}`)];
 };
 
-/* =========================================================
-   Utilitários de UI
-   ========================================================= */
+/* =============================
+   Componentes básicos
+   ============================= */
 const SectionTitle = ({ children }) => <h2 className="title">{children}</h2>;
 const Card = ({ children, style }) => <div className="card" style={style}>{children}</div>;
-
-const Img = ({ src, alt, ratio = "16/9", round = true }) => {
-  const [err, setErr] = useState(false);
-  const path = !err ? src : "/images/placeholder.jpg";
-  return (
-    <div className={`imgwrap ${round ? "round" : ""}`} style={{ aspectRatio: ratio }}>
-      <img
-        src={path}
-        alt={alt}
-        loading="lazy"
-        onError={() => setErr(true)}
-        style={{ width: "100%", height: "100%", objectFit: "cover" }}
-      />
-    </div>
-  );
-};
+const Img = ({ src, alt, ratio = "16/9", round = true }) => (
+  <div className={`imgwrap ${round ? "round" : ""}`} style={{ aspectRatio: ratio }}>
+    <img src={src} alt={alt} loading="lazy" />
+  </div>
+);
 
 const Carousel = ({ items, renderItem, auto = 5000 }) => {
   const [i, setI] = useState(0);
@@ -292,9 +330,24 @@ const Carousel = ({ items, renderItem, auto = 5000 }) => {
   );
 };
 
-/* =========================================================
-   Drawer (mobile)
-   ========================================================= */
+const Modal = ({ open, onClose, title, children }) => {
+  if (!open) return null;
+  return (
+    <div className="modalbg" onClick={onClose}>
+      <div className="modal" onClick={(e) => e.stopPropagation()} role="dialog" aria-modal="true">
+        <div className="modalhead">
+          <div className="modaltitle">{title}</div>
+          <button className="close" onClick={onClose} aria-label="close">×</button>
+        </div>
+        <div className="modalbody">{children}</div>
+      </div>
+    </div>
+  );
+};
+
+/* =============================
+   Drawer (menu lateral)
+   ============================= */
 const Drawer = ({ open, onClose, lang, setLang }) => {
   const go = (to) => { window.location.hash = `#/${to}`; onClose(); };
   return (
@@ -309,21 +362,29 @@ const Drawer = ({ open, onClose, lang, setLang }) => {
         </div>
 
         <nav className="dlinks">
-          <button onClick={() => go("home")}>{t(lang,"nav.home","Início")}</button>
-          <button onClick={() => go("clay")}>{t(lang,"nav.clay","Panela de Barro")}</button>
-          <button onClick={() => go("wood")}>{t(lang,"nav.woodfire","Fogão a Lenha")}</button>
-          <button onClick={() => go("menu")}>{t(lang,"nav.menu","Menu")}</button>
-          <button onClick={() => go("gallery")}>{t(lang,"nav.gallery","Galeria")}</button>
-          <button onClick={() => go("location")}>{t(lang,"nav.location","Localização")}</button>
-          <button onClick={() => go("support")}>{t(lang,"nav.support","Suporte")}</button>
+          <button onClick={() => go("about")}>{t(lang,"nav.about")}</button>
+          <button onClick={() => go("menu")}>{t(lang,"nav.menu")}</button>
+          <button onClick={() => go("gallery")}>{t(lang,"nav.gallery")}</button>
+          <button onClick={() => go("wood")}>{t(lang,"nav.woodfire")}</button>
+          <button onClick={() => go("location")}>{t(lang,"nav.location")}</button>
+          <button onClick={() => go("support")}>{t(lang,"nav.support")}</button>
         </nav>
 
         <div className="dsection">
-          <div className="dtitle">Idiomas / Languages / اللغات</div>
+          <div className="dtitle">{t(lang,"drawer.languages","Idiomas")}</div>
           <div className="dlangs">
             {LANGS.map((l) => (
               <button key={l} className={`chip ${l===lang?"active":""}`} onClick={() => setLang(l)}>{l.toUpperCase()}</button>
             ))}
+          </div>
+        </div>
+
+        <div className="dsection">
+          <div className="dtitle">{t(lang,"drawer.social","Redes sociais")}</div>
+          <div className="dsocial">
+            <a href="#" aria-label="Instagram">Instagram</a>
+            <a href="#" aria-label="Facebook">Facebook</a>
+            <a href="#" aria-label="TikTok">TikTok</a>
           </div>
         </div>
       </aside>
@@ -331,95 +392,173 @@ const Drawer = ({ open, onClose, lang, setLang }) => {
   );
 };
 
-/* =========================================================
+/* =============================
    Páginas
-   ========================================================= */
+   ============================= */
 const Home = ({ lang }) => (
   <>
     <div className="hero">
-      <Img src={heroImage} alt="Hero" ratio="21/9" />
+      <Img src={heroImage} alt="Picanha" ratio="21/9" />
       <div className="herooverlay" />
       <div className="heroinfo">
-        <h1>{t(lang,"hero.title")}</h1>
-        <p className="sub">{t(lang,"hero.subtitle")}</p>
-        <p className="soon">{t(lang,"hero.soon")}</p>
-        <a className="btn" href="#/menu">{t(lang,"hero.cta")}</a>
+        <h1>{t(lang,"hero.title","Sabores brasileiros, calor de família")}</h1>
+        <p className="sub">{t(lang,"hero.subtitle","Restaurante familiar no Qatar. 20+ anos de hospitalidade, fogão a lenha e raízes brasileiras.")}</p>
+        <p className="soon">{t(lang,"hero.soon","Inauguração em Novembro — reservas online em breve.")}</p>
+        <a className="btn" href="#/menu">{t(lang,"hero.cta","Ver Menu")}</a>
       </div>
     </div>
 
-    <SectionTitle>{t(lang,"sections.menuHighlights")}</SectionTitle>
+    <SectionTitle>{t(lang,"sections.menuHighlights","Destaques do Menu")}</SectionTitle>
     <Carousel
       items={highlights}
       renderItem={(item) => (
         <Card>
-          <Img src={item.src} alt={item.label} ratio="4/3" />
+          <Img src={item.src} alt={item.label} ratio="16/9" />
           <div className="caption">{item.label}</div>
         </Card>
       )}
-      auto={4200}
+      auto={4500}
+    />
+
+    <SectionTitle>{t(lang,"sections.immersive","Imersões do Brasil")}</SectionTitle>
+    <Carousel
+      items={immersions}
+      renderItem={(item) => (
+        <Card>
+          <Img src={item.src} alt={item.key} ratio="16/9" />
+          <div className="caption">{t(lang,`immersiveLabels.${item.key}`, item.key)}</div>
+        </Card>
+      )}
+      auto={5200}
     />
   </>
 );
 
-const Article = ({ lang, title, blocks }) => {
-  // blocks: [{type:'p'|'h'|'img'|'hr', content:'...', alt:'', ratio:'', caption:''}, ...]
+const Menu = ({ lang }) => {
+  const tabs = useMemo(() => ([
+    { key: "all", label: t(lang,"menu.tabs.all","Todos") },
+    { key: "mains", label: t(lang,"menu.tabs.mains","Pratos") },
+    { key: "appetizers", label: t(lang,"menu.tabs.appetizers","Entradas") },
+    { key: "seasonal", label: t(lang,"menu.tabs.seasonal","Sazonais") },
+    { key: "beverages", label: t(lang,"menu.tabs.beverages","Bebidas") },
+    { key: "desserts", label: t(lang,"menu.tabs.desserts","Sobremesas") },
+  ]), [lang]);
+
+  const [tab, setTab] = useState("all");
+  const [open, setOpen] = useState(null);
+
+  const filtered = tab === "all" ? MENU_ITEMS : MENU_ITEMS.filter((i) => i.cat === tab);
+
   return (
     <>
-      <SectionTitle>{title}</SectionTitle>
-      <article className="article">
-        {blocks.map((b, idx) => {
-          if (b.type === "h") return <h3 key={idx} className="subtitle">{b.content}</h3>;
-          if (b.type === "p") return <p key={idx} className="p">{b.content}</p>;
-          if (b.type === "img")
-            return (
-              <figure key={idx} className="figure">
-                <Img src={b.src} alt={b.alt || ""} ratio={b.ratio || "16/9"} />
-                {b.caption && <figcaption>{b.caption}</figcaption>}
-              </figure>
-            );
-          if (b.type === "hr") return <hr key={idx} className="sep" />;
-          return null;
+      <SectionTitle>{t(lang,"menu.title","Menu")}</SectionTitle>
+
+      {/* Abas sticky */}
+      <div className="tabs sticky">
+        {tabs.map(tb => (
+          <button key={tb.key} className={`chip ${tab===tb.key?"active":""}`} onClick={() => setTab(tb.key)}>
+            {tb.label}
+          </button>
+        ))}
+      </div>
+
+      <div className="grid">
+        {filtered.map((item) => {
+          const name = menuT(lang, item.id, "name", item.name);
+          const desc = menuT(lang, item.id, "desc", item.desc);
+          return (
+            <Card key={item.id} style={{ paddingBottom: 12 }}>
+              <button className="cardbtn" onClick={() => setOpen({ ...item, name, desc })}>
+                <Img src={item.img} alt={name} ratio="16/9" />
+                <div className="cardtitle">{name}</div>
+                <div className="carddesc">{desc}</div>
+                <div className="tags">
+                  {item.tags.map((tg) => (
+                    <span className="tag" key={tg}>{t(lang,`menu.tags.${tg}`,tg)}</span>
+                  ))}
+                </div>
+              </button>
+            </Card>
+          );
         })}
-      </article>
-      <a className="back" href="#/home">{t(lang,"sections.back")}</a>
+      </div>
+
+      <Modal open={!!open} onClose={() => setOpen(null)} title={open ? open.name : ""}>
+        {open && (
+          <>
+            <Img src={open.img} alt={open.name} ratio="16/9" />
+            <p className="mdesc">{open.desc}</p>
+            <div className="tags" style={{marginTop:8}}>
+              {open.tags.map((tg) => (
+                <span className="tag" key={tg}>{t(lang,`menu.tags.${tg}`,tg)}</span>
+              ))}
+            </div>
+          </>
+        )}
+      </Modal>
     </>
   );
 };
 
-const ClayFull = ({ lang }) => {
-  const text = CLAY_TEXT[lang];
-  const blocks = [
-    { type: "p", content: text },
-    { type: "img", src: "/images/panela-1.jpg", alt: "Panela artesanal", caption: "Panelas artesanais (representação)", ratio: "4/3" },
-  ];
-  return <Article lang={lang} title={t(lang,"nav.clay")} blocks={blocks} />;
+const About = ({ lang }) => {
+  const d = dict[lang].about;
+  return (
+    <>
+      <SectionTitle>{d.title}</SectionTitle>
+      <p className="p">{d.p1}</p>
+      <p className="p">{d.p2}</p>
+      <p className="p">{d.p3}</p>
+
+      <h3 className="subtitle">{d.family}</h3>
+      <div className="familygrid">
+        {Object.values(d.people).map((p) => (
+          <Card key={p.name}>
+            <Img src={p.img} alt={p.name} ratio="1/1" />
+            <div className="cardtitle">{p.name}</div>
+            <div className="carddesc">{p.text}</div>
+          </Card>
+        ))}
+      </div>
+
+      <div className="grid2">
+        {d.heritageImgs.map((h, i) => (
+          <Card key={i}>
+            <Img src={h.src} alt={h.caption} ratio="16/9" />
+            <div className="caption">{h.caption}</div>
+          </Card>
+        ))}
+      </div>
+    </>
+  );
 };
 
-const WoodFull = ({ lang }) => {
-  const text = WOOD_TEXT[lang];
-  const blocks = [
-    { type: "p", content: text },
-    { type: "img", src: "/images/fogao-lenha.jpg", alt: "Fogão a lenha", caption: "Nosso fogão a lenha (ilustração)", ratio: "4/3" },
-    { type: "hr" },
-    { type: "h", content: lang==="ar" ? "أطباق من الموقد" : lang==="en" ? "Plates from the Stove" : "Pratos do Fogão" },
-    { type: "img", src: "/images/feijoada-costela.jpg", alt: "Feijoada de Costela", caption: "Feijoada de Costela", ratio: "16/9" },
-    { type: "img", src: "/images/vaca-atolada.jpg", alt: "Vaca Atolada", caption: "Vaca Atolada", ratio: "16/9" },
-    { type: "img", src: "/images/farofa-banana.jpg", alt: "Farofa de Banana da Terra", caption: "Farofa de Banana da Terra", ratio: "16/9" },
-  ];
-  return <Article lang={lang} title={t(lang,"nav.woodfire")} blocks={blocks} />;
+const WoodFire = ({ lang }) => {
+  const d = dict[lang].wood;
+  return (
+    <>
+      <SectionTitle>{d.title}</SectionTitle>
+      <p className="p">{d.p1}</p>
+      <p className="p">{d.p2}</p>
+      <div className="grid3">
+        {d.imgs.map((src, i) => (
+          <Card key={i}><Img src={src} alt={`wood-${i}`} ratio="1/1" /></Card>
+        ))}
+      </div>
+      <a className="back" href="#/home">{t(lang,"sections.back","Voltar ao início")}</a>
+    </>
+  );
 };
 
 const Gallery = ({ lang }) => {
-  const photos = highlights.map(i => ({ src: i.src, alt: i.label }));
+  const photos = MENU_ITEMS.map(i => ({ src: i.img, alt: i.name }));
   return (
     <>
-      <SectionTitle>{t(lang,"nav.gallery")}</SectionTitle>
+      <SectionTitle>{t(lang,"gallery.title","Galeria")}</SectionTitle>
       <div className="gallery">
         {photos.map((p, i) => (
           <Card key={i}><Img src={p.src} alt={p.alt} ratio="1/1" /></Card>
         ))}
       </div>
-      <a className="back" href="#/home">{t(lang,"sections.back")}</a>
     </>
   );
 };
@@ -446,7 +585,7 @@ const Location = ({ lang }) => {
           </a>
         </p>
       </Card>
-      <a className="back" href="#/home">{t(lang,"sections.back")}</a>
+      <a className="back" href="#/home">{t(lang,"sections.back","Voltar ao início")}</a>
     </>
   );
 };
@@ -456,18 +595,20 @@ const Support = ({ lang }) => {
   return (
     <>
       <SectionTitle>{d.title}</SectionTitle>
-      <ul className="list">{d.items.map((it, i) => (<li key={i}>{it}</li>))}</ul>
+      <ul className="list">
+        {d.items.map((it, i) => (<li key={i}>{it}</li>))}
+      </ul>
       <h3 className="subtitle">{d.contactTitle}</h3>
       <p className="p">WhatsApp: <a className="link" href="https://wa.me/97430475279">+{d.phone}</a></p>
-      <p className="p">Email: <a className="link" href={`mailto:${d.email}`}>{d.email}</a></p>
-      <a className="back" href="#/home">{t(lang,"sections.back")}</a>
+      <p className="p">Email: <a className="link" href="mailto:restaurant@paneladebarroqatar.com">{d.email}</a></p>
+      <a className="back" href="#/home">{t(lang,"sections.back","Voltar ao início")}</a>
     </>
   );
 };
 
-/* =========================================================
-   App
-   ========================================================= */
+/* =============================
+   App (nav, splash, rotas)
+   ============================= */
 const App = () => {
   const [route] = useHashRoute();
   const [lang, setLang] = useState(() => {
@@ -477,11 +618,11 @@ const App = () => {
   const [splash, setSplash] = useState(true);
   const [openDrawer, setOpenDrawer] = useState(false);
 
-  useEffect(() => { const t = setTimeout(() => setSplash(false), 900); return () => clearTimeout(t); }, []);
+  useEffect(() => { const t = setTimeout(() => setSplash(false), 1100); return () => clearTimeout(t); }, []);
   useEffect(() => { localStorage.setItem("lang", lang); }, [lang]);
-  useEffect(() => { setOpenDrawer(false); }, [route]);
+  useEffect(() => { setOpenDrawer(false); }, [route]); // fecha drawer ao mudar rota
 
-  // mede a altura real do header e aplica em --navh
+  // mede a altura real do header e salva em --navh (corrige sticky em PT/EN no mobile)
   useEffect(() => {
     const setNavHeight = () => {
       const el = document.querySelector('.nav');
@@ -503,15 +644,15 @@ const App = () => {
         <button className="hamb" onClick={() => setOpenDrawer(true)} aria-label="menu">☰</button>
         <a className="brand" href="#/home">
           <img src="/logo.png" alt="logo" />
-          <span>{t(lang,"brand")}</span>
+          <span>{t(lang,"brand","Panela de Barro")}</span>
         </a>
         <nav className="links">
-          <a href="#/home">{t(lang,"nav.home")}</a>
-          <a href="#/clay">{t(lang,"nav.clay")}</a>
-          <a href="#/wood">{t(lang,"nav.woodfire")}</a>
-          <a href="#/gallery">{t(lang,"nav.gallery")}</a>
-          <a href="#/location">{t(lang,"nav.location")}</a>
-          <a href="#/support">{t(lang,"nav.support")}</a>
+          <a href="#/about">{t(lang,"nav.about","Sobre")}</a>
+          <a href="#/menu">{t(lang,"nav.menu","Menu")}</a>
+          <a href="#/gallery">{t(lang,"nav.gallery","Galeria")}</a>
+          <a href="#/wood">{t(lang,"nav.woodfire","Fogão a Lenha")}</a>
+          <a href="#/location">{t(lang,"nav.location","Localização")}</a>
+          <a href="#/support">{t(lang,"nav.support","Suporte")}</a>
         </nav>
         <div className="langs">
           {LANGS.map((l) => (
@@ -524,9 +665,10 @@ const App = () => {
 
       <main className="container">
         {route === "home" && <Home lang={lang} />}
-        {route === "clay" && <ClayFull lang={lang} />}
-        {route === "wood" && <WoodFull lang={lang} />}
+        {route === "about" && <About lang={lang} />}
+        {route === "menu" && <Menu lang={lang} />}
         {route === "gallery" && <Gallery lang={lang} />}
+        {route === "wood" && <WoodFire lang={lang} />}
         {route === "location" && <Location lang={lang} />}
         {route === "support" && <Support lang={lang} />}
       </main>
@@ -536,18 +678,19 @@ const App = () => {
   );
 };
 
-/* =========================================================
-   CSS (desktop e mobile caprichados)
-   ========================================================= */
+/* =============================
+   CSS embutido (responsivo)
+   ============================= */
 const Styles = () => (
   <style>{`
   :root{
     --bg:#f0e2cf; --paper:#f6eadb; --ink:#2d241c; --muted:#7b6a5c;
     --pill:#b8644e; --pill-ghost:#e7d6c5; --shadow: 0 8px 24px rgba(0,0,0,.08);
-    --radius:18px; --navh:64px; --safeTop: env(safe-area-inset-top, 0px);
+    --radius:18px; --navh:64px;
+    --safeTop: env(safe-area-inset-top, 0px);
   }
   *{box-sizing:border-box}
-  html,body,#root{height:100%}
+  body,html,#root{height:100%}
   body{margin:0;background:var(--bg);color:var(--ink);font-family:system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,"Noto Sans",sans-serif}
   a{color:var(--pill)}
   .app{min-height:100%}
@@ -558,59 +701,93 @@ const Styles = () => (
     background:rgba(246,234,219,.88);
     backdrop-filter:saturate(140%) blur(8px);
     display:flex; gap:16px; align-items:center; justify-content:space-between;
-    padding: calc(8px + var(--safeTop)) 14px 8px 14px;
-    border-bottom:1px solid #e5d5c2; min-height:64px;
+    padding: calc(8px + var(--safeTop)) 14px 8px 14px; /* respeita a área segura do iPhone */
+    border-bottom:1px solid #e5d5c2; 
+    min-height:64px; /* o valor real é medido em runtime e aplicado em --navh */
   }
   .hamb{display:none;border:0;background:var(--pill-ghost);width:40px;height:36px;border-radius:10px;font-size:20px;cursor:pointer}
   .brand{display:flex;align-items:center;gap:10px;text-decoration:none;color:var(--ink);font-weight:800}
   .brand img{width:28px;height:28px}
-  .brand span{font-size:20px;letter-spacing:.2px;white-space:nowrap}
+  .brand span{font-size:20px;letter-spacing:.2px;white-space:nowrap} /* "Panela de Barro" sempre em uma linha */
   .links a{margin:0 10px;text-decoration:none;color:var(--ink)}
   .langs .chip{margin-left:6px}
 
-  /* Desktop container mais estreito (melhor leitura) */
-  .container{max-width:980px;margin:0 auto;padding:18px}
+  /* Desktop vs mobile */
+  @media (max-width:920px){
+    .links{display:none !important;} /* esconde links no celular */
+    .hamb{display:inline-block}
 
-  /* Títulos */
+    /* Centraliza a marca no cabeçalho, logo maior */
+    .brand{flex:1;min-width:0;justify-content:center}
+    .brand img{width:34px;height:34px}
+    .brand span{font-size:clamp(18px,5.2vw,22px);white-space:nowrap}
+
+    /* Idiomas na direita em coluna, menores */
+    .langs{display:flex;flex-direction:column;gap:6px;align-items:flex-end;margin-left:6px}
+    .langs .chip{padding:6px 10px;font-size:12px;margin:0}
+  }
+
+  .container{max-width:1100px;margin:0 auto;padding:18px}
+
   .title{font-size:32px;margin:26px 6px}
   .subtitle{margin:10px 6px 12px 6px}
 
-  /* Cards e imagens */
   .card{background:var(--paper);border-radius:var(--radius);box-shadow:var(--shadow);padding:10px}
   .imgwrap{width:100%;overflow:hidden}
   .imgwrap.round{border-radius:var(--radius)}
-  .imgwrap img{display:block;width:100%;height:100%;object-fit:cover}
+  .imgwrap img{width:100%;height:100%;object-fit:cover;display:block}
 
-  /* Texto */
   .caption{padding:8px 10px 10px 10px;color:var(--ink);font-weight:600}
-  .p{margin:8px 6px 12px 6px;line-height:1.7;color:var(--ink);white-space:pre-wrap}
+  .p{margin:8px 6px 12px 6px;line-height:1.65;color:var(--ink)}
   .list{margin:0 6px 18px 28px}
   .link{color:var(--pill);text-decoration:underline}
 
-  /* Grid menor no desktop para fotos ficarem elegantes */
-  .gallery{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:14px}
-  .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:16px}
-  @media (min-width:1024px){
-    .grid{grid-template-columns:repeat(auto-fill,minmax(240px,1fr));}
-  }
+  .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:16px}
+  .grid2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}
+  .grid3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px}
+  @media (max-width:720px){ .grid2{grid-template-columns:1fr} .grid3{grid-template-columns:1fr 1fr} }
+  .familygrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:16px}
 
-  /* HERO com overlay forte p/ legibilidade */
+  .tabs{display:flex;flex-wrap:wrap;gap:10px;margin:6px}
+  .tabs.sticky{
+    position:-webkit-sticky; /* iOS Safari */
+    position:sticky;
+    top: calc(var(--safeTop) + var(--navh) + 6px); /* usa altura real medida no JS */
+    z-index:20;
+    background:linear-gradient(#f6eadb,#f6eadb);
+    padding:8px 6px;border-radius:14px;box-shadow:var(--shadow)
+  }
+  .chip{border:0;background:var(--pill-ghost);color:var(--ink);padding:8px 14px;border-radius:999px;cursor:pointer}
+  .chip.active{background:var(--pill);color:#fff}
+
+  .cardbtn{all:unset;display:block;cursor:pointer}
+  .cardtitle{font-weight:800;font-size:18px;margin:8px 6px 4px}
+  .carddesc{color:var(--muted);margin:0 6px 8px}
+  .tags{display:flex;gap:6px;flex-wrap:wrap;margin:0 6px 6px}
+  .tag{background:#eee;border-radius:999px;padding:4px 8px;font-size:12px;color:#5a4b3f}
+
+  /* Hero */
   .hero{position:relative}
   .hero .imgwrap{border-radius:var(--radius)}
-  .herooverlay{position:absolute;inset:0;background:linear-gradient(180deg,rgba(0,0,0,.55),rgba(0,0,0,.25),rgba(0,0,0,.55));border-radius:var(--radius)}
+  .herooverlay{position:absolute;inset:0;background:linear-gradient(180deg,rgba(0,0,0,.45),rgba(0,0,0,.25),rgba(0,0,0,.45));border-radius:var(--radius)}
   .heroinfo{position:absolute;inset:auto 18px 18px 18px;color:#fff}
   .heroinfo h1{font-size:clamp(22px,3.6vw,40px);margin:0 0 8px 0}
   .heroinfo .sub{margin:0 0 6px 0;max-width:820px}
   .heroinfo .soon{opacity:.95;margin:0 0 10px 0}
   .btn{display:inline-block;background:var(--pill);color:#fff;text-decoration:none;padding:12px 18px;border-radius:14px;font-weight:700}
 
-  /* HERO mobile */
-  @media (max-width: 520px) {
-    .hero .imgwrap { height: 60vh !important; aspect-ratio: auto !important; }
-    .herooverlay { background: linear-gradient(180deg, rgba(0,0,0,0.1) 8%, rgba(0,0,0,0.45) 55%, rgba(0,0,0,0.7) 100%); }
-    .heroinfo { left: 16px; right: 16px; bottom: 18px; top: auto; max-width: 100%; }
-    .heroinfo h1 { font-size: clamp(20px, 6vw, 26px); line-height: 1.2; }
-    .heroinfo .sub, .heroinfo .soon { font-size: clamp(12px, 3.5vw, 14px); line-height: 1.35; }
+  /* HERO mobile legível */
+  @media (max-width: 480px) {
+    .hero .imgwrap { height: 58vh !important; aspect-ratio: auto !important; }
+    .hero img { object-fit: cover; object-position: center; }
+    .herooverlay {
+      background: linear-gradient(180deg, rgba(0,0,0,0.05) 12%, rgba(0,0,0,0.40) 55%, rgba(0,0,0,0.62) 100%);
+    }
+    .heroinfo { left: 16px; right: 16px; bottom: 18px; top: auto; transform: none; gap: 8px; padding: 0; max-width: 100%; }
+    .heroinfo h1 { font-size: clamp(20px, 6vw, 26px); line-height: 1.2; margin: 0; }
+    .heroinfo .sub { font-size: clamp(13px, 3.8vw, 15px); line-height: 1.35; margin: 0; }
+    .heroinfo .soon { font-size: clamp(12px, 3.5vw, 14px); line-height: 1.35; }
+    .heroinfo .btn { padding: 10px 16px; font-size: 14px; border-radius: 14px; }
   }
 
   /* Carousel */
@@ -619,22 +796,30 @@ const Styles = () => (
   .cbtn{position:absolute;top:50%;transform:translateY(-50%);border:0;background:rgba(0,0,0,.35);color:#fff;width:40px;height:40px;border-radius:50%;cursor:pointer}
   .cbtn.left{left:8px}.cbtn.right{right:8px}
 
+  /* Modal */
+  .modalbg{position:fixed;inset:0;background:rgba(0,0,0,.55);display:flex;align-items:center;justify-content:center;padding:18px;z-index:50}
+  .modal{background:#fff;color:#111;border-radius:18px;max-width:820px;width:100%;box-shadow:var(--shadow);max-height:85vh;display:flex;flex-direction:column}
+  .modalhead{display:flex;align-items:center;justify-content:space-between;padding:12px 14px;border-bottom:1px solid #eee}
+  .modaltitle{font-weight:800}
+  .close{border:0;background:#eee;border-radius:10px;width:36px;height:32px;cursor:pointer}
+  .modalbody{padding:12px 14px;overflow:auto}
+  .modalbody .imgwrap{margin-bottom:10px}
+  .mdesc{margin:6px 2px 10px 2px}
+
+  /* Gallery */
+  .gallery{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:14px}
+
   /* Map */
   .mapwrap{position:relative;width:100%;aspect-ratio:16/9;border-radius:14px;overflow:hidden}
   .mapwrap iframe{position:absolute;inset:0;border:0;width:100%;height:100%}
 
-  /* Article (páginas longas) */
-  .article{background:var(--paper);border-radius:var(--radius);box-shadow:var(--shadow);padding:14px}
-  .figure{margin:14px 6px}
-  .figure figcaption{font-size:13px;color:var(--muted);margin-top:6px}
-  .sep{border:0;border-top:1px solid #e6d7c8;margin:16px 0}
-
   .back{display:inline-block;margin:14px 6px 0;color:var(--pill);text-decoration:none;font-weight:700}
+
   .foot{padding:30px 18px;color:#7a6b5c;text-align:center}
 
-  /* Splash (logo pequeno) */
+  /* Splash (logo ao abrir) */
   .splash{position:fixed;inset:0;background:var(--bg);display:flex;align-items:center;justify-content:center;z-index:100}
-  .splash img{width:56px;height:56px;filter:drop-shadow(0 6px 18px rgba(0,0,0,.18))}
+  .splash img{width:72px;height:72px;filter:drop-shadow(0 6px 18px rgba(0,0,0,.18))}
 
   /* Drawer */
   .drawerWrap{position:fixed;inset:0;background:rgba(0,0,0,.25);opacity:0;pointer-events:none;transition:.2s;z-index:60}
@@ -651,21 +836,11 @@ const Styles = () => (
   .dsection{padding:10px}
   .dtitle{font-weight:800;margin:8px 0}
   .dlangs{display:flex;gap:8px;flex-wrap:wrap}
-
-  /* Mobile header centralizado */
-  @media (max-width:920px){
-    .links{display:none !important;}
-    .hamb{display:inline-block}
-    .brand{flex:1;justify-content:center}
-    .brand img{width:34px;height:34px}
-    .brand span{font-size:clamp(18px,5.2vw,22px)}
-    .langs{display:flex;flex-direction:column;gap:6px;align-items:flex-end;margin-left:6px}
-    .langs .chip{padding:6px 10px;font-size:12px;margin:0}
-  }
+  .dsocial{display:flex;gap:12px}
   `}</style>
 );
 
-/* =========================================================
+/* =============================
    export
-   ========================================================= */
+   ============================= */
 export default App;
