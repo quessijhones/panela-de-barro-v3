@@ -37,7 +37,7 @@ const dict = {
       },
       heritageImgs: [
         { src: "/heritage/panela-1.jpg", caption: "Panelas artesanais de barro" },
-        { src: "/heritage/panela-artesanal.jpg", caption: "Feita à mão, como manda a tradição" },
+        { src: "/heritage/panela-mao.jpg", caption: "Feita à mão, como manda a tradição" },
       ],
     },
     wood: {
@@ -87,7 +87,7 @@ const dict = {
       },
       heritageImgs: [
         { src: "/heritage/panela-1.jpg", caption: "Handmade clay pots" },
-        { src: "/heritage/panela-artesanal.jpg", caption: "Handcrafted, as tradition dictates" },
+        { src: "/panela-mao.jpg", caption: "Handcrafted, as tradition dictates" },
       ],
     },
     wood: {
@@ -137,7 +137,7 @@ const dict = {
       },
       heritageImgs: [
         { src: "/heritage/panela-1.jpg", caption: "قدور طين يدوية الصنع" },
-        { src: "/heritage/panela-artesanal.jpg", caption: "صناعة تقليدية" },
+        { src: "/heritage/panela-mao.jpg", caption: "صناعة تقليدية" },
       ],
     },
     wood: { title: "موقد الحطب", p1: "من الأرياف البرازيلية: أخشاب مناسبة وجمر ثابت وصبر.", p2: "نُكرّم هذا الإرث بعنايةٍ بالمكوّن.", imgs: ["/heritage/fogao-1.jpg", "/heritage/fogao-2.jpg", "/heritage/fogao-3.jpg"] },
