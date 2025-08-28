@@ -4,7 +4,20 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>Panela de Barro</title>
+
+    <!-- ícones -->
     <link rel="icon" href="/favicon.ico" />
+    <link rel="icon" type="image/png" href="/logo.png" />
+
+    <!-- polimentos opcionais -->
+    <meta name="theme-color" content="#f1e0ce" />
+    <meta name="description" content="Panela de Barro — cozinha brasileira no Qatar, fogão a lenha e ingredientes frescos. Inauguração em breve." />
+    <meta property="og:title" content="Panela de Barro" />
+    <meta property="og:description" content="Cozinha brasileira autêntica no Qatar. Fogão a lenha, tradição e ingredientes frescos." />
+    <meta property="og:type" content="website" />
+    <meta property="og:locale" content="pt_BR" />
+    <meta property="og:image" content="/images/picanha-grelhada.jpg" />
+
     <style>
       :root { --bg:#f1e0ce; }
       /* Splash inicial (estático) */
@@ -17,7 +30,7 @@
     </style>
 
     <script>
-      /* Esconde o splash SEMPRE (load, erro, hash, atraso, etc.) */
+      // Esconde o splash SEMPRE (load, erro, hash, atraso, etc.)
       (function () {
         function hide() {
           var el = document.getElementById("splash");
@@ -25,11 +38,8 @@
           el.classList.add("hide");
           setTimeout(function () { el.remove(); }, 450);
         }
-        // expõe p/ o app poder chamar também
         window.__hideSplash = hide;
-
-        // fallbacks para garantir que some
-        setTimeout(hide, 1800);               // some mesmo que nada carregue
+        setTimeout(hide, 1800);
         window.addEventListener("load", hide, { once: true });
         window.addEventListener("error", hide, { once: true });
         window.addEventListener("hashchange", hide);
