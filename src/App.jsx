@@ -1,3 +1,4 @@
+// src/App.jsx
 import React, { useEffect, useMemo, useState } from "react";
 
 /* =========================================================
@@ -119,15 +120,15 @@ A história do fogão a lenha no Brasil é a própria história da formação do
 
 Os indígenas, com seu profundo conhecimento do fogo e das madeiras nativas, ensinaram quais eram as melhores lenhas para cada propósito. Os escravizados africanos, forçados a adaptar-se, foram os primeiros alquimistas desses fogões, transformando cortes de carne menos nobres e ingredientes negligenciados em pratos de uma riqueza cultural imensurável. A feijoada, hoje nosso prato nacional, nasceu nas senzalas, fervilhando pacientemente em grandes panelas de ferro sobre esses fogões.
 
-Assim, o fogão a lenha se ergueu como o coração pulsante da casa brasileira. Era ao seu redor que as famílias se reuniam, as histórias eram contadas, o pão era amassado e o café, coado. Seu calor irregular não é uma falha, mas uma virtude. É essa imprevisibilidade que exige do cozinheiro paciência, sensibilidade e um conhecimento quase espiritual do fogo. O sabor "fumê" (o smokey natural) que impregna os alimentos não é um condimento que se adiciona; é a própria essência da memória, é o carvão e a madeira se transformando no sublime.
+Assim, o fogão a lenha se ergueu como o coração pulsante da casa brasileira. Era ao seu redor que as famílias se reuniam, as histórias eram contadas, o pão era amassado e o café, coado. Seu calor irregular não é uma falha, mas uma virtude. É essa imprevisibilidade que exige do cozinheiro paciência, sensibilidade e um conhecimento quase espiritual do fogo. O sabor "fumê" (o *smokey* natural) que impregna os alimentos não é um condimento que se adiciona; é a própria essência da memória, é o carvão e a madeira se transformando no sublime.
 
 É essa alma ancestral, forjada a fogo e história, que nós do Panela de Barro transplantamos para o Qatar. Nosso fogão a lenha, visível em nossa cozinha aberta, não é uma peça de museu; é o artista principal da nossa cozinha. Cada prato que sai dele é uma carta de amor à tradição brasileira.
 
-Nossa Feijoada de Costela Bovina: Resgatamos a origem do prato com um toque de sofisticação do sertão. A costela bovina é assada lentamente pela brasa da lenha, até desfiar-se ao toque, conferindo ao caldo do feijão preto uma profundidade e uma riqueza incomparáveis. Cada colher é um mergulho na história do Brasil, um sabor robusto e verdadeiro.
+*   Nossa Feijoada de Costela Bovina: Resgatamos a origem do prato com um toque de sofisticação do sertão. A costela bovina é assada lentamente pela brasa da lenha, até desfiar-se ao toque, conferindo ao caldo do feijão preto uma profundidade e uma riqueza incomparáveis. Cada colher é um mergulho na história do Brasil, um sabor robusto e verdadeiro.
 
-Nossa Vaca Atolada: Este clássico caipira, que narra poeticamente a vaca "atolada" na mandioca, ganha vida em nosso fogão. A mandioca cozinha na brasa branda, absorvendo todo o sabor da carne bovina macia, criando uma harmonia perfeita entre o doce do legume e o savor da carne. É um prato humilde em sua origem, mas de uma complexidade de sabores que só o cozimento lento e fumegante pode proporcionar.
+*   Nossa Vaca Atolada: Este clássico caipira, que narra poeticamente a vaca "atolada" na mandioca, ganha vida em nosso fogão. A mandioca cozinha na brasa branda, absorvendo todo o sabor da carne bovina macia, criando uma harmonia perfeita entre o doce do legume e o savor da carne. É um prato humilde em sua origem, mas de uma complexidade de sabores que só o cozimento lento e fumegante pode proporcionar.
 
-Nossa Farofa de Banana da Terra: A farofa, a companheira indispensável, é elevada a outro patamar. A banana da terra é delicadamente fatiada e dourada, depois misturada à farinha de mandioca torrada no calor do nosso fogão. O resultado é um contraste celestial de texturas: a crocância da farofa e a maciez adocicada da banana, tudo com o aroma inconfundível de fogo de lenha.
+*   Nossa Farofa de Banana da Terra: A farofa, a companheira indispensável, é elevada a outro patamar. A banana da terra é delicadamente fatiada e dourada, depois misturada à farinha de mandioca torrada no calor do nosso fogão. O resultado é um contraste celestial de texturas: a crocância da farofa e a maciez adocicada da banana, tudo com o aroma inconfundível de fogo de lenha.
 
 No Panela de Barro, nossa cozinha aberta convida você a testemunhar a magia desse ritual secular. Deixe que o aroma inebriante de lenha queimada e comida caseira transporte os seus sentidos para o interior do Brasil. Aqui, você não fará apenas uma refeição; você vivenciará a autenticidade de uma tradição celebrada com os sabores mais puros da nossa terra.
 
@@ -141,19 +142,19 @@ The Indigenous people, with their deep understanding of fire and native woods, t
 
 Thus, the wood-fired stove stood as the beating heart of the Brazilian home. It was around it that families gathered, stories were told, bread was kneaded, and coffee was brewed. Its irregular heat is not a flaw but a virtue. It is this unpredictability that demands from the cook patience, sensitivity, and an almost spiritual knowledge of fire. The natural "fumê" (the smoky flavor) that imbues the food is not an added seasoning; it is the very essence of memory — it is the charcoal and wood transforming into the sublime.
 
-It is this ancestral soul, forged by fire and history, that we at Panela de Barro have transplanted to Qatar. Our wood-fired stove, visible in our open kitchen, is not a museum piece; it is the lead artist in our kitchen. Every dish that comes from it is a love letter to Brazilian tradition.
+It is this ancestral soul, forged by fire and history, that we at **Panela de Barro** have transplanted to Qatar. Our wood-fired stove, visible in our open kitchen, is not a museum piece; it is the lead artist in our kitchen. Every dish that comes from it is a love letter to Brazilian tradition.
 
-Our Beef Rib Feijoada: We rescue the origin of the dish with a touch of sertão sophistication. The beef ribs are slow-roasted by the wood embers until they fall apart at the touch, giving the black bean broth an unmatched depth and richness. Every spoonful is a dive into Brazil's history, a robust and true flavor.
+*   Our Beef Rib Feijoada: We rescue the origin of the dish with a touch of sertão sophistication. The beef ribs are slow-roasted by the wood embers until they fall apart at the touch, giving the black bean broth an unmatched depth and richness. Every spoonful is a dive into Brazil's history, a robust and true flavor.
 
-Our Vaca Atolada ("Cow Stuck in the Mud"): This rustic classic, which poetically tells of a cow "stuck" in manioc, comes to life on our stove. The manioc cooks over gentle embers, absorbing all the flavor of the tender beef, creating a perfect harmony between the vegetable's sweetness and the meat's savor. It is a humble dish in origin but with a complexity of flavors that only slow, smoky cooking can provide.
+*   Our Vaca Atolada ("Cow Stuck in the Mud"): This rustic classic, which poetically tells of a cow "stuck" in manioc, comes to life on our stove. The manioc cooks over gentle embers, absorbing all the flavor of the tender beef, creating a perfect harmony between the vegetable's sweetness and the meat's savor. It is a humble dish in origin but with a complexity of flavors that only slow, smoky cooking can provide.
 
-Our Farofa with Plantain: Farofa, the indispensable companion, is elevated to another level. The plantain is delicately sliced and golden-fried, then mixed with manioc flour toasted in the heat of our stove. The result is a heavenly contrast of textures: the crunchiness of the farofa and the sweet softness of the plantain, all with the unmistakable aroma of wood fire.
+*   Our Farofa with Plantain: Farofa, the indispensable companion, is elevated to another level. The plantain is delicately sliced and golden-fried, then mixed with manioc flour toasted in the heat of our stove. The result is a heavenly contrast of textures: the crunchiness of the farofa and the sweet softness of the plantain, all with the unmistakable aroma of wood fire.
 
 At Panela de Barro, our open kitchen invites you to witness the magic of this centuries-old ritual. Let the intoxicating aroma of burning wood and home-cooked food transport your senses to the heart of rural Brazil. Here, you will not just have a meal; you will experience the authenticity of a tradition celebrated with the purest flavors of our land.
 
 Come. The fire is lit.`,
 
-  ar: `روح البرازيل في ألسنة اللهب والطين
+  ar: ` روح البرازيل في ألسنة اللهب والطين
 
 تاريخ موقد الحطب في البرازيل هو نفسه تاريخ تكوين الشعب البرازيلي. قبل أن يصبح أيقونة للطهي العاطفي، كان أداة أساسية للبقاء ومحور الحياة المنزلية. تعود أصوله إلى المستعمرين البرتغاليين الذين جلبوا تقنيات البناء وعادة الطهي في مواقد ثابتة. لكنها في التربة البرازيلية حيث تحولت هذه الأداة، متضمنةً معرفة السكان الأصليين والأفارقة، لتصبح فريدة من نوعها.
 
@@ -161,11 +162,11 @@ Come. The fire is lit.`,
 
 هكذا، ارتفع موقد الحطب كقلب نابض للبيت البرازيلي. حوله تجمعت العائلات، وحُكيت القصص، وُعُجن الخبز، وصُفي القهوة. حرارته غير المنتظمة ليست عيباً بل فضيلة. هذا التقلب هو ما يتطلب من الطاهي الصبر والحساسية ومعرفة روحية تقريباً بالنار. نكهة "الدخان" الطبيعية التي تتشربها الطعام ليست بهاراً يضاف؛ بل هي جوهر الذاكرة本身، هي الفحم والخشب يتحولان إلى السامي.
 
-هذه الروح الأصيلة، المُشكلة بالنار والتاريخ، هي ما نقلناها في بانيلا دي بارّو إلى قطر. موقد الحطب لدينا، المرئي في مطبخنا المفتوح، ليس قطعة متحف؛ هو الفنان الرئيسي في مطبخنا. كل طبق يخرج منه هو رسالة حب إلى التقاليد البرازيلية.
+هذه الروح الأصيلة، المُشكلة بالنار والتاريخ، هي ما نقلناه في بانيلا دي بارّو إلى قطر. موقد الحطب لدينا، المرئي في مطبخنا المفتوح، ليس قطعة متحف؛ هو الفنان الرئيسي في مطبخنا. كل طبق يخرج منه هو رسالة حب إلى التقاليد البرازيلية.
 
- فيجوادا بأضلاع البقر: نستعيد أصل الطبق ولكن بلمسة من تطور الـ"سيرتاو" (المناطق الداخلية). أضلاع البقر تُشوى ببطء على جمر الحطب حتى تتفكك بمجرد اللمس، معطية مرق الفاصوليا السوداء عمقاً وثراءً لا مثيل لهما. كل ملعقة هي غوص في تاريخ البرازيل، نكهة قوية وصادقة.
-  فاكا أتولادا ("البقرة العالقة في الوحل"): هذا الطبق التقليدي الريفي، الذي يحكي بشاعرية عن بقرة "عالقة" في المنيهوت (الكسافا)، يولد من جديد على موقدنا. المنيهوت يطهى على الجمر اللطيف، ممتصاً كل نكهة اللحم البقري الطري، خالقاً تناغماً مثالياً بين حلاوة الخضروات وطعم اللحم. هو طبق متواضع في أصله، لكنه ذو تعقيد في النكهات لا يمكن أن يتحقق إلا بالطهي البطيء المدخن.
-   فاروفا بموز الجنة: الفاروفا، الرفيق indispensável، تُرفع إلى مستوى آخر. موز الجنة يُقطع شرائح رقيقة ويُقلى إلى الذهبية، ثم يُمزج مع دقيق المنيهوت المحمص على حرارة موقدنا. النتيجة تباين سماوي في القوام: قرمشة الفاروفا وليونة حلاوة الموز، كل ذلك مع رائحة نار الحطب التي لا تخطئها الأذن.
+*    فيجوادا بأضلاع البقر: نستعيد أصل الطبق ولكن بلمسة من تطور الـ"سيرتاو" (المناطق الداخلية). أضلاع البقر تُشوى ببطء على جمر الحطب حتى تتفكك بمجرد اللمس، معطية مرق الفاصوليا السوداء عمقاً وثراءً لا مثيل لهما. كل ملعقة هي غوص في تاريخ البرازيل، نكهة قوية وصادقة.
+*   فاكا أتولادا ("البقرة العالقة في الوحل"): هذا الطبق التقليدي الريفي، الذي يحكي بشاعرية عن بقرة "عالقة" في المنيهوت (الكسافا)، يولد من جديد على موقدنا. المنيهوت يطهى على الجمر اللطيف، ممتصاً كل نكهة اللحم البقري الطري، خالقاً تناغماً مثالياً بين حلاوة الخضروات وطعم اللحم. هو طبق متواضع في أصله، لكنه ذو تعقيد في النكهات لا يمكن أن يتحقق إلا بالطهي البطيء المدخن.
+*    فاروفا بموز الجنة:** الفاروفا، الرفيق indispensável، تُرفع إلى مستوى آخر. موز الجنة يُقطع شرائح رقيقة ويُقلى إلى الذهبية، ثم يُمزج مع دقيق المنيهوت المحمص على حرارة موقدنا. النتيجة تباين سماوي في القوام: قرمشة الفاروفا وليونة حلاوة الموز، كل ذلك مع رائحة نار الحطب التي لا تخطئها الأذن.
 
 في بانيلا دي بارّو، مطبخنا المفتوح يدعوكم لمشاهدة سحر هذا الطقوس القديمة. دع الرائحة المسكرة للخشب المحترق والطعام المنزلي تنقل حواسكم إلى عمق البرازيل الريفي. هنا، لن تتناولوا فقط وجبة؛ بل ستعيشون أصالة ت التقليد تُحتفل بها بأصفى نكهات أرضنا.
 
@@ -184,33 +185,33 @@ Com a colonização, a panela de barro foi adotada e adaptada. Nas senzalas, tor
 
 A panela de barro é, portanto, o útero onde se gestaram os sabores mais autênticos do Brasil. Ela representa a simplicidade, a tradição, a conexão com a terra e a generosidade de compartilhar o alimento.
 
-Foi inspirado por toda essa carga cultural e afetiva que escolhemos o nome Panela de Barro para o nosso restaurante no Qatar. Não é apenas uma referência ao utensílio, mas uma declaração de intenções.
+Foi inspirado por toda essa carga cultural e afetiva que escolhemos o nome **Panela de Barro** para o nosso restaurante no Qatar. Não é apenas uma referência ao utensílio, mas uma declaração de intenções.
 
 Queremos que cada cliente sinta que está sendo servido diretamente daquelas panelas quentes que ecoam séculos de história. Nossos pratos, preparados com a mesma dedicação e amor que exigiam as cozinheiras de outrora, buscam capturar essa alma. O barro é nossa fonte de inspiração: rústico, autêntico, acolhedor e cheio de histórias para contar.
 
-No Panela de Barro, servimos mais que uma refeição; servimos uma herança. Convidamos você a experimentar o sabor aconchegante e verdadeiro que só uma boa comida, feita com alma e história, pode oferecer.
+No **Panela de Barro**, servimos mais que uma refeição; servimos uma herança. Convidamos você a experimentar o sabor aconchegante e verdadeiro que só uma boa comida, feita com alma e história, pode oferecer.
 
-Do nosso barro para o seu paladar.`,
+*Do nosso barro para o seu paladar.`,
 
   en: `Panela de Barro: The Womb of Brazilian Cuisine
 
 More than a simple pot, the "panela de barro" (clay pot) is an archetypal symbol of Brazilian food culture. Its history is intertwined with the very formation of our people, being one of the oldest and most sacred culinary technologies in the Americas.
 
-Before the arrival of Europeans, Indigenous peoples had already mastered the art of pottery, hand-shaping and firing clay pots, bowls, and platters that were the center of their community life. It was in these clay vessels that fish was moqueado (smoked-cooked), beiju (cassava flatbread) was prepared, and caiçuma (a fermented drink) was made. Each pot carried the identity and knowledge of its people.
+Long before the arrival of Europeans, Indigenous peoples had already mastered the art of pottery, hand-shaping and firing clay pots, bowls, and platters that were the center of their community life. It was in these clay vessels that fish was moqueado (smoked-cooked), beiju (cassava flatbread) was prepared, and caiçuma (a fermented drink) was made. Each pot carried the identity and knowledge of its people.
 
 With colonization, the clay pot was adopted and adapted. In the senzalas (slave quarters), it became an instrument of resistance and creativity. It was in its warm and generous belly that some of the pillars of our gastronomy were born: stewed beans, angu (a polenta-like dish), and hearty stews. It is credited with the unique quality of cooking food slowly and evenly, preserving its juices and nutrients like no metal pot can. The clay breathes, interacts with the fire and the food, releasing minerals and imparting an earthy, unique flavor, affectionately known as "sabor de roça" (countryside flavor).
 
 The clay pot is, therefore, the womb where the most authentic flavors of Brazil were gestated. It represents simplicity, tradition, connection to the land, and the generosity of sharing food.
 
-Inspired by all this cultural and emotional significance, we chose the name Panela de Barro for our restaurant in Qatar. It is not just a reference to the utensil, but a statement of intent.
+Inspired by all this cultural and emotional significance, we chose the name **Panela de Barro** for our restaurant in Qatar. It is not just a reference to the utensil, but a statement of intent.
 
 We want every customer to feel like they are being served directly from those warm pots that echo centuries of history. Our dishes, prepared with the same dedication and love required of cooks of yesteryear, seek to capture this soul. The clay is our source of inspiration: rustic, authentic, welcoming, and full of stories to tell.
 
-At Panela de Barro, we serve more than a meal; we serve a heritage. We invite you to experience the comforting and genuine flavor that only good food, made with soul and history, can provide.
+At **Panela de Barro**, we serve more than a meal; we serve a heritage. We invite you to experience the comforting and genuine flavor that only good food, made with soul and history, can provide.
 
 From our clay to your palate.`,
 
-  ar: `بانيلا دي بارّو: رحم المطبخ البرازيلي
+  ar: ` رحم المطبخ البرازيلي
 
 أكثر من مجرد وعاء، "بانيلا دي بارّو" (القدر الفخاري) هو رمز أساسي في ثقافة الطهي البرازيلية. تاريخها متشابك مع نشأة شعبنا نفسه، حيث تُعد واحدة من أقدم تقنيات الطهي قدسية في الأمريكتين.
 
@@ -224,7 +225,7 @@ From our clay to your palate.`,
 
 نريد لكلّ زبون أن يشعر كأن الطعام يُقدَّم له مباشرة من تلك القدور الدافئة التي تصدح بقرون من التاريخ. أطباقنا، المصنوعة بنفس الحبّ والإخلاص، تحاول التقاط هذه الروح. الطين مصدر إلهامنا: ريفيّ، أصيل، مرحّب، ومفعم بالقصص.
 
-في **بانيلا دي بارّو**، نحن لا نقدّم وجبة فحسب؛ بل إرثًا حيًّا. ندعوكم لتذوّق النكهة الدافئة الصادقة التي لا يمنحها إلا طعام مصنوع بروح وتاريخ.
+في بانيلا دي بارّو، نحن لا نقدّم وجبة فحسب؛ بل إرثًا حيًّا. ندعوكم لتذوّق النكهة الدافئة الصادقة التي لا يمنحها إلا طعام مصنوع بروح وتاريخ.
 
 من طيننا إلى paladarكم.`,
 };
@@ -367,8 +368,8 @@ const Article = ({ lang, title, blocks }) => {
       <SectionTitle>{title}</SectionTitle>
       <article className="article">
         {blocks.map((b, idx) => {
-          if (b.type === "p") return <p key={idx} className="p">{b.content}</p>;
           if (b.type === "h") return <h3 key={idx} className="subtitle">{b.content}</h3>;
+          if (b.type === "p") return <p key={idx} className="p">{b.content}</p>;
           if (b.type === "img")
             return (
               <figure key={idx} className="figure">
@@ -468,3 +469,203 @@ const Support = ({ lang }) => {
    App
    ========================================================= */
 const App = () => {
+  const [route] = useHashRoute();
+  const [lang, setLang] = useState(() => {
+    const saved = typeof localStorage !== "undefined" && localStorage.getItem("lang");
+    return LANGS.includes(saved) ? saved : DEFAULT_LANG;
+  });
+  const [splash, setSplash] = useState(true);
+  const [openDrawer, setOpenDrawer] = useState(false);
+
+  useEffect(() => { const t = setTimeout(() => setSplash(false), 900); return () => clearTimeout(t); }, []);
+  useEffect(() => { localStorage.setItem("lang", lang); }, [lang]);
+  useEffect(() => { setOpenDrawer(false); }, [route]);
+
+  // mede a altura real do header e aplica em --navh
+  useEffect(() => {
+    const setNavHeight = () => {
+      const el = document.querySelector('.nav');
+      if (!el) return;
+      const h = Math.ceil(el.getBoundingClientRect().height);
+      document.documentElement.style.setProperty('--navh', `${h}px`);
+    };
+    setNavHeight();
+    window.addEventListener('resize', setNavHeight);
+    return () => window.removeEventListener('resize', setNavHeight);
+  }, [lang]);
+
+  return (
+    <div className="app" dir={lang === "ar" ? "rtl" : "ltr"}>
+      <Styles />
+      {splash && <div className="splash"><img src="/logo.png" alt="Panela de Barro" /></div>}
+
+      <header className="nav">
+        <button className="hamb" onClick={() => setOpenDrawer(true)} aria-label="menu">☰</button>
+        <a className="brand" href="#/home">
+          <img src="/logo.png" alt="logo" />
+          <span>{t(lang,"brand")}</span>
+        </a>
+        <nav className="links">
+          <a href="#/home">{t(lang,"nav.home")}</a>
+          <a href="#/clay">{t(lang,"nav.clay")}</a>
+          <a href="#/wood">{t(lang,"nav.woodfire")}</a>
+          <a href="#/gallery">{t(lang,"nav.gallery")}</a>
+          <a href="#/location">{t(lang,"nav.location")}</a>
+          <a href="#/support">{t(lang,"nav.support")}</a>
+        </nav>
+        <div className="langs">
+          {LANGS.map((l) => (
+            <button key={l} onClick={() => setLang(l)} className={`chip ${l===lang?"active":""}`}>{l.toUpperCase()}</button>
+          ))}
+        </div>
+      </header>
+
+      <Drawer open={openDrawer} onClose={() => setOpenDrawer(false)} lang={lang} setLang={setLang} />
+
+      <main className="container">
+        {route === "home" && <Home lang={lang} />}
+        {route === "clay" && <ClayFull lang={lang} />}
+        {route === "wood" && <WoodFull lang={lang} />}
+        {route === "gallery" && <Gallery lang={lang} />}
+        {route === "location" && <Location lang={lang} />}
+        {route === "support" && <Support lang={lang} />}
+      </main>
+
+      <footer className="foot">© 2025 Panela de Barro</footer>
+    </div>
+  );
+};
+
+/* =========================================================
+   CSS (desktop e mobile caprichados)
+   ========================================================= */
+const Styles = () => (
+  <style>{`
+  :root{
+    --bg:#f0e2cf; --paper:#f6eadb; --ink:#2d241c; --muted:#7b6a5c;
+    --pill:#b8644e; --pill-ghost:#e7d6c5; --shadow: 0 8px 24px rgba(0,0,0,.08);
+    --radius:18px; --navh:64px; --safeTop: env(safe-area-inset-top, 0px);
+  }
+  *{box-sizing:border-box}
+  html,body,#root{height:100%}
+  body{margin:0;background:var(--bg);color:var(--ink);font-family:system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,"Noto Sans",sans-serif}
+  a{color:var(--pill)}
+  .app{min-height:100%}
+
+  /* Nav */
+  .nav{
+    position:sticky; top:0; z-index:30;
+    background:rgba(246,234,219,.88);
+    backdrop-filter:saturate(140%) blur(8px);
+    display:flex; gap:16px; align-items:center; justify-content:space-between;
+    padding: calc(8px + var(--safeTop)) 14px 8px 14px;
+    border-bottom:1px solid #e5d5c2; min-height:64px;
+  }
+  .hamb{display:none;border:0;background:var(--pill-ghost);width:40px;height:36px;border-radius:10px;font-size:20px;cursor:pointer}
+  .brand{display:flex;align-items:center;gap:10px;text-decoration:none;color:var(--ink);font-weight:800}
+  .brand img{width:28px;height:28px}
+  .brand span{font-size:20px;letter-spacing:.2px;white-space:nowrap}
+  .links a{margin:0 10px;text-decoration:none;color:var(--ink)}
+  .langs .chip{margin-left:6px}
+
+  /* Desktop container mais estreito (melhor leitura) */
+  .container{max-width:980px;margin:0 auto;padding:18px}
+
+  /* Títulos */
+  .title{font-size:32px;margin:26px 6px}
+  .subtitle{margin:10px 6px 12px 6px}
+
+  /* Cards e imagens */
+  .card{background:var(--paper);border-radius:var(--radius);box-shadow:var(--shadow);padding:10px}
+  .imgwrap{width:100%;overflow:hidden}
+  .imgwrap.round{border-radius:var(--radius)}
+  .imgwrap img{display:block;width:100%;height:100%;object-fit:cover}
+
+  /* Texto */
+  .caption{padding:8px 10px 10px 10px;color:var(--ink);font-weight:600}
+  .p{margin:8px 6px 12px 6px;line-height:1.7;color:var(--ink);white-space:pre-wrap}
+  .list{margin:0 6px 18px 28px}
+  .link{color:var(--pill);text-decoration:underline}
+
+  /* Grid menor no desktop para fotos ficarem elegantes */
+  .gallery{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:14px}
+  .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:16px}
+  @media (min-width:1024px){
+    .grid{grid-template-columns:repeat(auto-fill,minmax(240px,1fr));}
+  }
+
+  /* HERO com overlay forte p/ legibilidade */
+  .hero{position:relative}
+  .hero .imgwrap{border-radius:var(--radius)}
+  .herooverlay{position:absolute;inset:0;background:linear-gradient(180deg,rgba(0,0,0,.55),rgba(0,0,0,.25),rgba(0,0,0,.55));border-radius:var(--radius)}
+  .heroinfo{position:absolute;inset:auto 18px 18px 18px;color:#fff}
+  .heroinfo h1{font-size:clamp(22px,3.6vw,40px);margin:0 0 8px 0}
+  .heroinfo .sub{margin:0 0 6px 0;max-width:820px}
+  .heroinfo .soon{opacity:.95;margin:0 0 10px 0}
+  .btn{display:inline-block;background:var(--pill);color:#fff;text-decoration:none;padding:12px 18px;border-radius:14px;font-weight:700}
+
+  /* HERO mobile */
+  @media (max-width: 520px) {
+    .hero .imgwrap { height: 60vh !important; aspect-ratio: auto !important; }
+    .herooverlay { background: linear-gradient(180deg, rgba(0,0,0,0.1) 8%, rgba(0,0,0,0.45) 55%, rgba(0,0,0,0.7) 100%); }
+    .heroinfo { left: 16px; right: 16px; bottom: 18px; top: auto; max-width: 100%; }
+    .heroinfo h1 { font-size: clamp(20px, 6vw, 26px); line-height: 1.2; }
+    .heroinfo .sub, .heroinfo .soon { font-size: clamp(12px, 3.5vw, 14px); line-height: 1.35; }
+  }
+
+  /* Carousel */
+  .carousel{position:relative;margin:12px 6px}
+  .cinner{overflow:hidden}
+  .cbtn{position:absolute;top:50%;transform:translateY(-50%);border:0;background:rgba(0,0,0,.35);color:#fff;width:40px;height:40px;border-radius:50%;cursor:pointer}
+  .cbtn.left{left:8px}.cbtn.right{right:8px}
+
+  /* Map */
+  .mapwrap{position:relative;width:100%;aspect-ratio:16/9;border-radius:14px;overflow:hidden}
+  .mapwrap iframe{position:absolute;inset:0;border:0;width:100%;height:100%}
+
+  /* Article (páginas longas) */
+  .article{background:var(--paper);border-radius:var(--radius);box-shadow:var(--shadow);padding:14px}
+  .figure{margin:14px 6px}
+  .figure figcaption{font-size:13px;color:var(--muted);margin-top:6px}
+  .sep{border:0;border-top:1px solid #e6d7c8;margin:16px 0}
+
+  .back{display:inline-block;margin:14px 6px 0;color:var(--pill);text-decoration:none;font-weight:700}
+  .foot{padding:30px 18px;color:#7a6b5c;text-align:center}
+
+  /* Splash (logo pequeno) */
+  .splash{position:fixed;inset:0;background:var(--bg);display:flex;align-items:center;justify-content:center;z-index:100}
+  .splash img{width:56px;height:56px;filter:drop-shadow(0 6px 18px rgba(0,0,0,.18))}
+
+  /* Drawer */
+  .drawerWrap{position:fixed;inset:0;background:rgba(0,0,0,.25);opacity:0;pointer-events:none;transition:.2s;z-index:60}
+  .drawerWrap.open{opacity:1;pointer-events:auto}
+  .drawer{position:absolute;top:0;bottom:0;left:0;width:84%;max-width:360px;background:var(--paper);box-shadow:var(--shadow);transform:translateX(-100%);transition:.22s;border-top-right-radius:16px;border-bottom-right-radius:16px;display:flex;flex-direction:column}
+  .drawerWrap.open .drawer{transform:translateX(0)}
+  .drawerhead{display:flex;align-items:center;justify-content:space-between;padding:14px;border-bottom:1px solid #e6d7c8}
+  .dbrand{display:flex;align-items:center;gap:10px;font-weight:800}
+  .dbrand img{width:28px;height:28px}
+  .dclose{border:0;background:#eee;border-radius:10px;width:36px;height:32px;cursor:pointer}
+  .dlinks{display:flex;flex-direction:column;padding:10px}
+  .dlinks button{all:unset;padding:12px 10px;border-radius:10px;cursor:pointer}
+  .dlinks button:hover{background:#efdfcf}
+  .dsection{padding:10px}
+  .dtitle{font-weight:800;margin:8px 0}
+  .dlangs{display:flex;gap:8px;flex-wrap:wrap}
+
+  /* Mobile header centralizado */
+  @media (max-width:920px){
+    .links{display:none !important;}
+    .hamb{display:inline-block}
+    .brand{flex:1;justify-content:center}
+    .brand img{width:34px;height:34px}
+    .brand span{font-size:clamp(18px,5.2vw,22px)}
+    .langs{display:flex;flex-direction:column;gap:6px;align-items:flex-end;margin-left:6px}
+    .langs .chip{padding:6px 10px;font-size:12px;margin:0}
+  }
+  `}</style>
+);
+
+/* =========================================================
+   export
+   ========================================================= */
+export default App;
