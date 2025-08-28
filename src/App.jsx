@@ -87,7 +87,7 @@ const dict = {
           name: "Dona Cleuza — Mãe & Guardiã das Receitas (mineira)",
           text:
             "Inspira nossos sabores: panelas no fogo, histórias e receitas de gerações.",
-          img: "/heritage/cleuza.jpg",
+          img: "/heritage/cleusa.jpg",
         },
         {
           name: "Head Chef — Irmão",
