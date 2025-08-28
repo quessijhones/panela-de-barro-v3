@@ -60,7 +60,6 @@ const dict = {
   // en, ar ... igual como antes, mas textos históricos completos
 };
 
-// Util de texto
 const t = (lang, key, fallback = "") => {
   const value = key.split(".").reduce((o, k) => (o && o[k] !== undefined ? o[k] : undefined), dict[lang]);
   return typeof value === "string" ? value : fallback;
@@ -95,6 +94,13 @@ const SmokeEffect = () => (
 const AnimatedCard = ({ children, style, delay = 0 }) => (
   <div className="animated-card" style={{ ...style, animationDelay: `${delay}ms` }}>
     {children}
+  </div>
+);
+
+const SectionTitle = ({ children }) => <h2 className="title">{children}</h2>;
+const Img = ({ src, alt, ratio = "16/9", round = true }) => (
+  <div className={`imgwrap ${round ? "round" : ""}`} style={{ aspectRatio: ratio }}>
+    <img src={src} alt={alt} loading="lazy" />
   </div>
 );
 
@@ -174,16 +180,24 @@ const WoodFire = ({ lang }) => {
 };
 
 /* =============================
-   Outros componentes/páginas
+   Componente principal App
    ============================= */
-/* ... (Menu, Gallery, etc = igual ao seu original) ... */
+const App = () => {
+  // Adicione toda sua navegação, rotas, header, etc aqui!
+  return (
+    <div>
+      {/* Exemplo mínimo para teste: */}
+      <About lang="pt" />
+      {/* Para produção, adicione navegação/rotas como antes */}
+    </div>
+  );
+};
 
 /* =============================
    CSS embutido + efeitos
    ============================= */
 const Styles = () => (
   <style>{`
-  /* ... seu CSS anterior ... */
   .smoke-bg {
     position: fixed;
     top: 0; left: 0; width: 100vw; height: 100vh;
@@ -211,7 +225,6 @@ const Styles = () => (
     60% { opacity: .85;}
     100%{ opacity: 1; transform: translateY(0) scale(1);}
   }
-  /* ... restante igual ... */
   `}</style>
 );
 
