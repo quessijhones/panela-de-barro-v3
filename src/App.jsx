@@ -10,42 +10,210 @@ const DEFAULT_LANG = "pt";
 const dict = {
   pt: {
     brand: "Panela de Barro",
-    nav: { about: "Sobre", menu: "Menu", gallery: "Galeria", woodfire: "Fogão a Lenha", location: "Localização", support: "Suporte" },
+    nav: {
+      about: "Sobre",
+      menu: "Menu",
+      gallery: "Galeria",
+      woodfire: "Fogão a Lenha",
+      location: "Localização",
+      support: "Suporte",
+    },
     hero: {
       title: "Sabores brasileiros, calor de família",
-      subtitle: "Restaurante familiar no Qatar. 20+ anos de hospitalidade, fogão a lenha e raízes brasileiras.",
+      subtitle:
+        "Restaurante familiar no Qatar. 20+ anos de hospitalidade, fogão a lenha e raízes brasileiras.",
       cta: "Ver Menu",
       soon: "Inauguração em Novembro — reservas online em breve.",
     },
     sections: { menuHighlights: "Destaques do Menu", immersive: "Imersões do Brasil", back: "Voltar ao início" },
     menu: {
       title: "Menu",
-      tabs: { all: "Todos", mains: "Pratos", appetizers: "Entradas", seasonal: "Sazonais", beverages: "Bebidas", desserts: "Sobremesas" },
+      tabs: {
+        all: "Todos",
+        mains: "Pratos",
+        appetizers: "Entradas",
+        seasonal: "Sazonais",
+        beverages: "Bebidas",
+        desserts: "Sobremesas",
+      },
       modal: { close: "Fechar" },
-      tags: { Halal: "Halal", Beef: "Carne", Dairy: "Laticínio", Gluten: "Glúten", Sea: "Peixe", Dessert: "Sobremesa", Beverage: "Bebida", Seasonal: "Sazonal" },
+      tags: {
+        Halal: "Halal",
+        Beef: "Carne",
+        Dairy: "Laticínio",
+        Gluten: "Glúten",
+        Sea: "Peixe",
+        Dessert: "Sobremesa",
+        Beverage: "Bebida",
+        Seasonal: "Sazonal",
+      },
     },
+
+    /* ===== SOBRE: texto completo + imagens pequenas intercaladas ===== */
     about: {
       title: "Sobre",
-      p1: "Panela de Barro é um tributo às raízes brasileiras: cozinha de fazenda, ingredientes frescos e fogo de lenha. Nossa família acumula décadas de cozinha — e traz essa memória para Doha.",
-      p2: "A panela de barro atravessa a nossa história: dos povos indígenas à criatividade das cozinhas afro-brasileiras. Ela cozinha devagar, permite que os sabores conversem e imprime um toque terroso inconfundível.",
-      p3: "Esse é o sabor que buscamos em cada prato. Tradição, calma e afeto — servidos à mesa.",
+      rich: {
+        blocks: [
+          { type: "p", text: "Panela de Barro: O Útero da Culinária Brasileira" },
+          {
+            type: "p",
+            text: "Mais do que um simples recipiente, a panela de barro é um símbolo arquetípico da alimentação brasileira. Sua história se confunde com a própria formação do nosso povo, sendo uma das mais antigas e sagradas tecnologias culinárias das Américas.",
+          },
+          {
+            type: "p",
+            text: "Antes da chegada dos europeus, os povos indígenas já dominavam a arte da cerâmica, moldando com as mãos e cozendo no fogo panelas, potes e alguidares que eram o centro de sua vida comunitária. Eram nestas vasilhas de barro que se cozinhava o peixe moqueado, se preparava o beiju e se fermentava a caiçuma. Cada panela carregava a identidade e o saber de seu povo.",
+          },
+          {
+            type: "img",
+            src: "/heritage/panela-mao.jpg",
+            alt: "Panela de barro artesanal nas mãos",
+            caption: "Feita à mão, de geração em geração",
+            align: "right",
+          },
+          {
+            type: "p",
+            text: "Com a colonização, a panela de barro foi adotada e adaptada. Nas senzalas, tornou-se instrumento de resistência e criatividade. Foi no seu bojo quente e generoso que nasceram alguns dos pilares de nossa gastronomia: o feijão guisado, o angu, os ensopados. A ela se atribui a qualidade única de cozinhar os alimentos de forma lenta e uniforme, conservando seus sucos e nutrientes como nenhuma outra panela de metal é capaz. O barro respira, interage com o fogo e com a comida, cedendo minerais e conferindo um sabor terroso e singular, conhecido carinhosamente como “sabor de roça”.",
+          },
+          {
+            type: "img",
+            src: "/heritage/panela-1.jpg",
+            alt: "Panelas de barro",
+            caption: "Panelas que respiram e guardam memória",
+            align: "left",
+          },
+          {
+            type: "p",
+            text: "A panela de barro é, portanto, o útero onde se gestaram os sabores mais autênticos do Brasil. Ela representa a simplicidade, a tradição, a conexão com a terra e a generosidade de compartilhar o alimento.",
+          },
+          {
+            type: "p",
+            text: "Foi inspirado por toda essa carga cultural e afetiva que escolhemos o nome Panela de Barro para o nosso restaurante no Qatar. Não é apenas uma referência ao utensílio, mas uma declaração de intenções.",
+          },
+          {
+            type: "p",
+            text: "Queremos que cada cliente sinta que está sendo servido diretamente daquelas panelas quentes que ecoam séculos de história. Nossos pratos, preparados com a mesma dedicação e amor que exigiam as cozinheiras de outrora, buscam capturar essa alma. O barro é nossa fonte de inspiração: rústico, autêntico, acolhedor e cheio de histórias para contar.",
+          },
+          {
+            type: "p",
+            text: "No Panela de Barro, servimos mais que uma refeição; servimos uma herança. Convidamos você a experimentar o sabor aconchegante e verdadeiro que só uma boa comida, feita com alma e história, pode oferecer.",
+          },
+        ],
+      },
       family: "Nossa família",
       people: {
-        quessi: { name: "Quessi Jones — Proprietário", text: "Quessi conduz a casa e preserva o propósito: cozinhar com alma, acolher com carinho.", img: "/heritage/chef-quessi.jpg" },
-        alex: { name: "Alex — Chef de Cozinha", text: "Alex lidera a cozinha com técnica e memória afetiva — ponto perfeito e fogo certo.", img: "/heritage/chef-alex.jpg" },
-        cleusa: { name: "Cleusa Gonçalves — Mãe & Guardiã das Receitas", text: "Dona Cleusa inspira nossos sabores: panelas no fogo, histórias e receitas passadas de geração em geração.", img: "/heritage/cleusa.jpg" },
+        quessi: {
+          name: "Quessi — Proprietário",
+          text:
+            "Anfitrião atento e apaixonado pelas raízes brasileiras. Cuida do acolhimento e da experiência do convidado, mantendo vivo o propósito da casa: cozinhar com alma, honrar a memória e servir com carinho.",
+          img: "/heritage/chef-quessi.jpg",
+        },
+        alex: {
+          name: "Alex — Head Chef",
+          text:
+            "Comando de fogo preciso e sensibilidade no tempero. Une técnica profissional e memória afetiva para entregar ponto perfeito, aromas de brasa e respeito aos ingredientes.",
+          img: "/heritage/chef-alex.jpg",
+        },
+        cleusa: {
+          name: "Cleusa Gonçalves — Mãe & Guardiã das Receitas",
+          text:
+            "A raiz do nosso sabor: cadernos de receita, histórias de roça e o cuidado paciente de quem sabe que comida boa nasce do tempo certo.",
+          img: "/heritage/cleusa.jpg",
+        },
       },
       heritageImgs: [
         { src: "/heritage/panela-1.jpg", caption: "Panelas artesanais de barro" },
         { src: "/heritage/panela-artesanal.jpg", caption: "Feita à mão, como manda a tradição" },
       ],
     },
+
+    /* ===== FOGÃO A LENHA: texto completo + fotos estratégicas ===== */
     wood: {
       title: "Fogão a Lenha",
-      p1: "Do interior do Brasil ao mundo: madeiras corretas, brasa constante e paciência — o segredo do caldo encorpado.",
+      rich: {
+        blocks: [
+          { type: "p", text: "O Fogão a Lenha: A Alma do Brasil em Chamas e Argila" },
+          {
+            type: "p",
+            text: "A história do fogão a lenha no Brasil é a própria história da formação do povo brasileiro. Muito antes de ser um ícone da gastronomia afetiva, ele foi uma ferramenta fundamental de sobrevivência e o epicentro da vida doméstica. Suas origens remontam aos colonizadores portugueses, que trouxeram a técnica da alvenaria e o hábito de cozinhar em lareiras fixas. No entanto, foi no solo brasileiro que esse instrumento se transformou, incorporando saberes indígenas e africanos, tornando-se único.",
+          },
+          {
+            type: "p",
+            text: "Os indígenas, com seu profundo conhecimento do fogo e das madeiras nativas, ensinaram quais eram as melhores lenhas para cada propósito. Os escravizados africanos, forçados a adaptar-se, foram os primeiros alquimistas desses fogões, transformando cortes de carne menos nobres e ingredientes negligenciados em pratos de uma riqueza cultural imensurável. A feijoada, hoje nosso prato nacional, nasceu nas senzalas, fervilhando pacientemente em grandes panelas de ferro sobre esses fogões.",
+          },
+          {
+            type: "img",
+            src: "/images/feijoada-costela.jpg",
+            alt: "Feijoada de Costela",
+            caption: "Feijoada de Costela Bovina",
+            align: "right",
+          },
+          {
+            type: "p",
+            text: "Assim, o fogão a lenha se ergueu como o coração pulsante da casa brasileira. Era ao seu redor que as famílias se reuniam, as histórias eram contadas, o pão era amassado e o café, coado. Seu calor irregular não é uma falha, mas uma virtude. É essa imprevisibilidade que exige do cozinheiro paciência, sensibilidade e um conhecimento quase espiritual do fogo. O sabor “fumê”, o smokey natural, que impregna os alimentos não é um condimento que se adiciona; é a própria essência da memória, é o carvão e a madeira se transformando no sublime.",
+          },
+          {
+            type: "img",
+            src: "/heritage/fogao-1.jpg",
+            alt: "Fogão a lenha",
+            caption: "Brasa mansa, calor constante",
+            align: "left",
+          },
+          {
+            type: "p",
+            text: "É essa alma ancestral, forjada a fogo e história, que nós do Panela de Barro transplantamos para o Qatar. Nosso fogão a lenha, visível em nossa cozinha aberta, não é uma peça de museu; é o artista principal da nossa cozinha. Cada prato que sai dele é uma carta de amor à tradição brasileira.",
+          },
+          {
+            type: "p",
+            text: "Nossa Feijoada de Costela Bovina: Resgatamos a origem do prato com um toque de sofisticação do sertão. A costela bovina é assada lentamente pela brasa da lenha, até desfiar-se ao toque, conferindo ao caldo do feijão preto uma profundidade e uma riqueza incomparáveis. Cada colher é um mergulho na história do Brasil, um sabor robusto e verdadeiro.",
+          },
+          {
+            type: "img",
+            src: "/images/feijoada-costela.jpg",
+            alt: "Feijoada servida na casa",
+            caption: "Caldo profundo e sabor robusto",
+            align: "center",
+          },
+          {
+            type: "p",
+            text: "Nossa Vaca Atolada: Este clássico caipira, que narra poeticamente a vaca atolada na mandioca, ganha vida em nosso fogão. A mandioca cozinha na brasa branda, absorvendo todo o sabor da carne bovina macia, criando uma harmonia perfeita entre o doce do legume e o sabor da carne.",
+          },
+          {
+            type: "img",
+            src: "/images/vaca-atolada.jpg",
+            alt: "Vaca Atolada",
+            caption: "Doçura da mandioca, força da carne",
+            align: "right",
+          },
+          {
+            type: "p",
+            text: "Nossa Farofa de Banana da Terra: A farofa, a companheira indispensável, é elevada a outro patamar. A banana da terra é delicadamente fatiada e dourada, depois misturada à farinha de mandioca torrada no calor do nosso fogão. Contraste de texturas e aroma inconfundível de lenha.",
+          },
+          {
+            type: "img",
+            src: "/images/farofa-de-castanha.jpg",
+            alt: "Farofa da casa",
+            caption: "Imagem ilustrativa da farofa servida",
+            align: "left",
+          },
+          {
+            type: "p",
+            text: "No Panela de Barro, nossa cozinha aberta convida você a testemunhar a magia desse ritual secular. Deixe que o aroma inebriante de lenha queimada e comida caseira transporte os seus sentidos para o interior do Brasil. Aqui, você não fará apenas uma refeição; você vivenciará a autenticidade de uma tradição celebrada com os sabores mais puros da nossa terra.",
+          },
+          {
+            type: "img",
+            src: "/heritage/fogao-2.jpg",
+            alt: "Detalhe do fogão a lenha",
+            caption: "Chama viva, tradição viva",
+            align: "center",
+          },
+        ],
+      },
+      // fallback simples caso não use os blocos
+      p1: "Do interior do Brasil ao mundo: madeiras corretas, brasa constante e paciência.",
       p2: "Nossa cozinha honra esse saber, unindo tradição e cuidado com o ingrediente.",
       imgs: ["/heritage/fogao-1.jpg", "/heritage/fogao-2.jpg", "/heritage/fogao-3.jpg"],
     },
+
     gallery: { title: "Galeria" },
     support: {
       title: "Suporte",
@@ -58,6 +226,8 @@ const dict = {
     immersiveLabels: { amazonia: "Amazônia", cerrado: "Cerrado", lencois: "Lençóis", litoral: "Litoral", serra: "Serra" },
     drawer: { menu: "Menu", social: "Redes sociais", languages: "Idiomas", close: "Fechar" },
   },
+
+  /* EN/AR mantidos, apenas equipe ajustada para “Quessi” */
   en: {
     brand: "Panela de Barro",
     nav: { about: "About", menu: "Menu", gallery: "Gallery", woodfire: "Wood-Fired Stove", location: "Location", support: "Support" },
@@ -81,9 +251,9 @@ const dict = {
       p3: "That’s the taste we seek in every dish — tradition, calm and affection at the table.",
       family: "Our family",
       people: {
-        quessi: { name: "Quessi Jones — Owner", text: "Quessi leads the house with soul and warmth.", img: "/heritage/chef-quessi.jpg" },
-        alex: { name: "Alex — Head Chef", text: "Technique and memory — perfect doneness and steady fire.", img: "/heritage/chef-alex.jpg" },
-        cleusa: { name: "Cleusa Gonçalves — Mother & Recipe Guardian", text: "Stories and recipes passed down generations.", img: "/heritage/cleusa.jpg" },
+        quessi: { name: "Quessi — Owner", text: "Warm host who looks after the guest experience and keeps our purpose alive.", img: "/heritage/chef-quessi.jpg" },
+        alex: { name: "Alex — Head Chef", text: "Steady fire and precise timing. Technique with memory.", img: "/heritage/chef-alex.jpg" },
+        cleusa: { name: "Cleusa Gonçalves — Mother & Recipe Guardian", text: "The living memory behind our menu.", img: "/heritage/cleusa.jpg" },
       },
       heritageImgs: [
         { src: "/heritage/panela-1.jpg", caption: "Handmade clay pots" },
@@ -108,6 +278,7 @@ const dict = {
     immersiveLabels: { amazonia: "Amazon", cerrado: "Cerrado", lencois: "Lençóis", litoral: "Coast", serra: "Highlands" },
     drawer: { menu: "Menu", social: "Social", languages: "Languages", close: "Close" },
   },
+
   ar: {
     brand: "بانِيلا دي بارّو",
     nav: { about: "نبذة", menu: "القائمة", gallery: "المعرض", woodfire: "موقد الحطب", location: "الموقع", support: "الدعم" },
@@ -126,23 +297,34 @@ const dict = {
     },
     about: {
       title: "نبذة",
-      p1: "«بانِيلا دي بارّو» تحية للجذور البرازيلية: طبخ ريفي ومكوّنات طازجة ونار الحطب. تنقل عائلتنا عقودًا من الذكريات إلى الدوحة.",
+      p1: "«بانِيلا دي بارّو» تحية للجذور البرازيلية: طبخ ريفي ومكوّنات طازجة ونار الحطب.",
       p2: "قدور الطين جزء من تاريخنا — الطهي البطيء يترك لمسة ترابية لا تُنسى.",
       p3: "هذا ما نبحث عنه في كل طبق: تقليد وهدوء ومودّة على المائدة.",
       family: "عائلتنا",
       people: {
-        quessi: { name: "كِوِسّي جونز — المالك", text: "يقود المكان بروحٍ دافئة.", img: "/heritage/chef-quessi.jpg" },
-        alex: { name: "أليكس — الشيف", text: "حرفية ونار ثابتة.", img: "/heritage/chef-alex.jpg" },
-        cleusa: { name: "كلوزا غونشالفِس — الأم وحافظة الوصفات", text: "حكايات ووصفات تتوارثها الأجيال.", img: "/heritage/cleusa.jpg" },
+        quessi: { name: "ڤِسّي — المالك", text: "مضيف دافئ يهتم بتجربة الضيوف ويحفظ هدفنا حيًا.", img: "/heritage/chef-quessi.jpg" },
+        alex: { name: "أليكس — الشيف", text: "نار ثابتة وتوقيت دقيق. حِرفة بذاكرة.", img: "/heritage/chef-alex.jpg" },
+        cleusa: { name: "كلوزا غونشالفِس — الأم وحافظة الوصفات", text: "الذاكرة الحيّة لقائمتنا.", img: "/heritage/cleusa.jpg" },
       },
       heritageImgs: [
         { src: "/heritage/panela-1.jpg", caption: "قدور طين يدوية الصنع" },
         { src: "/heritage/panela-artesanal.jpg", caption: "صناعة تقليدية" },
       ],
     },
-    wood: { title: "موقد الحطب", p1: "من الأرياف البرازيلية: أخشاب مناسبة وجمر ثابت وصبر.", p2: "نُكرّم هذا الإرث بعنايةٍ بالمكوّن.", imgs: ["/heritage/fogao-1.jpg", "/heritage/fogao-2.jpg", "/heritage/fogao-3.jpg"] },
+    wood: {
+      title: "موقد الحطب",
+      p1: "من الأرياف البرازيلية: أخشاب مناسبة وجمر ثابت وصبر.",
+      p2: "نُكرّم هذا الإرث بعنايةٍ بالمكوّن.",
+      imgs: ["/heritage/fogao-1.jpg", "/heritage/fogao-2.jpg", "/heritage/fogao-3.jpg"],
+    },
     gallery: { title: "المعرض" },
-    support: { title: "الدعم", items: ["الطلبات والحجوزات قريبًا", "الفعاليات والولائم", "شراكات"], contactTitle: "التواصل", phone: "974 3047 5279", email: "restaurant@paneladebarroqatar.com" },
+    support: {
+      title: "الدعم",
+      items: ["الطلبات والحجوزات قريبًا", "الفعاليات والولائم", "شراكات"],
+      contactTitle: "التواصل",
+      phone: "974 3047 5279",
+      email: "restaurant@paneladebarroqatar.com",
+    },
     location: { title: "الموقع", addr: "باراها تاون — الدوحة، قطر", map: "افتح الخريطة" },
     immersiveLabels: { amazonia: "الأمازون", cerrado: "السِّيرادو", lencois: "لِنسويس", litoral: "الساحل", serra: "الجبال" },
     drawer: { menu: "القائمة", social: "التواصل الاجتماعي", languages: "اللغات", close: "إغلاق" },
@@ -151,9 +333,46 @@ const dict = {
 
 // util de texto
 const t = (lang, key, fallback = "") => {
-  const value = key.split(".").reduce((o, k) => (o && o[k] !== undefined ? o[k] : undefined), dict[lang]);
+  const value = key
+    .split(".")
+    .reduce((o, k) => (o && o[k] !== undefined ? o[k] : undefined), dict[lang]);
   return typeof value === "string" ? value : fallback;
 };
+
+/* === Helpers para renderizar os blocos e a faixa de equipe === */
+const renderRich = (blocks = []) => (
+  <div className="rich">
+    {blocks.map((b, i) => {
+      if (b.type === "img") {
+        return (
+          <figure key={i} className={`rich-figure ${b.align || "center"}`}>
+            <img src={b.src} alt={b.alt || ""} loading="lazy" />
+            {b.caption ? <figcaption>{b.caption}</figcaption> : null}
+          </figure>
+        );
+      }
+      return (
+        <p key={i} className="rich-p">
+          {b.text}
+        </p>
+      );
+    })}
+  </div>
+);
+
+const TeamStrip = ({ people = [] }) => (
+  <div className="team-strip">
+    {people.map((p, i) => (
+      <figure key={i} className="team-card">
+        <img src={p.img} alt={p.name} loading="lazy" />
+        <figcaption>
+          <strong>{p.name}</strong>
+          <span>{p.text}</span>
+        </figcaption>
+      </figure>
+    ))}
+  </div>
+);
 
 /* ===================================================
    Dados de Home e Imersões
@@ -174,6 +393,7 @@ const immersions = [
   { key: "litoral", src: "/immersive/litoral.jpg" },
   { key: "serra", src: "/immersive/serra.jpg" },
 ];
+
 
 /* ===================================================
    MENU — itens com descrições oficiais + calorias
