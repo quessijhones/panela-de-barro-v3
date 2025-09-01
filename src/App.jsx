@@ -201,7 +201,7 @@ const MENU_ITEMS = [/* --- (todo o seu array atual, sem mudanças) --- */
   { id:"encanto-coco", name:"Encanto de Coco", desc:"Pudim de coco sedoso assado lentamente com cobertura dourada de caramelo leve. Um toque delicado em um clássico brasileiro.", img:"/images/encanto-de-coco.jpg", tags:["Dessert","Dairy"], cat:"desserts", kcal:430 },
   { id:"doce-roca-gelo", name:"Doce da Roça com Gelo", desc:"Abóbora cremosa cozida lentamente com especiarias da casa. Servida quente com sorvete de creme artesanal. Doce do interior com alma de sobremesa de chef.", img:"/images/doce-da-roca-com-gelo.jpg", tags:["Dessert"], cat:"desserts", kcal:510 },
   { id:"mandioca-real", name:"Mandioca Real", desc:"Bolo rústico de mandioca servido com doce de leite artesanal e farofa crocante de mandioca caramelizada. Tradição e textura em harmonia perfeita.", img:"/images/mandioca-real.jpg", tags:["Dessert","Dairy","Gluten"], cat:"desserts", kcal:560 },
-  { id:"beijo-roca", name:"Beijo da Roça", desc:"Beijinho cremoso de coco com castanha de caju sobre mini bolo de milho verde levemente úmido. Um carinho doce do campo.", img:"/images/pao-de-queijo.jpg", tags:["Dessert","Dairy"], cat:"desserts", kcal:540 },
+  { id:"beijo-roca", name:"Beijo da Roça", desc:"Beijinho cremoso de coco com castanha de caju sobre mini bolo de milho verde levemente úmido. Um carinho doce do campo.", img:"/images/beijo-roca.jpg", tags:["Dessert","Dairy"], cat:"desserts", kcal:540 },
   // SAZONAL
   { id:"pamonha", name:"Pamonha Doce (Sazonal)", desc:"Clássico de milho verde disponível em épocas de safra.", img:"/images/pamonha.jpg", tags:["Dessert","Seasonal"], cat:"seasonal", kcal:390 },
   // BEBIDAS
