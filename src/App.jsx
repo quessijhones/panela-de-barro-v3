@@ -235,7 +235,7 @@ const t = (lang, key, fallback = "") => {
 const heroImage = "/images/picanha-grelhada.jpg";
 
 const highlights = [
-  { label: "Fraldinha Inteira", src: "/images/fraldinha-inteira.jpg" },
+  { label: "Moqueca Baiana", src: "/images/moqueca-baiana.jpg" },
   { label: "Galinhada Caipira", src: "/images/galinhada-caipira.jpg" },
   { label: "Rubacão", src: "/images/rubacao.jpg" },
   { label: "Pão de Queijo da Casa", src: "/images/pao-de-queijo.jpg" },
