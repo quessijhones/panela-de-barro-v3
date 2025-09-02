@@ -38,7 +38,7 @@ about: {
       {
         type: "p",
         text:
-          "Antes da chegada dos europeus, os povos indígenas já dominavam a arte da cerâmica — moldando com as mãos e cozendo no fogo panelas e potes que eram o centro da vida comunitária. Nelas se cozinhava o peixe moqueado, se preparava o beiju e se fermentava a caiçuma."
+          "Antes da chegada dos europeus, os povos indígenas já dominavam a arte da cerâmica, moldando com as mãos e cozendo no fogo panelas e potes que eram o centro da vida comunitária. Nelas se cozinhava o peixe moqueado, se preparava o beiju e se fermentava a caiçuma."
       },
       {
         type: "img",
@@ -99,7 +99,7 @@ about: {
 },
     wood: {
       title: "Fogão a Lenha",
-      p1: "Do interior do Brasil ao mundo: madeiras corretas, brasa constante e paciência — o segredo do caldo encorpado.",
+      p1: "Do interior do Brasil ao mundo: madeiras corretas, brasa constante e paciência, o segredo do caldo encorpado.",
       p2: "Nossa cozinha honra esse saber, unindo tradição e cuidado com o ingrediente.",
       imgs: ["/heritage/fogao-1.jpg", "/heritage/fogao-2.jpg", "/heritage/fogao-3.jpg"],
     },
@@ -136,7 +136,25 @@ about: {
   title: "About",
   p1: "Panela de Barro — the womb of Brazilian cuisine. More than a simple vessel, the clay pot is an archetypal symbol of Brazilian food. Its story blends with the very formation of our people, making it one of the oldest and most sacred culinary technologies in the Americas.",
   p2: "Before the arrival of Europeans, Indigenous peoples already mastered ceramics — shaping clay by hand and firing pots that were at the center of community life. In them, fish moqueca was cooked, beiju was prepared and caiçuma was fermented. With colonization, the clay pot was adopted and adapted; in the senzalas it became a tool of resistance and creativity, giving rise to stews, broths and rich one-pot dishes. Clay breathes and cooks slowly, preserving juices and nutrients and leaving the familiar countryside taste.",
+    },
+      {
+   type: "img",
+        src: "/heritage/panela-mao.jpg",
+        alt: "Panela de barro artesanal nas mãos",
+        caption: "Feita à mão, de geração em geração",
+        align: "right"
+            },
+      {
   p3: "The clay pot is, therefore, the cradle where the authentic flavors of Brazil were nurtured: simplicity, tradition, a bond with the land and the generosity of sharing. We chose the name Panela de Barro for our restaurant in Qatar as a declaration of purpose: cook with soul, honor memory and serve with care. Here, every dish carries this heritage.",
+ },
+      {
+   type: "img",
+        src: "/heritage/panela-1.jpg",
+        alt: "Panelas de barro",
+        caption: "Panelas que respiram e guardam memória",
+        align: "left"
+ },
+      {
   family: "Our family",
   people: {
     quessi: { name: "Quessi Jones — Owner", text: "Warm host who looks after the guest experience and keeps our purpose alive.", img: "/heritage/chef-quessi.jpg" },
