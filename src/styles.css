@@ -115,27 +115,54 @@ body{
 /* ---------- footer -------- */
 .footer{padding:32px;text-align:center;color:#846f62}
 
-/* ====== SOBRE (imagens menores, sempre inteiras) ====== */
-/* container para figuras do Sobre (se você estiver usando <figure> ou um card dedicado) */
-.about-figure{margin:12px auto; max-width:720px; background:var(--paper); border-radius:16px; padding:10px; box-shadow:0 2px 10px rgba(0,0,0,.06);}
-.about-figure figcaption{margin-top:8px; opacity:.85}
+/* =========================================================
+   SOBRE — imagens menores, centralizadas e SEM corte
+   (sem tocar em cards/galeria/hero)
+   ========================================================= */
 
-/* a imagem do Sobre agora fica do tamanho dos cards de “Nossa família” e SEM corte */
-.about-photo{
-  width:100%;
-  max-width:100%;
-  height:auto;                 /* permite que a imagem use a própria altura */
-  aspect-ratio: 4 / 3;         /* mantém proporção agradável em todas as telas */
-  object-fit:contain;          /* mostra a foto inteira (sem cortar) */
-  background:#eee;             /* fundo neutro quando sobrar espaço */
-  border-radius:14px;
+/* Qualquer FIGURE “solta” (não-card/galeria/hero) vira um bloco centrado */
+.container figure:not(.tile-figure):not(.gallery-card):not(.person-media):not(.slide-hero){
+  margin:12px auto;
+  max-width: 720px;              /* limite no desktop */
+  width: 100%;
+  background: var(--paper);
+  border-radius: 16px;
+  padding: 10px;
+  box-shadow: 0 2px 10px rgba(0,0,0,.06);
+}
+
+/* A imagem dentro dessas figures aparece INTEIRA (sem crop) e menor */
+.container figure:not(.tile-figure):not(.gallery-card):not(.person-media):not(.slide-hero) > img{
   display:block;
+  margin:0 auto;
+  width: 100%;
+  max-width: 100%;
+  height: auto;                  /* respeita a altura natural */
+  aspect-ratio: 4 / 3;           /* proporção agradável em todas as telas */
+  object-fit: contain;           /* mostra a foto inteira */
+  background: #eee;              /* fundo quando sobrar espaço */
+  border-radius: 12px;
 }
 
-/* garante espaçamento e visual igual aos cards da família */
-.card.person{
-  overflow:hidden;
+/* Legenda opcional mais discreta */
+.container figure:not(.tile-figure):not(.gallery-card):not(.person-media):not(.slide-hero) figcaption{
+  margin-top: 8px;
+  opacity: .85;
 }
+
+/* Mobile: segura largura e garante que a 2ª foto apareça também */
+@media (max-width: 768px){
+  .container figure:not(.tile-figure):not(.gallery-card):not(.person-media):not(.slide-hero){
+    max-width: 92vw;             /* cabe na tela */
+    padding: 8px;
+  }
+  .container figure:not(.tile-figure):not(.gallery-card):not(.person-media):not(.slide-hero) > img{
+    aspect-ratio: 4 / 3;
+  }
+}
+
+/* ====== NOSSA FAMÍLIA (cards) ====== */
+.card.person{overflow:hidden}
 .person-photo{
   width:100%;
   aspect-ratio:4/3;
@@ -146,13 +173,7 @@ body{
 .card.person h4{margin:12px 16px 4px}
 .card.person p{margin:0 16px 16px;line-height:1.5}
 
-/* Ajustes responsivos do Sobre para caber no mobile e a segunda foto aparecer */
-@media (max-width:768px){
-  .about-figure{max-width:600px;padding:8px}
-  .about-photo{aspect-ratio:4/3} /* consistente no mobile */
-}
-
-/* ====== Galeria: evita faixas brancas e mantém padrão ====== */
+/* ====== Galeria / outras figuras (mantém padrão) ====== */
 .grid-3 .card img,
 .gallery img,
 figure.card img{
@@ -192,7 +213,7 @@ figure.card img{
 .carousel-arrow.left{left:8px}
 .carousel-arrow.right{right:8px}
 
-/* ---- Figuras em Sobre / Fogão a Lenha / Galeria ---- */
+/* ---- Figuras do Fogão a Lenha / cards com cobertura ---- */
 .tile-figure{border-radius:20px;overflow:hidden;background:#f4efe9}
 .tile-figure img{
   width:100%;
