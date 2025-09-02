@@ -24,22 +24,79 @@ const dict = {
       modal: { close: "Fechar" },
       tags: { Halal: "Halal", Beef: "Carne", Dairy: "Laticínio", Gluten: "Glúten", Sea: "Peixe", Dessert: "Sobremesa", Beverage: "Bebida", Seasonal: "Sazonal" },
     },
-    about: {
-      title: "Sobre",
-      p1: "Panela de Barro é um tributo às raízes brasileiras: cozinha de fazenda, ingredientes frescos e fogo de lenha. Nossa família acumula décadas de cozinha — e traz essa memória para Doha.",
-      p2: "A panela de barro atravessa a nossa história: dos povos indígenas à criatividade das cozinhas afro-brasileiras. Ela cozinha devagar, permite que os sabores conversem e imprime um toque terroso inconfundível.",
-      p3: "Esse é o sabor que buscamos em cada prato. Tradição, calma e afeto — servidos à mesa.",
-      family: "Nossa família",
-      people: {
-        quessi: { name: "Quessi Jones — Proprietário", text: "Quessi conduz a casa e preserva o propósito: cozinhar com alma, acolher com carinho.", img: "/heritage/chef-quessi.jpg" },
-        alex: { name: "Alex — Chef de Cozinha", text: "Alex lidera a cozinha com técnica e memória afetiva — ponto perfeito e fogo certo.", img: "/heritage/chef-alex.jpg" },
-        cleusa: { name: "Cleusa Gonçalves — Mãe & Guardiã das Receitas", text: "Dona Cleusa inspira nossos sabores: panelas no fogo, histórias e receitas passadas de geração em geração.", img: "/heritage/cleusa.jpg" },
+   // ===== PT =====
+about: {
+  title: "Sobre",
+  rich: {
+    blocks: [
+      { type: "p", text: "Panela de Barro: O Útero da Culinária Brasileira" },
+      {
+        type: "p",
+        text:
+          "Mais do que um simples recipiente, a panela de barro é um símbolo arquetípico da alimentação brasileira. Sua história se confunde com a própria formação do nosso povo, sendo uma das mais antigas e sagradas tecnologias culinárias das Américas."
       },
-      heritageImgs: [
-        { src: "/heritage/panela-1.jpg", caption: "Panelas artesanais de barro" },
-        { src: "/heritage/panela-artesanal.jpg", caption: "Feita à mão, como manda a tradição" },
-      ],
+      {
+        type: "p",
+        text:
+          "Antes da chegada dos europeus, os povos indígenas já dominavam a arte da cerâmica — moldando com as mãos e cozendo no fogo panelas e potes que eram o centro da vida comunitária. Nelas se cozinhava o peixe moqueado, se preparava o beiju e se fermentava a caiçuma."
+      },
+      {
+        type: "img",
+        src: "/heritage/panela-mao.jpg",
+        alt: "Panela de barro artesanal nas mãos",
+        caption: "Feita à mão, de geração em geração",
+        align: "right"
+      },
+      {
+        type: "p",
+        text:
+          "Com a colonização, a panela de barro foi adotada e adaptada. Nas senzalas, tornou-se instrumento de resistência e criatividade: nasceram feijões guisados, angu, ensopados. O barro respira e cozinha devagar, preservando sucos e nutrientes e deixando o conhecido “sabor de roça”."
+      },
+      {
+        type: "img",
+        src: "/heritage/panela-1.jpg",
+        alt: "Panelas de barro",
+        caption: "Panelas que respiram e guardam memória",
+        align: "left"
+      },
+      {
+        type: "p",
+        text:
+          "A panela de barro é, portanto, o útero onde se gestaram sabores autênticos do Brasil: simplicidade, tradição, conexão com a terra e generosidade em compartilhar."
+      },
+      {
+        type: "p",
+        text:
+          "Escolhemos o nome Panela de Barro para o nosso restaurante no Qatar como declaração de intenções: cozinhar com alma, honrar a memória e servir com carinho. Aqui, cada prato quer carregar essa herança."
+      }
+    ]
+  },
+  family: "Nossa família",
+  people: {
+    quessi: {
+      name: "Quessi — Proprietário",
+      text:
+        "Anfitrião atento e apaixonado pelas raízes brasileiras. Zela pela experiência do convidado e pelo propósito da casa.",
+      img: "/heritage/chef-quessi.jpg"
     },
+    alex: {
+      name: "Alex — Head Chef",
+      text:
+        "Comando de fogo preciso e sensibilidade no tempero. Técnica com memória afetiva.",
+      img: "/heritage/chef-alex.jpg"
+    },
+    cleusa: {
+      name: "Cleusa Gonçalves — Mãe & Guardiã das Receitas",
+      text:
+        "A raiz do nosso sabor: cadernos de receita, histórias de roça e o tempo certo de cada preparo.",
+      img: "/heritage/cleusa.jpg"
+    }
+  },
+  heritageImgs: [
+    { src: "/heritage/panela-1.jpg", caption: "Panelas artesanais de barro" },
+    { src: "/heritage/panela-artesanal.jpg", caption: "Feita à mão, como manda a tradição" }
+  ]
+},
     wood: {
       title: "Fogão a Lenha",
       p1: "Do interior do Brasil ao mundo: madeiras corretas, brasa constante e paciência — o segredo do caldo encorpado.",
@@ -74,22 +131,28 @@ const dict = {
       modal: { close: "Close" },
       tags: { Halal: "Halal", Beef: "Beef", Dairy: "Dairy", Gluten: "Gluten", Sea: "Fish", Dessert: "Dessert", Beverage: "Beverage", Seasonal: "Seasonal" },
     },
-    about: {
-      title: "About",
-      p1: "Panela de Barro is a tribute to Brazilian roots: farm cooking, fresh ingredients and wood fire. Our family brings decades of kitchen memories to Doha.",
-      p2: "Clay pots cross our history: from indigenous peoples to Afro-Brazilian creativity. Slow cooking lets flavors speak and leaves an unmistakable earthy touch.",
-      p3: "That’s the taste we seek in every dish — tradition, calm and affection at the table.",
-      family: "Our family",
-      people: {
-        quessi: { name: "Quessi Jones — Owner", text: "Quessi leads the house with soul and warmth.", img: "/heritage/chef-quessi.jpg" },
-        alex: { name: "Alex — Head Chef", text: "Technique and memory — perfect doneness and steady fire.", img: "/heritage/chef-alex.jpg" },
-        cleusa: { name: "Cleusa Gonçalves — Mother & Recipe Guardian", text: "Stories and recipes passed down generations.", img: "/heritage/cleusa.jpg" },
-      },
-      heritageImgs: [
-        { src: "/heritage/panela-1.jpg", caption: "Handmade clay pots" },
-        { src: "/heritage/panela-artesanal.jpg", caption: "Handcrafted, as tradition dictates" },
-      ],
-    },
+    // ===== EN =====
+about: {
+  title: "About",
+  rich: {
+    blocks: [
+      { type: "p", text: "Panela de Barro — the cradle of Brazilian flavors." },
+      { type: "p", text: "Clay pots shaped Brazil’s food: indigenous craft, Afro-Brazilian creativity and slow cooking that preserves juices and memory." },
+      { type: "img", src: "/heritage/panela-mao.jpg", alt: "Handmade clay pot", caption: "Handcrafted, passed down through generations", align: "right" },
+      { type: "p", text: "We chose this name to declare our purpose: cook with soul, honor memory and serve with care." }
+    ]
+  },
+  family: "Our family",
+  people: {
+    quessi: { name: "Quessi — Owner", text: "Warm host who looks after the guest experience and keeps our purpose alive.", img: "/heritage/chef-quessi.jpg" },
+    alex:   { name: "Alex — Head Chef", text: "Precise fire and seasoned timing. Technique with memory.", img: "/heritage/chef-alex.jpg" },
+    cleusa: { name: "Cleusa Gonçalves — Mother & Recipe Guardian", text: "The living memory behind our menu.", img: "/heritage/cleusa.jpg" }
+  },
+  heritageImgs: [
+    { src: "/heritage/panela-1.jpg", caption: "Handmade clay pots" },
+    { src: "/heritage/panela-artesanal.jpg", caption: "Tradition in every piece" }
+  ]
+},
     wood: {
       title: "Wood-Fired Stove",
       p1: "From Brazil’s countryside: the right woods, steady embers and patience — the secret of rich broths.",
@@ -124,22 +187,28 @@ const dict = {
       modal: { close: "إغلاق" },
       tags: { Halal: "حلال", Beef: "لحم بقر", Dairy: "ألبان", Gluten: "غلوتين", Sea: "سمك", Dessert: "حلوى", Beverage: "مشروب", Seasonal: "موسمي" },
     },
-    about: {
-      title: "نبذة",
-      p1: "«بانِيلا دي بارّو» تحية للجذور البرازيلية: طبخ ريفي ومكوّنات طازجة ونار الحطب. تنقل عائلتنا عقودًا من الذكريات إلى الدوحة.",
-      p2: "قدور الطين جزء من تاريخنا — الطهي البطيء يترك لمسة ترابية لا تُنسى.",
-      p3: "هذا ما نبحث عنه في كل طبق: تقليد وهدوء ومودّة على المائدة.",
-      family: "عائلتنا",
-      people: {
-        quessi: { name: "كِوِسّي جونز — المالك", text: "يقود المكان بروحٍ دافئة.", img: "/heritage/chef-quessi.jpg" },
-        alex: { name: "أليكس — الشيف", text: "حرفية ونار ثابتة.", img: "/heritage/chef-alex.jpg" },
-        cleusa: { name: "كلوزا غونشالفِس — الأم وحافظة الوصفات", text: "حكايات ووصفات تتوارثها الأجيال.", img: "/heritage/cleusa.jpg" },
-      },
-      heritageImgs: [
-        { src: "/heritage/panela-1.jpg", caption: "قدور طين يدوية الصنع" },
-        { src: "/heritage/panela-artesanal.jpg", caption: "صناعة تقليدية" },
-      ],
-    },
+   // ===== AR =====
+about: {
+  title: "نبذة",
+  rich: {
+    blocks: [
+      { type: "p", text: "«بانِيلا دي بارّو»: مهد النكهات البرازيلية." },
+      { type: "p", text: "قدور الطين جزء من تاريخ الطعام في البرازيل — حرفة السكان الأصليين وإبداع الأفارقة والطهي البطيء الذي يحفظ العصارة والذاكرة." },
+      { type: "img", src: "/heritage/panela-mao.jpg", alt: "قدر طين يدوي", caption: "حِرفة تتناقلها الأجيال", align: "right" },
+      { type: "p", text: "اخترنا الاسم إعلانًا لنيّتنا: طبخ بروح، تكريم للذاكرة وخدمة بمودّة." }
+    ]
+  },
+  family: "عائلتنا",
+  people: {
+    quessi: { name: "ڤِسّي — المالك", text: "مضيف دافئ يهتم بتجربة الضيوف ويحفظ هدفنا حيًا.", img: "/heritage/chef-quessi.jpg" },
+    alex:   { name: "أليكس — الشيف", text: "نار ثابتة وتوقيت دقيق. حِرفة بذاكرة.", img: "/heritage/chef-alex.jpg" },
+    cleusa: { name: "كلوزا غونشالفِس — الأم وحافظة الوصفات", text: "الذاكرة الحيّة لقائمتنا.", img: "/heritage/cleusa.jpg" }
+  },
+  heritageImgs: [
+    { src: "/heritage/panela-1.jpg", caption: "قدور طين يدوية الصنع" },
+    { src: "/heritage/panela-artesanal.jpg", caption: "تقليدٌ متوارث" }
+  ]
+},
     wood: { title: "موقد الحطب", p1: "من الأرياف البرازيلية: أخشاب مناسبة وجمر ثابت وصبر.", p2: "نُكرّم هذا الإرث بعنايةٍ بالمكوّن.", imgs: ["/heritage/fogao-1.jpg", "/heritage/fogao-2.jpg", "/heritage/fogao-3.jpg"] },
     gallery: { title: "المعرض" },
     support: { title: "الدعم", items: ["الطلبات والحجوزات قريبًا", "الفعاليات والولائم", "شراكات"], contactTitle: "التواصل", phone: "974 3047 5279", email: "restaurant@paneladebarroqatar.com" },
@@ -148,6 +217,21 @@ const dict = {
     drawer: { menu: "القائمة", social: "التواصل الاجتماعي", languages: "اللغات", close: "إغلاق" },
   },
 };
+// Render de blocos ricos (parágrafos + imagens com legenda)
+const renderRich = (blocks = []) => (
+  <div className="rich">
+    {blocks.map((b, i) =>
+      b.type === "img" ? (
+        <figure key={i} className={`rich-figure ${b.align || "center"}`}>
+          <img src={b.src} alt={b.alt || ""} loading="lazy" />
+          {b.caption ? <figcaption>{b.caption}</figcaption> : null}
+        </figure>
+      ) : (
+        <p key={i} className="rich-p">{b.text}</p>
+      )
+    )}
+  </div>
+);
 
 // util de texto
 const t = (lang, key, fallback = "") => {
@@ -510,9 +594,17 @@ const About = ({ lang }) => {
   return (
     <>
       <SectionTitle>{d.title}</SectionTitle>
-      <p className="p">{d.p1}</p>
-      <p className="p">{d.p2}</p>
-      <p className="p">{d.p3}</p>
+
+      {/* se houver blocos ricos, usa; senão cai no p1/p2/p3 que você já tinha */}
+      {d.rich ? (
+        renderRich(d.rich.blocks)
+      ) : (
+        <>
+          {d.p1 && <p className="p">{d.p1}</p>}
+          {d.p2 && <p className="p">{d.p2}</p>}
+          {d.p3 && <p className="p">{d.p3}</p>}
+        </>
+      )}
 
       <h3 className="subtitle">{d.family}</h3>
       <div className="familygrid">
@@ -526,7 +618,7 @@ const About = ({ lang }) => {
       </div>
 
       <div className="grid2">
-        {d.heritageImgs.map((h, i) => (
+        {d.heritageImgs?.map((h, i) => (
           <Card key={i}>
             <Img src={h.src} alt={h.caption} ratio="16/9" />
             <div className="caption">{h.caption}</div>
