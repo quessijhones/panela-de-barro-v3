@@ -134,24 +134,19 @@ about: {
     // ===== EN =====
 about: {
   title: "About",
-  rich: {
-    blocks: [
-      { type: "p", text: "Panela de Barro — the cradle of Brazilian flavors." },
-      { type: "p", text: "Clay pots shaped Brazil’s food: indigenous craft, Afro-Brazilian creativity and slow cooking that preserves juices and memory." },
-      { type: "img", src: "/heritage/panela-mao.jpg", alt: "Handmade clay pot", caption: "Handcrafted, passed down through generations", align: "right" },
-      { type: "p", text: "We chose this name to declare our purpose: cook with soul, honor memory and serve with care." }
-    ]
-  },
+  p1: "Panela de Barro — the womb of Brazilian cuisine. More than a simple vessel, the clay pot is an archetypal symbol of Brazilian food. Its story blends with the very formation of our people, making it one of the oldest and most sacred culinary technologies in the Americas.",
+  p2: "Before the arrival of Europeans, Indigenous peoples already mastered ceramics — shaping clay by hand and firing pots that were at the center of community life. In them, fish moqueca was cooked, beiju was prepared and caiçuma was fermented. With colonization, the clay pot was adopted and adapted; in the senzalas it became a tool of resistance and creativity, giving rise to stews, broths and rich one-pot dishes. Clay breathes and cooks slowly, preserving juices and nutrients and leaving the familiar countryside taste.",
+  p3: "The clay pot is, therefore, the cradle where the authentic flavors of Brazil were nurtured: simplicity, tradition, a bond with the land and the generosity of sharing. We chose the name Panela de Barro for our restaurant in Qatar as a declaration of purpose: cook with soul, honor memory and serve with care. Here, every dish carries this heritage.",
   family: "Our family",
   people: {
-    quessi: { name: "Quessi — Owner", text: "Warm host who looks after the guest experience and keeps our purpose alive.", img: "/heritage/chef-quessi.jpg" },
-    alex:   { name: "Alex — Head Chef", text: "Precise fire and seasoned timing. Technique with memory.", img: "/heritage/chef-alex.jpg" },
-    cleusa: { name: "Cleusa Gonçalves — Mother & Recipe Guardian", text: "The living memory behind our menu.", img: "/heritage/cleusa.jpg" }
+    quessi: { name: "Quessi Jones — Owner", text: "Warm host who looks after the guest experience and keeps our purpose alive.", img: "/heritage/chef-quessi.jpg" },
+    alex:   { name: "Alex — Head Chef", text: "Technique and memory — perfect doneness and steady fire.", img: "/heritage/chef-alex.jpg" },
+    cleusa: { name: "Cleusa Gonçalves — Mother & Recipe Guardian", text: "Stories and recipes passed down through generations.", img: "/heritage/cleusa.jpg" },
   },
   heritageImgs: [
-    { src: "/heritage/panela-1.jpg", caption: "Handmade clay pots" },
-    { src: "/heritage/panela-artesanal.jpg", caption: "Tradition in every piece" }
-  ]
+    { src: "/heritage/panela-1.jpg",        caption: "Handcrafted, passed down through generations" },
+    { src: "/heritage/panela-artesanal.jpg", caption: "Pots that breathe and hold memory" },
+  ],
 },
     wood: {
       title: "Wood-Fired Stove",
@@ -190,24 +185,19 @@ about: {
    // ===== AR =====
 about: {
   title: "نبذة",
-  rich: {
-    blocks: [
-      { type: "p", text: "«بانِيلا دي بارّو»: مهد النكهات البرازيلية." },
-      { type: "p", text: "قدور الطين جزء من تاريخ الطعام في البرازيل — حرفة السكان الأصليين وإبداع الأفارقة والطهي البطيء الذي يحفظ العصارة والذاكرة." },
-      { type: "img", src: "/heritage/panela-mao.jpg", alt: "قدر طين يدوي", caption: "حِرفة تتناقلها الأجيال", align: "right" },
-      { type: "p", text: "اخترنا الاسم إعلانًا لنيّتنا: طبخ بروح، تكريم للذاكرة وخدمة بمودّة." }
-    ]
-  },
+  p1: "«بانِيلا دي بارّو» — رَحم المطبخ البرازيلي. أكثر من مجرد وعاء، فـقِدر الطين رمزٌ أصيل لطعام البرازيل. قصته تمتزج بتكوُّن شعبنا نفسه، وهو من أقدم وأقدس التقنيات culinárias في القارتين الأميركيتين.",
+  p2: "قبل وصول الأوروبيين كان السكان الأصليون يتقنون صناعة الفخار — يعجنون الطين بأيديهم ويُحرقون القدور التي كانت مركز الحياة المجتمعية. فيها كان يُطهى طبق الموكِيكا من السمك، ويُحضَّر الخبز المسطح «بيجو»، وتُخمَّر «كايصوما». ومع الاستعمار، اعتُمِد القِدر الطيني وتحوّل في المزارع والسَّنزالاس إلى أداة مقاومة وإبداع: ظهرت اليخنات والمرق والأطباق الغنية. الطين «يتنفّس» ويطهو على مهل، فيحفظ العُصارات والمغذّيات ويمنح مذاق الريف المألوف.",
+  p3: "لذلك فالقِدر الطيني هو مهد النكهات البرازيلية الأصيلة: البساطة، والتقاليد، والارتباط بالأرض، وسخاء المشاركة. اخترنا اسم «بانِيلا دي بارّو» لمطعمنا في قطر إعلانًا لنيّتنا: نطبخ بروح، نُكرِّم الذاكرة ونخدم بمودّة. هنا يحمل كل طبق هذا الإرث.",
   family: "عائلتنا",
   people: {
-    quessi: { name: "ڤِسّي — المالك", text: "مضيف دافئ يهتم بتجربة الضيوف ويحفظ هدفنا حيًا.", img: "/heritage/chef-quessi.jpg" },
-    alex:   { name: "أليكس — الشيف", text: "نار ثابتة وتوقيت دقيق. حِرفة بذاكرة.", img: "/heritage/chef-alex.jpg" },
-    cleusa: { name: "كلوزا غونشالفِس — الأم وحافظة الوصفات", text: "الذاكرة الحيّة لقائمتنا.", img: "/heritage/cleusa.jpg" }
+    quessi: { name: "كِوِسّي جونز — المالك", text: "مضيف دافئ يعتني بتجربة الضيف ويحفظ غاية المكان.", img: "/heritage/chef-quessi.jpg" },
+    alex:   { name: "أليكس — الشيف",         text: "حِرَفية وذاكرة — تسوية مثالية ونار ثابتة.",     img: "/heritage/chef-alex.jpg" },
+    cleusa: { name: "كلوزا غونشالفِس — الأم وحافظة الوصفات", text: "حكايات ووصفات تتناقلها الأجيال.", img: "/heritage/cleusa.jpg" },
   },
   heritageImgs: [
-    { src: "/heritage/panela-1.jpg", caption: "قدور طين يدوية الصنع" },
-    { src: "/heritage/panela-artesanal.jpg", caption: "تقليدٌ متوارث" }
-  ]
+    { src: "/heritage/panela-1.jpg",        caption: "مصنوعة يدويًا، تتناقلها الأجيال" },
+    { src: "/heritage/panela-artesanal.jpg", caption: "قدور «تتنفّس» وتحفظ الذاكرة" },
+  ],
 },
     wood: { title: "موقد الحطب", p1: "من الأرياف البرازيلية: أخشاب مناسبة وجمر ثابت وصبر.", p2: "نُكرّم هذا الإرث بعنايةٍ بالمكوّن.", imgs: ["/heritage/fogao-1.jpg", "/heritage/fogao-2.jpg", "/heritage/fogao-3.jpg"] },
     gallery: { title: "المعرض" },
