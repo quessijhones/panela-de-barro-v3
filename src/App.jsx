@@ -1,4 +1,3 @@
-import { Analytics } from "@vercel/analytics/next"
 // src/App.jsx
 import React, { useEffect, useMemo, useState } from "react";
 
