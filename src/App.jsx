@@ -96,12 +96,40 @@ about: {
     { src: "/heritage/panela-1.jpg", caption: "Panelas artesanais de barro" },
     { src: "/heritage/panela-artesanal.jpg", caption: "Feita à mão, como manda a tradição" }
   ]
-},
+ },
     wood: {
       title: "Fogão a Lenha",
-      p1: "Do interior do Brasil ao mundo: madeiras corretas, brasa constante e paciência, o segredo do caldo encorpado.",
-      p2: "Nossa cozinha honra esse saber, unindo tradição e cuidado com o ingrediente.",
-      imgs: ["/heritage/fogao-1.jpg", "/heritage/fogao-2.jpg", "/heritage/fogao-3.jpg"],
+      p1: "A história do fogão a lenha no Brasil é a própria história da formação do povo brasileiro. Muito antes de ser um ícone da gastronomia afetiva, ele foi uma ferramenta fundamental de sobrevivência e o epicentro da vida doméstica.",
+      p2: "Suas origens remontam aos colonizadores portugueses, que trouxeram a técnica da alvenaria e o hábito de cozinhar em lareiras fixas. No entanto, foi no solo brasileiro que esse instrumento se transformou, incorporando saberes indígenas e africanos, tornando-se único.",
+      p3: "Os indígenas, com seu profundo conhecimento do fogo e das madeiras nativas, ensinaram quais eram as melhores lenhas para cada propósito. Os escravizados africanos, forçados a adaptar-se, foram os primeiros alquimistas desses fogões, transformando cortes de carne menos nobres e ingredientes negligenciados em pratos de uma riqueza cultural imensurável.",
+      p4: "A feijoada, hoje nosso prato nacional, nasceu nas senzalas, fervilhando pacientemente em grandes panelas de ferro sobre esses fogões. Assim, o fogão a lenha se ergueu como o coração pulsante da casa brasileira, da senzala à casa-grande, da tapera cabocla à fazenda bandeirista.",
+      p5: "Era ao seu redor que as famílias se reuniam, as histórias eram contadas, o pão era amassado e o café, coado. Seu calor irregular não é uma falha, mas uma virtude. É essa imprevisibilidade que exige do cozinheiro paciência, sensibilidade e um conhecimento quase espiritual do fogo.",
+      p6: "O sabor 'fumê' (o smokey natural) que impregna os alimentos não é um condimento que se adiciona; é a própria essência da memória, é o carvão e a madeira se transformando no sublime.",
+      p7: "É essa alma ancestral, forjada a fogo e história, que nós do Panela de Barro transplantamos para o Qatar. Nosso fogão a lenha, visível em nossa cozinha aberta, não é uma peça de museu; é o artista principal da nossa cozinha.",
+      p8: "Cada prato que sai dele é uma carta de amor à tradição brasileira:",
+      dishes: {
+        feijoada: {
+          title: "Nossa Feijoada de Costela Bovina",
+          desc: "Resgatamos a origem do prato com um toque de sofisticação do sertão. A costela bovina é assada lentamente pela brasa da lenha, até desfiar-se ao toque, conferindo ao caldo do feijão preto uma profundidade e uma riqueza incomparáveis."
+        },
+        vacaAtolada: {
+          title: "Nossa Vaca Atolada",
+          desc: "Este clássico caipira, que narra poeticamente a vaca 'atolada' na mandioca, ganha vida em nosso fogão. A mandioca cozinha na brasa branda, absorvendo todo o sabor da carne bovina macia, criando uma harmonia perfeita entre o doce do legume e o savor da carne."
+        },
+        farofa: {
+          title: "Nossa Farofa de Banana da Terra",
+          desc: "A farofa, a companheira indispensável, é elevada a outro patamar. A banana da terra é delicadamente fatiada e dourada, depois misturada à farinha de mandioca torrada no calor do nosso fogão."
+        }
+      },
+      conclusion: "No Panela de Barro, nossa cozinha aberta convida você a testemunhar a magia desse ritual secular. Deixe que o aroma inebriante de lenha queimada e comida caseira transporte os seus sentidos para o interior do Brasil.",
+      imgs: [
+        { src: "/heritage/fogao-1.jpg", caption: "Fogão a lenha tradicional" },
+        { src: "/heritage/fogao-2.jpg", caption: "Preparo de pratos no fogão" },
+        { src: "/heritage/fogao-3.jpg", caption: "Brasas que dão sabor único" },
+        { src: "/dishes/feijoada-costela.jpg", caption: "Feijoada de Costela" },
+        { src: "/dishes/vaca-atolada.jpg", caption: "Vaca Atolada" },
+        { src: "/dishes/farofa-banana.jpg", caption: "Farofa de Banana da Terra" }
+      ],
     },
     gallery: { title: "Galeria" },
     support: {
