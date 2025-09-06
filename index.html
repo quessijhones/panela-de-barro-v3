@@ -38,13 +38,39 @@
     #splash.hide { opacity: 0; pointer-events: none; }
     #splash img { width: 96px; height: 96px; }
   </style>
-</head>
-  <body>
-    <!-- Splash estático -->
-    <div id="splash" aria-hidden="true"><img src="/logo.png" alt=""></div>
 
-    <!-- App -->
-    <div id="root"></div>
-    <script type="module" src="/src/main.jsx"></script>
-  </body>
+  <!-- Script para esconder o splash SEMPRE -->
+  <script>
+    (function () {
+      function hide() {
+        var el = document.getElementById("splash");
+        if (!el) return;
+        el.classList.add("hide");
+        setTimeout(function () { el.remove(); }, 450);
+      }
+      // fallback por tempo (mesmo se algo falhar)
+      setTimeout(hide, 1800);
+      // quando a página carregar normalmente
+      window.addEventListener("load", hide, { once: true });
+      // se ocorrer erro de carregamento
+      window.addEventListener("error", hide, { once: true });
+      // se entrar por rota com hash
+      window.addEventListener("hashchange", hide);
+      document.addEventListener("DOMContentLoaded", function () {
+        if (location.hash) hide();
+      });
+      // expõe global (se quiser chamar manualmente)
+      window.__hideSplash = hide;
+    })();
+  </script>
+</head>
+<body>
+  <!-- Splash estático -->
+  <div id="splash" aria-hidden="true"><img src="/logo.png" alt=""></div>
+  <noscript><style>#splash{display:none!important}</style></noscript>
+
+  <!-- App -->
+  <div id="root"></div>
+  <script type="module" src="/src/main.jsx"></script>
+</body>
 </html>
