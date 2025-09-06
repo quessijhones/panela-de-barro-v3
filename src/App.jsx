@@ -698,21 +698,62 @@ const About = ({ lang }) => {
 
 const WoodFire = ({ lang }) => {
   const d = dict[lang].wood;
+
+  // lista de parágrafos longos na ordem
+  const paras = [d.p1, d.p2, d.p3, d.p4, d.p5, d.p6, d.p7, d.p8].filter(Boolean);
+
   return (
     <>
       <SectionTitle>{d.title}</SectionTitle>
-      <p className="p">{d.p1}</p>
-      <p className="p">{d.p2}</p>
-      <div className="grid3">
-        {d.imgs.map((src, i) => (
-          <Card key={i}><Img src={src} alt={`wood-${i}`} ratio="1/1" /></Card>
+
+      {/* Texto corrido */}
+      <div className="readable">
+        {paras.map((tx, i) => (
+          <p key={i} className="p">{tx}</p>
         ))}
       </div>
-      <a className="back" href="#/home">{t(lang,"sections.back","Voltar ao início")}</a>
+
+      {/* Figuras do fogão a lenha — pequenas (igual “Sobre”) */}
+      <div className="grid-3 wood-figs" style={{marginTop:12}}>
+        {d.imgs?.map((src, i) => (
+          <figure key={i} className="tile-figure card">
+            <img src={src} alt={`wood-${i}`} loading="lazy" />
+          </figure>
+        ))}
+      </div>
+
+      {/* Destaques de pratos feitos no fogo a lenha */}
+      {d.dishes && (
+        <>
+          <h3 className="subtitle" style={{marginTop:18}}>
+            {lang === "pt" ? "Pratos no nosso fogão" :
+             lang === "ar" ? "أطباق على موقد الحطب" :
+             "Dishes from our wood-fired stove"}
+          </h3>
+          <div className="grid-3">
+            {Object.values(d.dishes).map((dish, i) => (
+              <div className="card" key={i}>
+                <img src={dish.img} alt={dish.title} loading="lazy" />
+                <div className="p16">
+                  <div className="cardtitle">{dish.title}</div>
+                  <div className="carddesc">{dish.desc}</div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </>
+      )}
+
+      <div className="readable">
+        {d.conclusion && <p className="p">{d.conclusion}</p>}
+      </div>
+
+      <a className="back" href="#/home">
+        {t(lang,"sections.back","Voltar ao início")}
+      </a>
     </>
   );
 };
-
 const Gallery = ({ lang }) => {
   const photos = MENU_ITEMS.map(i => ({ src: i.img, alt: i.name }));
   return (
