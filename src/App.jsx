@@ -98,39 +98,35 @@ about: {
   ]
  },
     wood: {
-      title: "Fogão a Lenha",
-      p1: "A história do fogão a lenha no Brasil é a própria história da formação do povo brasileiro. Muito antes de ser um ícone da gastronomia afetiva, ele foi uma ferramenta fundamental de sobrevivência e o epicentro da vida doméstica.",
-      p2: "Suas origens remontam aos colonizadores portugueses, que trouxeram a técnica da alvenaria e o hábito de cozinhar em lareiras fixas. No entanto, foi no solo brasileiro que esse instrumento se transformou, incorporando saberes indígenas e africanos, tornando-se único.",
-      p3: "Os indígenas, com seu profundo conhecimento do fogo e das madeiras nativas, ensinaram quais eram as melhores lenhas para cada propósito. Os escravizados africanos, forçados a adaptar-se, foram os primeiros alquimistas desses fogões, transformando cortes de carne menos nobres e ingredientes negligenciados em pratos de uma riqueza cultural imensurável.",
-      p4: "A feijoada, hoje nosso prato nacional, nasceu nas senzalas, fervilhando pacientemente em grandes panelas de ferro sobre esses fogões. Assim, o fogão a lenha se ergueu como o coração pulsante da casa brasileira, da senzala à casa-grande, da tapera cabocla à fazenda bandeirista.",
-      p5: "Era ao seu redor que as famílias se reuniam, as histórias eram contadas, o pão era amassado e o café, coado. Seu calor irregular não é uma falha, mas uma virtude. É essa imprevisibilidade que exige do cozinheiro paciência, sensibilidade e um conhecimento quase espiritual do fogo.",
-      p6: "O sabor 'fumê' (o smokey natural) que impregna os alimentos não é um condimento que se adiciona; é a própria essência da memória, é o carvão e a madeira se transformando no sublime.",
-      p7: "É essa alma ancestral, forjada a fogo e história, que nós do Panela de Barro transplantamos para o Qatar. Nosso fogão a lenha, visível em nossa cozinha aberta, não é uma peça de museu; é o artista principal da nossa cozinha.",
-      p8: "Cada prato que sai dele é uma carta de amor à tradição brasileira:",
-      dishes: {
-        feijoada: {
-          title: "Nossa Feijoada de Costela Bovina",
-          desc: "Resgatamos a origem do prato com um toque de sofisticação do sertão. A costela bovina é assada lentamente pela brasa da lenha, até desfiar-se ao toque, conferindo ao caldo do feijão preto uma profundidade e uma riqueza incomparáveis."
-        },
-        vacaAtolada: {
-          title: "Nossa Vaca Atolada",
-          desc: "Este clássico caipira, que narra poeticamente a vaca 'atolada' na mandioca, ganha vida em nosso fogão. A mandioca cozinha na brasa branda, absorvendo todo o sabor da carne bovina macia, criando uma harmonia perfeita entre o doce do legume e o savor da carne."
-        },
-        farofa: {
-          title: "Nossa Farofa de Banana da Terra",
-          desc: "A farofa, a companheira indispensável, é elevada a outro patamar. A banana da terra é delicadamente fatiada e dourada, depois misturada à farinha de mandioca torrada no calor do nosso fogão."
-        }
-      },
-      conclusion: "No Panela de Barro, nossa cozinha aberta convida você a testemunhar a magia desse ritual secular. Deixe que o aroma inebriante de lenha queimada e comida caseira transporte os seus sentidos para o interior do Brasil.",
-      imgs: [
-        { src: "/heritage/fogao-1.jpg", caption: "Fogão a lenha tradicional" },
-        { src: "/heritage/fogao-2.jpg", caption: "Preparo de pratos no fogão" },
-        { src: "/heritage/fogao-3.jpg", caption: "Brasas que dão sabor único" },
-        { src: "/dishes/feijoada-costela.jpg", caption: "Feijoada de Costela" },
-        { src: "/dishes/vaca-atolada.jpg", caption: "Vaca Atolada" },
-        { src: "/dishes/farofa-banana.jpg", caption: "Farofa de Banana da Terra" }
-      ],
+  title: "Fogão a Lenha",
+  p1: "A história do fogão a lenha no Brasil é a própria história da formação do povo brasileiro. Muito antes de ser um ícone da gastronomia afetiva, ele foi uma ferramenta fundamental de sobrevivência e o epicentro da vida doméstica.",
+  p2: "Suas origens remontam aos colonizadores portugueses, que trouxeram a técnica da alvenaria e o hábito de cozinhar em lareiras fixas. No entanto, foi no solo brasileiro que esse instrumento se transformou, incorporando saberes indígenas e africanos, tornando-se único.",
+  p3: "Os povos indígenas, com profundo conhecimento do fogo e das madeiras nativas, ensinaram quais eram as melhores lenhas para cada propósito. Pessoas escravizadas africanas, forçadas a adaptar-se, foram as primeiras alquimistas desses fogões — transformando cortes de carne menos nobres e ingredientes negligenciados em pratos de riqueza cultural imensa.",
+  p4: "A feijoada, hoje prato símbolo nacional, nasceu nas senzalas, fervendo pacientemente em grandes panelas de ferro sobre esses fogões. Assim, o fogão a lenha ergueu-se como o coração pulsante da casa brasileira: da senzala à casa-grande, da tapera cabocla à fazenda bandeirista.",
+  p5: "Ao seu redor as famílias se reuniam, histórias eram contadas, o pão era amassado e o café coado. Seu calor irregular não é falha: é virtude. Essa imprevisibilidade exige do cozinheiro paciência, sensibilidade e um conhecimento quase espiritual do fogo.",
+  p6: "O sabor defumado que impregna os alimentos não é um condimento que se adiciona; é memória viva: carvão e madeira transformados em sutileza.",
+  p7: "É essa alma ancestral, forjada a fogo e história, que nós do Panela de Barro transplantamos para o Qatar. Nosso fogão a lenha, visível na cozinha aberta, não é peça de museu — é protagonista.",
+  p8: "Cada prato que sai dele é uma carta de amor à tradição brasileira:",
+  dishes: {
+    feijoada: {
+      title: "Nossa Feijoada de Costela Bovina",
+      desc: "Resgatamos a origem do prato com um toque do sertão: costela bovina assada lentamente na brasa até desfiar, dando ao caldo do feijão preto profundidade e riqueza incomparáveis.",
+      img: "/images/feijoada-costela.jpg"
     },
+    vacaAtolada: {
+      title: "Nossa Vaca Atolada",
+      desc: "Clássico caipira que narra a vaca ‘atolada’ na mandioca: a raiz cozinha em brasa branda, absorvendo o sabor da carne macia — harmonia entre o doce do legume e o sabor da carne.",
+      img: "/images/vaca-atolada.jpg"
+    },
+    farofa: {
+      title: "Nossa Farofa de Banana da Terra",
+      desc: "A companheira indispensável elevada: banana da terra fatiada e dourada, depois envolvida na farinha de mandioca tostada no calor do fogão.",
+      img: "/images/farofa-de-castanha.jpg"
+    }
+  },
+  conclusion: "No Panela de Barro, nossa cozinha aberta convida você a testemunhar a magia desse ritual secular. Deixe que o aroma de lenha e comida caseira transporte seus sentidos para o interior do Brasil.",
+  imgs: ["/heritage/fogao-1.jpg","/heritage/fogao-2.jpg","/heritage/fogao-3.jpg"]
+},
     gallery: { title: "Galeria" },
     support: {
       title: "Suporte",
@@ -177,11 +173,35 @@ about: {
   ],
 },
     wood: {
-      title: "Wood-Fired Stove",
-      p1: "From Brazil’s countryside: the right woods, steady embers and patience — the secret of rich broths.",
-      p2: "We honor this know-how, uniting tradition and care for the ingredient.",
-      imgs: ["/heritage/fogao-1.jpg", "/heritage/fogao-2.jpg", "/heritage/fogao-3.jpg"],
+  title: "Wood-Fired Stove",
+  p1: "The story of Brazil’s wood-fired stove is the story of Brazil itself. Long before it became an icon of comfort cooking, it was a vital tool for survival and the center of home life.",
+  p2: "Its roots trace back to Portuguese colonizers who brought masonry know-how and fixed hearths. In Brazil, the stove transformed as it absorbed Indigenous and African knowledge, becoming truly unique.",
+  p3: "Indigenous peoples, masters of fire and native woods, taught which logs worked best for each purpose. Enslaved Africans, forced to adapt, became the first alchemists of these stoves — turning humble cuts and overlooked ingredients into dishes of profound cultural richness.",
+  p4: "Feijoada — now a national symbol — bubbled patiently in iron pots over these fires in the senzalas. The wood-fired stove rose as the beating heart of the Brazilian home, from senzala to manor house, from simple shacks to countryside farms.",
+  p5: "Families gathered around it; stories were told; bread was kneaded; coffee was brewed. Its uneven heat is not a flaw — it’s a virtue. That unpredictability asks for patience, sensitivity, and an almost spiritual knowledge of fire.",
+  p6: "The smoky note that permeates the food isn’t a seasoning you add; it’s living memory: charcoal and wood becoming subtlety.",
+  p7: "This ancestral soul — forged by fire and history — is what we bring to Qatar. Our wood-fired stove, visible in our open kitchen, isn’t a museum piece; it’s the lead artist.",
+  p8: "Every dish that leaves it is a love letter to Brazilian tradition:",
+  dishes: {
+    feijoada: {
+      title: "Our Beef Rib Feijoada",
+      desc: "We honor the dish’s origins with a touch from the sertão: beef ribs slow-roasted over embers until they fall apart, lending unmatched depth and richness to the black-bean broth.",
+      img: "/images/feijoada-costela.jpg"
     },
+    vacaAtolada: {
+      title: "Our Vaca Atolada",
+      desc: "A countryside classic where cassava ‘embraces’ the beef: it cooks gently over embers, soaking up the flavor of tender meat — a harmony between the root’s natural sweetness and the savoriness of beef.",
+      img: "/images/vaca-atolada.jpg"
+    },
+    farofa: {
+      title: "Our Plantain Farofa",
+      desc: "The indispensable side, elevated: ripe plantain is thinly sliced and browned, then folded into toasted cassava flour warmed by the stove.",
+      img: "/images/farofa-de-castanha.jpg"
+    }
+  },
+  conclusion: "At Panela de Barro, our open kitchen invites you to witness this time-honored ritual. Let the aroma of burning wood and home cooking transport you to Brazil’s countryside.",
+  imgs: ["/heritage/fogao-1.jpg","/heritage/fogao-2.jpg","/heritage/fogao-3.jpg"]
+},
     gallery: { title: "Gallery" },
     support: {
       title: "Support",
@@ -227,7 +247,36 @@ about: {
     { src: "/heritage/panela-artesanal.jpg", caption: "قدور «تتنفّس» وتحفظ الذاكرة" },
   ],
 },
-    wood: { title: "موقد الحطب", p1: "من الأرياف البرازيلية: أخشاب مناسبة وجمر ثابت وصبر.", p2: "نُكرّم هذا الإرث بعنايةٍ بالمكوّن.", imgs: ["/heritage/fogao-1.jpg", "/heritage/fogao-2.jpg", "/heritage/fogao-3.jpg"] },
+    wood: {
+  title: "موقد الحطب",
+  p1: "قصة موقد الحطب في البرازيل هي جزء من قصة تكوّن الشعب البرازيلي نفسه. قبل أن يصبح رمزًا للمطبخ الدافئ، كان أداةً أساسية للبقاء ومركز الحياة المنزلية.",
+  p2: "تعود جذوره إلى البرتغاليين الذين جلبوا معهم فن البناء والعَمَدة الثابتة. لكن في البرازيل تغيّر الموقد وتشكّل بالمعرفة الأصلية والأفريقية فأصبح فريدًا.",
+  p3: "عرّفنا السكّان الأصليون على أنواع الأخشاب المناسبة لكل غاية، بخبرتهم بالنار وغاباتهم. وأبدع الأفارقة المُستعبَدون، مكرهين على التكيّف، في تحويل القطع الرخيصة والمكوّنات المتواضعة إلى أطباقٍ غنيّة بالمعنى والثقافة.",
+  p4: "نشأت الفيجوادا — طبقنا الوطني اليوم — في «السِنزالات»، تغلي بصبر في قدور الحديد فوق هذه المواقد. وهكذا صار موقد الحطب قلب البيت البرازيلي النابض: من السِنزالة إلى بيوت الأسياد، ومن الأكواخ البسيطة إلى المزارع.",
+  p5: "حولَه كانت العائلة تجتمع، والقصص تُروى، والعجين يُعجن والقهوة تُصفّى. حرارته غير المنتظمة ليست عيبًا بل ميزة؛ فهي تطلب صبرًا وحسًّا مرهفًا ومعرفة شبه روحية بالنار.",
+  p6: "النَّكهة الدخانية ليست بهارًا يُضاف؛ إنها ذاكرة حية، فحمٌ وخشب يتحوّلان إلى رهافة.",
+  p7: "هذه الروح الضاربة في القِدم — المجبولة بالنار والتاريخ — هي ما ننقله إلى قطر. موقدنا، الظاهر في مطبخنا المفتوح، ليس قطعة متحف؛ بل هو بطل المطبخ.",
+  p8: "وكل طبق يخرج منه رسالةُ حبٍ للتقليد البرازيلي:",
+  dishes: {
+    feijoada: {
+      title: "فيجوادا ضلع البقر",
+      desc: "نُعيد أصل الطبق بلمسة من الريف: أضلاع البقر تُطهى ببطء فوق الجمر حتى تتفتّت، فتمنح مرق الفاصولياء السوداء عمقًا وغِنى لا يُضاهيان.",
+      img: "/images/feijoada-costela.jpg"
+    },
+    vacaAtolada: {
+      title: "ڤاكا أتولادا",
+      desc: "كلاسيكية ريفية تعانق فيها الكسافا اللحم: تُطهى الكسافا على جمر هادئ لتتشبّع بنكهات اللحم الطري — توازن بين حلاوة الجذر ومِلْحَة اللحم.",
+      img: "/images/vaca-atolada.jpg"
+    },
+    farofa: {
+      title: "فاروفا موز الجنة",
+      desc: "الصاحبة التي لا تُستغنى عنها لكن بارتقاء: تُقطَّع موزة الجنة وتُحمّر برفق ثم تُخلط بدقيق الكسافا المُحمَّص على حرارة الموقد.",
+      img: "/images/farofa-de-castanha.jpg"
+    }
+  },
+  conclusion: "في «بانِيلا دي بارّو»، يدعوك مطبخنا المفتوح لمشاهدة طقسٍ عريق. دَع عطر الحطب والطعام البيتي يأخذك إلى ريف البرازيل.",
+  imgs: ["/heritage/fogao-1.jpg","/heritage/fogao-2.jpg","/heritage/fogao-3.jpg"]
+},
     gallery: { title: "المعرض" },
     support: { title: "الدعم", items: ["الطلبات والحجوزات قريبًا", "الفعاليات والولائم", "شراكات"], contactTitle: "التواصل", phone: "974 3047 5279", email: "restaurant@paneladebarroqatar.com" },
     location: { title: "الموقع", addr: "باراها تاون — الدوحة، قطر", map: "افتح الخريطة" },
