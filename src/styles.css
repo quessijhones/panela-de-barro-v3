@@ -243,3 +243,49 @@ figure.card img{
   .readable-on-image .hero-inner h1{font-size:28px;line-height:1.1}
   .readable-on-image .hero-inner p{font-size:15px}
 }
+/* ===== Fundo de barro (suave + animado) ===== */
+html, body { background: transparent; }
+body { position: relative; }
+
+/* Camada do fundo (fica atrás de tudo) */
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  background-image: url("/images/bg-clay-2400.webp");
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-attachment: fixed;          /* efeito parallax leve */
+  filter: saturate(.8) contrast(.92) brightness(.96);
+  opacity: .22;                           /* transparência para não brigar com o texto */
+  will-change: transform;
+  animation: clay-pan 60s ease-in-out infinite alternate;
+}
+
+/* troca para versão menor em telas pequenas */
+@media (max-width: 680px) {
+  body::before {
+    background-image: url("/images/bg-clay-1200.webp");
+    opacity: .20;
+  }
+}
+
+/* véu extra nos blocos hero/escrita sobre imagem (se quiser reforçar em alguma seção) */
+.readable-on-image .hero-overlay,
+.bg-veil {
+  background: linear-gradient(180deg, rgba(0,0,0,.35), rgba(0,0,0,.15) 40%, rgba(0,0,0,0) 100%);
+}
+
+/* Animação: pan + zoom MUITO sutis */
+@keyframes clay-pan {
+  0%   { transform: scale(1)   translate3d(0px, 0px, 0); }
+  50%  { transform: scale(1.03) translate3d(-10px, -8px, 0); }
+  100% { transform: scale(1.06) translate3d(12px, 10px, 0); }
+}
+
+/* Respeita usuários que preferem menos movimento */
+@media (prefers-reduced-motion: reduce) {
+  body::before { animation: none; }
+}
